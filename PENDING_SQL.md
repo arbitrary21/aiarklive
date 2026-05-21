@@ -35,7 +35,20 @@ Last updated: iteration 3
 
 ---
 
-## One-shot bundle
+## Manual ops (non-SQL)
+
+### Cloudflare Pages environment variables
+If OAuth still shows **Invalid API key** after deploy, update in **Cloudflare Dashboard → Workers & Pages → aiarklive → Settings → Environment variables**:
+
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://vsaqwmiwcbsuxcysbwru.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Current anon key from Supabase → Settings → API Keys (Legacy) |
+| `NEXT_PUBLIC_SITE_URL` | `https://aiarklive.com` |
+
+Then trigger a **Retry deployment** on the latest commit.
+
+---
 
 Copy-paste all migration files above into SQL Editor in order, or use:
 
