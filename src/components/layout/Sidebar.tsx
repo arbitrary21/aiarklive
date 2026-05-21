@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Compass,
   Home,
+  LayoutGrid,
   Link2,
+  Search,
   Sparkles,
   Trophy,
   User,
@@ -26,7 +27,8 @@ function useNavItems() {
 
   return [
     { href: "/", label: "Home", icon: Home },
-    { href: "/explore", label: "Explore", icon: Compass },
+    { href: "/discover", label: "Discover", icon: LayoutGrid },
+    { href: "/explore", label: "Explore", icon: Search },
     { href: "/challenges", label: "Challenges", icon: Sparkles },
     { href: "/upload", label: "Upload", icon: Link2 },
     { href: "/leaderboard", label: "Rankings", icon: Trophy },

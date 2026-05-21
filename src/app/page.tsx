@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { SignInPrompt } from "@/components/auth/SignInPrompt";
 import { InfiniteVideoGrid } from "@/components/InfiniteVideoGrid";
 import { FeedTabs } from "@/components/FeedTabs";
+import { TrendingKeywords } from "@/components/TrendingKeywords";
 import { getCurrentUser } from "@/lib/auth";
 import { getVideos } from "@/lib/videos";
 import type { FeedSort } from "@/lib/types";
@@ -46,6 +47,8 @@ export default async function Home({ searchParams }: HomeProps) {
       <Suspense fallback={<div className="h-10" />}>
         <FeedTabs />
       </Suspense>
+
+      <TrendingKeywords />
 
       {showFollowingSignIn ? (
         <SignInPrompt />

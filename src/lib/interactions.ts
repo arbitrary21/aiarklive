@@ -99,3 +99,15 @@ export async function unsaveVideo(userId: string, videoId: string): Promise<void
     .eq("video_id", videoId);
   if (error) throw error;
 }
+
+export async function getSavedVideoIds(userId: string): Promise<string[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("saves")
+    .select("video_id")
+    .eq("user_id", userId);
+
+  return (data ?? []).map((row) => row.video_id);
+}

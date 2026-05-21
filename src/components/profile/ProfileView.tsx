@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Download, Heart, Users, Video } from "lucide-react";
 import { FollowButton } from "@/components/auth/FollowButton";
-import { VideoGrid } from "@/components/VideoGrid";
+import { ProfileTabs } from "@/components/profile/ProfileTabs";
 import type { User, UserProfileStats, Video as VideoType } from "@/lib/types";
 
 function StatCard({
@@ -96,10 +96,7 @@ export function ProfileView({
         />
       </div>
 
-      <div>
-        <h2 className="mb-6 text-xl font-semibold text-foreground">Videos</h2>
-        <VideoGrid videos={videos} emptyMessage="No videos uploaded yet." />
-      </div>
+      <ProfileTabs videos={videos} isOwnProfile={isOwnProfile} />
 
       {isOwnProfile && (
         <Link
