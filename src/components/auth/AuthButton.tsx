@@ -90,7 +90,7 @@ export function AuthButton({ nextPath }: AuthButtonProps) {
           }}
         >
           <Link
-            href={`/profile/${user.id}`}
+            href="/profile/me"
             onClick={() => setOpen(false)}
             className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground transition hover:bg-[var(--surface-elevated)]"
           >

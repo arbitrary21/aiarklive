@@ -12,7 +12,7 @@ import {
 import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
+import { SiteBrand } from "@/components/layout/SiteBrand";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const SIDEBAR_WIDTH_KEY = "aiarklive-sidebar-width";
@@ -29,7 +29,7 @@ function useNavItems() {
     { href: "/upload", label: "Upload", icon: Link2 },
     { href: "/leaderboard", label: "Rankings", icon: Trophy },
     {
-      href: user ? `/profile/${user.id}` : "/login",
+      href: user ? "/profile/me" : "/login",
       label: "Profile",
       icon: User,
     },
@@ -115,27 +115,17 @@ export function Sidebar() {
       className="relative hidden shrink-0 flex-col border-r lg:flex"
       style={{ width, borderColor: "var(--border)" }}
     >
-      <Link
-        href="/"
-        className="flex items-start gap-2.5 px-5 py-4 transition hover:opacity-90"
-      >
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 text-sm font-bold text-white">
-          A
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="font-bold text-foreground">{SITE_NAME}</p>
-          <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-muted">
-            {SITE_TAGLINE}
-          </p>
-        </div>
-      </Link>
+      <SiteBrand />
 
       <nav className="flex flex-1 flex-col gap-1 px-3 py-2">
         {navItems.map(({ href, label, icon: Icon }) => {
           const active =
             href === "/"
               ? pathname === "/"
-              : pathname.startsWith(href.split("?")[0]);
+              : href === "/profile/me"
+                ? pathname === "/profile/me" ||
+                  (user ? pathname === `/profile/${user.id}` : false)
+                : pathname.startsWith(href.split("?")[0]);
 
           return (
             <Link
@@ -183,6 +173,7 @@ export function Sidebar() {
 
 export function MobileNav() {
   const pathname = usePathname();
+  const { user } = useAuth();
   const navItems = useNavItems();
 
   return (
@@ -194,7 +185,10 @@ export function MobileNav() {
         const active =
           href === "/"
             ? pathname === "/"
-            : pathname.startsWith(href.split("?")[0]);
+            : href === "/profile/me"
+              ? pathname === "/profile/me" ||
+                (user ? pathname === `/profile/${user.id}` : false)
+              : pathname.startsWith(href.split("?")[0]);
 
         return (
           <Link
