@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { createCallbackClient } from "@/lib/supabase/callback-client";
 import {
   ensureUserProfileWithClient,
   getUsernameSetupStateWithClient,
@@ -18,11 +18,13 @@ function safeNextPath(next: string | null): string {
 function AuthCallbackHandler() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const finishedRef = useRef(false);
+  const startedRef = useRef(false);
 
   useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+
     let cancelled = false;
-    const supabase = createClient();
     const code = searchParams.get("code");
     const oauthError = searchParams.get("error");
     const nextFromQuery = searchParams.get("next");
@@ -34,25 +36,20 @@ function AuthCallbackHandler() {
       sessionStorage.removeItem("auth_next");
     }
 
-    if (oauthError) {
+    if (oauthError || !code) {
       router.replace("/login?error=auth");
       return;
     }
 
-    async function finishSignIn() {
-      if (cancelled || finishedRef.current) return;
+    async function run() {
+      const supabase = createCallbackClient();
+      const { error: exchangeError } =
+        await supabase.auth.exchangeCodeForSession(code!);
 
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
-
-      if (error || !session) {
+      if (exchangeError) {
         router.replace("/login?error=auth");
         return;
       }
-
-      finishedRef.current = true;
 
       try {
         await ensureUserProfileWithClient(supabase);
@@ -67,42 +64,14 @@ function AuthCallbackHandler() {
 
         router.replace(next);
       } catch {
-        router.replace("/login?error=auth");
+        router.replace("/");
       }
     }
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        void finishSignIn();
-      }
-    });
-
-    if (!code) {
-      router.replace("/login?error=auth");
-      return () => {
-        cancelled = true;
-        subscription.unsubscribe();
-      };
-    }
-
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        void finishSignIn();
-        return;
-      }
-
-      window.setTimeout(() => {
-        if (!cancelled && !finishedRef.current) {
-          void finishSignIn();
-        }
-      }, 2500);
-    });
+    void run();
 
     return () => {
       cancelled = true;
-      subscription.unsubscribe();
     };
   }, [router, searchParams]);
 
