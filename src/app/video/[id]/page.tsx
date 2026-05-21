@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Download, Eye, Heart } from "lucide-react";
 import { VideoEmbed } from "@/components/VideoEmbed";
+import { CommentSection } from "@/components/CommentSection";
 import { VideoToolbar } from "@/components/VideoToolbar";
 import { getAiToolLabel, getGenreLabel } from "@/lib/constants";
 import { getSourceUrl } from "@/lib/youtube";
@@ -84,6 +85,8 @@ export default async function VideoPage({ params }: VideoPageProps) {
               {video.description}
             </p>
           )}
+
+          <CommentSection videoId={video.id} />
         </div>
 
         <aside className="space-y-4">

@@ -91,6 +91,26 @@ export interface Notification {
   actor?: User;
 }
 
+export interface Comment {
+  id: string;
+  video_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+  user?: User;
+}
+
+export interface Challenge {
+  id: string;
+  title: string;
+  description: string;
+  tool: AiTool;
+  prize: string;
+  ends_at: string;
+  entries_count: number;
+  status: "active" | "upcoming" | "ended";
+}
+
 export interface UserProfileStats {
   videoCount: number;
   followers: number;

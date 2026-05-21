@@ -1,4 +1,4 @@
-import type { User, Video } from "./types";
+import type { Challenge, Comment, User, Video } from "./types";
 
 export const mockUsers: User[] = [
   {
@@ -135,6 +135,56 @@ export const mockVideos: Video[] = [
     downloads_count: 41,
     is_nsfw: false,
     created_at: "2026-05-21T08:00:00Z",
+  },
+];
+
+export const mockComments: Comment[] = [
+  {
+    id: "comment-1",
+    video_id: "vid-1",
+    user_id: "user-2",
+    content: "The Kling motion on the rain loop is incredibly smooth.",
+    created_at: "2026-05-19T10:00:00Z",
+  },
+  {
+    id: "comment-2",
+    video_id: "vid-1",
+    user_id: "user-3",
+    content: "Would love the Suno prompt breakdown if you can share it.",
+    created_at: "2026-05-19T12:30:00Z",
+  },
+];
+
+export const mockChallenges: Challenge[] = [
+  {
+    id: "challenge-1",
+    title: "30-Second Kling Short Film",
+    description: "Create a narrative short under 30 seconds using Kling 2.0.",
+    tool: "kling",
+    prize: "Featured on homepage",
+    ends_at: "2026-06-15T00:00:00Z",
+    entries_count: 24,
+    status: "active",
+  },
+  {
+    id: "challenge-2",
+    title: "Runway Loop Challenge",
+    description: "Build a seamless ambient loop with Runway Gen-3.",
+    tool: "runway",
+    prize: "Creator spotlight badge",
+    ends_at: "2026-06-01T00:00:00Z",
+    entries_count: 17,
+    status: "active",
+  },
+  {
+    id: "challenge-3",
+    title: "Suno Music Video Jam",
+    description: "Pair Suno audio with any AI video tool of your choice.",
+    tool: "suno",
+    prize: "Community vote winner",
+    ends_at: "2026-07-01T00:00:00Z",
+    entries_count: 0,
+    status: "upcoming",
   },
 ];
 

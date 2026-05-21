@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { VideoCard } from "@/components/VideoCard";
+import { VideoLightbox } from "@/components/VideoLightbox";
 import type { AiTool, FeedSort, Genre, Video } from "@/lib/types";
 import { FEED_PAGE_SIZE } from "@/lib/types";
 
@@ -42,6 +43,7 @@ export function InfiniteVideoGrid({
   const [offset, setOffset] = useState(initialVideos.length);
   const [hasMore, setHasMore] = useState(initialVideos.length >= FEED_PAGE_SIZE);
   const [loading, setLoading] = useState(false);
+  const [previewVideo, setPreviewVideo] = useState<Video | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -109,10 +111,19 @@ export function InfiniteVideoGrid({
       <div className="masonry-grid">
         {videos.map((video) => (
           <div key={video.id} className="masonry-item">
-            <VideoCard video={video} />
+            <VideoCard
+              video={video}
+              onPreview={() => setPreviewVideo(video)}
+            />
           </div>
         ))}
       </div>
+      {previewVideo && (
+        <VideoLightbox
+          video={previewVideo}
+          onClose={() => setPreviewVideo(null)}
+        />
+      )}
       <div ref={sentinelRef} className="h-8" />
       {loading && (
         <p className="py-4 text-center text-sm text-muted">Loading more...</p>

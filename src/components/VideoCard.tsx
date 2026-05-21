@@ -6,43 +6,60 @@ import type { Video } from "@/lib/types";
 
 interface VideoCardProps {
   video: Video;
+  onPreview?: () => void;
 }
 
-export function VideoCard({ video }: VideoCardProps) {
+export function VideoCard({ video, onPreview }: VideoCardProps) {
+  const thumbnail = (
+    <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={video.thumbnail_url}
+        alt={video.title}
+        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+      />
+      <div
+        className="absolute inset-0 opacity-0 transition group-hover:opacity-100"
+        style={{ background: "var(--overlay)" }}
+      />
+      <div className="absolute right-2 top-2 opacity-0 transition group-hover:opacity-100">
+        <VideoActions
+          videoId={video.id}
+          initialLikes={video.likes_count}
+          compact
+        />
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 flex flex-wrap gap-1.5 p-3 opacity-0 transition group-hover:opacity-100">
+        {video.ai_tools.slice(0, 3).map((tool) => (
+          <span
+            key={tool}
+            className="rounded-lg px-2 py-0.5 text-xs font-medium text-foreground backdrop-blur-sm"
+            style={{ background: "var(--chip-bg)" }}
+          >
+            {getAiToolLabel(tool)}
+          </span>
+        ))}
+      </div>
+    </>
+  );
+
   return (
     <article className="group panel overflow-hidden transition hover:shadow-lg hover:shadow-brand-500/5">
-      <Link href={`/video/${video.id}`} className="block">
-        <div className="relative aspect-[4/5] overflow-hidden bg-[var(--surface-elevated)] sm:aspect-video">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={video.thumbnail_url}
-            alt={video.title}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-          />
-          <div
-            className="absolute inset-0 opacity-0 transition group-hover:opacity-100"
-            style={{ background: "var(--overlay)" }}
-          />
-          <div className="absolute right-2 top-2 opacity-0 transition group-hover:opacity-100">
-            <VideoActions
-              videoId={video.id}
-              initialLikes={video.likes_count}
-              compact
-            />
+      {onPreview ? (
+        <button
+          type="button"
+          onClick={onPreview}
+          className="relative block aspect-[4/5] w-full overflow-hidden bg-[var(--surface-elevated)] sm:aspect-video"
+        >
+          {thumbnail}
+        </button>
+      ) : (
+        <Link href={`/video/${video.id}`} className="block">
+          <div className="relative aspect-[4/5] overflow-hidden bg-[var(--surface-elevated)] sm:aspect-video">
+            {thumbnail}
           </div>
-          <div className="absolute bottom-0 left-0 right-0 flex flex-wrap gap-1.5 p-3 opacity-0 transition group-hover:opacity-100">
-            {video.ai_tools.slice(0, 3).map((tool) => (
-              <span
-                key={tool}
-                className="rounded-lg px-2 py-0.5 text-xs font-medium text-foreground backdrop-blur-sm"
-                style={{ background: "var(--chip-bg)" }}
-              >
-                {getAiToolLabel(tool)}
-              </span>
-            ))}
-          </div>
-        </div>
-      </Link>
+        </Link>
+      )}
 
       <div className="p-3.5">
         <Link href={`/video/${video.id}`}>

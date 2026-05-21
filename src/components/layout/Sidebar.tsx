@@ -6,6 +6,7 @@ import {
   Compass,
   Home,
   Link2,
+  Sparkles,
   Trophy,
   User,
 } from "lucide-react";
@@ -26,6 +27,7 @@ function useNavItems() {
   return [
     { href: "/", label: "Home", icon: Home },
     { href: "/explore", label: "Explore", icon: Compass },
+    { href: "/challenges", label: "Challenges", icon: Sparkles },
     { href: "/upload", label: "Upload", icon: Link2 },
     { href: "/leaderboard", label: "Rankings", icon: Trophy },
     {

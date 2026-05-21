@@ -15,6 +15,7 @@ ROUTES_TO_CHECK = [
     "/leaderboard",
     "/upload",
     "/auth/callback",
+    "/challenges",
 ]
 
 
