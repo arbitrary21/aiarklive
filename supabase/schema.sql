@@ -18,6 +18,7 @@ create table public.videos (
   title text not null,
   description text,
   embed_url text not null,
+  source_url text,
   platform text not null check (platform in ('youtube', 'tiktok', 'x')),
   thumbnail_url text not null,
   ai_tools text[] not null default '{}',

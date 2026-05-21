@@ -173,6 +173,7 @@ export async function createVideo(
       title: input.title,
       description: input.description ?? null,
       embed_url: input.embed_url,
+      source_url: input.source_url ?? null,
       platform: input.platform,
       thumbnail_url: input.thumbnail_url,
       ai_tools: input.ai_tools,

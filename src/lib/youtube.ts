@@ -24,8 +24,38 @@ export function getYouTubeThumbnail(videoId: string): string {
   return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 }
 
+export function getYouTubeWatchUrl(videoId: string): string {
+  return `https://www.youtube.com/watch?v=${videoId}`;
+}
+
 export function getYouTubeEmbedUrl(videoId: string): string {
   return `https://www.youtube.com/embed/${videoId}`;
+}
+
+export function getSourceUrl(
+  platform: Platform,
+  embedUrl: string,
+  sourceUrl?: string | null
+): string {
+  if (sourceUrl) return sourceUrl;
+
+  if (platform === "youtube") {
+    const videoId = extractYouTubeId(embedUrl);
+    if (videoId) return getYouTubeWatchUrl(videoId);
+  }
+
+  return embedUrl;
+}
+
+export function getPlatformLabel(platform: Platform): string {
+  switch (platform) {
+    case "youtube":
+      return "YouTube";
+    case "tiktok":
+      return "TikTok";
+    case "x":
+      return "X";
+  }
 }
 
 export async function fetchYouTubeMetadata(url: string, apiKey?: string) {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Compass, Home, Trophy, Upload, User } from "lucide-react";
-import { SITE_NAME } from "@/lib/constants";
+import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
 
 const navItems = [
   { href: "/", label: "홈", icon: Home },
@@ -23,7 +23,7 @@ export function Header() {
               {SITE_NAME}
             </span>
             <span className="hidden text-xs text-muted sm:block">
-              AI 영상 아카이브
+              {SITE_TAGLINE}
             </span>
           </div>
         </Link>

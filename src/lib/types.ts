@@ -39,6 +39,7 @@ export interface Video {
   title: string;
   description: string | null;
   embed_url: string;
+  source_url: string | null;
   platform: Platform;
   thumbnail_url: string;
   ai_tools: AiTool[];
@@ -60,6 +61,7 @@ export interface VideoFilters {
 
 export interface CreateVideoInput {
   embed_url: string;
+  source_url?: string;
   title: string;
   description?: string;
   platform: Platform;

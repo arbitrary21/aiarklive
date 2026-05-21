@@ -26,6 +26,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { embed_url, title, description, ai_tools, genre, prompt } = body;
+    const source_url = embed_url as string;
 
     if (!embed_url || !title || !ai_tools?.length || !genre) {
       return NextResponse.json(
@@ -56,6 +57,7 @@ export async function POST(request: Request) {
 
     const video = await createVideo({
       embed_url: resolvedEmbedUrl,
+      source_url,
       title,
       description,
       platform,

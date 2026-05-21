@@ -2,7 +2,7 @@ import type { AiTool, Genre } from "./types";
 
 export const SITE_NAME = "aiarklive";
 export const SITE_TAGLINE =
-  "AI 크리에이터가 당당하게 자랑하는 전용 무대";
+  "AI 크리에이터의 영상, 한곳에서 모아 보여주세요";
 
 export const AI_TOOLS: { value: AiTool; label: string }[] = [
   { value: "kling", label: "Kling" },

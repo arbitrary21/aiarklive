@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { FeedTabs } from "@/components/FeedTabs";
 import { VideoGrid } from "@/components/VideoGrid";
-import { SITE_TAGLINE } from "@/lib/constants";
 import { getVideos } from "@/lib/videos";
 import type { FeedSort } from "@/lib/types";
 
@@ -23,11 +22,14 @@ export default async function Home({ searchParams }: HomeProps) {
             AI Creator Archive
           </p>
           <h1 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
-            AI 영상을 방주처럼
+            AI 크리에이터의 영상,
             <br />
-            영원히 보존하세요
+            한곳에서 모아 보여주세요
           </h1>
-          <p className="mt-4 text-lg text-muted">{SITE_TAGLINE}</p>
+          <p className="mt-4 text-lg text-muted">
+            YouTube·Shorts 링크로 포트폴리오를 만들고, AI 툴·장르별로
+            찾아보세요
+          </p>
         </div>
         <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-10 h-48 w-48 rounded-full bg-accent-500/20 blur-3xl" />

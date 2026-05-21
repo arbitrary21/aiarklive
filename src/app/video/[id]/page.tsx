@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Eye, Heart, Share2 } from "lucide-react";
+import { Eye, Heart } from "lucide-react";
+import { VideoActions } from "@/components/VideoActions";
 import { VideoEmbed } from "@/components/VideoEmbed";
 import { getAiToolLabel, getGenreLabel } from "@/lib/constants";
+import { getSourceUrl } from "@/lib/youtube";
 import { getVideoById } from "@/lib/videos";
 
 export const runtime = "edge";
@@ -22,6 +24,12 @@ export default async function VideoPage({ params }: VideoPageProps) {
   const video = await getVideoById(id);
 
   if (!video) notFound();
+
+  const sourceUrl = getSourceUrl(
+    video.platform,
+    video.embed_url,
+    video.source_url
+  );
 
   return (
     <div className="grid gap-8 lg:grid-cols-3">
@@ -104,13 +112,12 @@ export default async function VideoPage({ params }: VideoPageProps) {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 py-3 text-sm text-muted transition hover:text-white"
-        >
-          <Share2 className="h-4 w-4" />
-          공유하기
-        </button>
+        <VideoActions
+          videoId={video.id}
+          title={video.title}
+          platform={video.platform}
+          sourceUrl={sourceUrl}
+        />
       </aside>
     </div>
   );
