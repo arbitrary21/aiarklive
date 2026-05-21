@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AuthButton } from "@/components/auth/AuthButton";
+import { SITE_NAME } from "@/lib/constants";
 
 export const runtime = "edge";
 
@@ -21,7 +22,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <div className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center text-center">
-      <h1 className="text-2xl font-bold text-foreground">Welcome to aiarklive</h1>
+      <h1 className="text-2xl font-bold text-foreground">Welcome to {SITE_NAME}</h1>
       <p className="mt-3 text-sm text-muted">
         Sign in with Google to upload videos, build your profile, and follow
         creators. New users are registered automatically on first sign-in.

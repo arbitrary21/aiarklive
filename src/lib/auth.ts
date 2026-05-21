@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import type { User } from "@/lib/types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   resolveAvailableUsername,
   suggestUsernameFromMetadata,
@@ -37,10 +38,9 @@ function userFromAuthUser(authUser: {
   };
 }
 
-export async function ensureUserProfile(): Promise<void> {
-  if (!isSupabaseConfigured()) return;
-
-  const supabase = await createClient();
+export async function ensureUserProfileWithClient(
+  supabase: SupabaseClient
+): Promise<void> {
   const {
     data: { user: authUser },
   } = await supabase.auth.getUser();
@@ -86,15 +86,19 @@ export async function ensureUserProfile(): Promise<void> {
   });
 }
 
+export async function ensureUserProfile(): Promise<void> {
+  if (!isSupabaseConfigured()) return;
+  await ensureUserProfileWithClient(await createClient());
+}
+
 export interface UsernameSetupState {
   needsSetup: boolean;
   suggestedUsername: string;
 }
 
-export async function getUsernameSetupState(): Promise<UsernameSetupState | null> {
-  if (!isSupabaseConfigured()) return null;
-
-  const supabase = await createClient();
+export async function getUsernameSetupStateWithClient(
+  supabase: SupabaseClient
+): Promise<UsernameSetupState | null> {
   const {
     data: { user: authUser },
   } = await supabase.auth.getUser();
@@ -118,6 +122,11 @@ export async function getUsernameSetupState(): Promise<UsernameSetupState | null
   const needsSetup = profile ? profile.username_confirmed === false : true;
 
   return { needsSetup, suggestedUsername };
+}
+
+export async function getUsernameSetupState(): Promise<UsernameSetupState | null> {
+  if (!isSupabaseConfigured()) return null;
+  return getUsernameSetupStateWithClient(await createClient());
 }
 
 export async function getCurrentUser(): Promise<User | null> {
