@@ -3,6 +3,7 @@
 import { SearchBar } from "@/components/SearchBar";
 import { AuthButton } from "@/components/auth/AuthButton";
 import { NotificationBell } from "@/components/auth/NotificationBell";
+import { UsernameSetupGate } from "@/components/auth/UsernameSetupGate";
 import { CreateMenu } from "@/components/CreateMenu";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { MobileNav, Sidebar } from "./Sidebar";
@@ -10,6 +11,7 @@ import { MobileNav, Sidebar } from "./Sidebar";
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
+      <UsernameSetupGate />
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col pb-16 lg:pb-0">
         <header

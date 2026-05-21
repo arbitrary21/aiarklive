@@ -31,6 +31,7 @@ export interface User {
   avatar_url: string | null;
   bio: string | null;
   created_at: string;
+  username_confirmed?: boolean;
 }
 
 export interface Video {

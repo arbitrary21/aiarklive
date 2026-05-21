@@ -142,13 +142,13 @@ export async function getUserById(id: string): Promise<User | null> {
   }
 
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("users")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
-  if (error || !data) {
+  if (!data) {
     return mockUsers.find((u) => u.id === id) ?? null;
   }
 

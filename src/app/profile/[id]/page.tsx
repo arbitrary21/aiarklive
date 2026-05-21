@@ -44,11 +44,11 @@ function StatCard({
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { id } = await params;
-  const user = await getUserById(id);
+  const currentUser = await getCurrentUser();
+  const user = (await getUserById(id)) ?? (currentUser?.id === id ? currentUser : null);
 
   if (!user) notFound();
 
-  const currentUser = await getCurrentUser();
   const isOwnProfile = currentUser?.id === id;
   const [videos, stats, following] = await Promise.all([
     getVideos({ userId: id }),

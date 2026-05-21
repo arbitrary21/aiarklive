@@ -10,6 +10,7 @@ import {
 } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import type { User } from "@/lib/types";
+import { suggestUsernameFromMetadata } from "@/lib/username";
 
 interface AuthContextValue {
   user: User | null;
@@ -42,17 +43,19 @@ function profileFromAuthUser(authUser: {
   return {
     id: authUser.id,
     email: authUser.email ?? "",
-    username:
-      authUser.user_metadata?.full_name ??
-      authUser.user_metadata?.name ??
-      authUser.email?.split("@")[0] ??
-      "user",
+    username: suggestUsernameFromMetadata({
+      username: authUser.user_metadata?.username,
+      full_name: authUser.user_metadata?.full_name,
+      name: authUser.user_metadata?.name,
+      email: authUser.email,
+    }),
     avatar_url:
       authUser.user_metadata?.avatar_url ??
       authUser.user_metadata?.picture ??
       null,
     bio: null,
     created_at: authUser.created_at ?? new Date().toISOString(),
+    username_confirmed: false,
   };
 }
 

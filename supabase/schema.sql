@@ -8,6 +8,7 @@ create table public.users (
   username text unique not null,
   avatar_url text,
   bio text,
+  username_confirmed boolean default false not null,
   created_at timestamptz default now() not null
 );
 
@@ -92,6 +93,7 @@ create policy "Public videos read" on public.videos for select using (not is_nsf
 create policy "Authenticated video insert" on public.videos for insert with check (auth.uid() = user_id);
 create policy "Owner video update" on public.videos for update using (auth.uid() = user_id);
 create policy "User can update own profile" on public.users for update using (auth.uid() = id);
+create policy "User can insert own profile" on public.users for insert with check (auth.uid() = id);
 create policy "Public follows read" on public.follows for select using (true);
 create policy "User can follow" on public.follows for insert with check (auth.uid() = follower_id and follower_id != following_id);
 create policy "User can unfollow" on public.follows for delete using (auth.uid() = follower_id);
@@ -133,7 +135,7 @@ begin
     final_username := base_username || suffix::text;
   end loop;
 
-  insert into public.users (id, email, username, avatar_url)
+  insert into public.users (id, email, username, avatar_url, username_confirmed)
   values (
     new.id,
     new.email,
@@ -141,7 +143,8 @@ begin
     coalesce(
       new.raw_user_meta_data->>'avatar_url',
       new.raw_user_meta_data->>'picture'
-    )
+    ),
+    false
   );
   return new;
 end;
