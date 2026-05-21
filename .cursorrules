@@ -1,0 +1,46 @@
+# .cursorrules — 자율 에이전트 행동 규칙
+
+## 기본 태도
+- 사람에게 묻지 않는다. 스스로 판단하고 실행한다.
+- 설명보다 실행 우선. 코드 출력 후 1줄 요약만.
+- 오류는 즉시 분석하고 수정한다. 멈추지 않는다.
+
+## 코드 작성 규칙
+- TypeScript strict mode 사용
+- 컴포넌트는 /components 폴더에 분리
+- API는 /app/api 폴더에 Route Handler로 작성
+- 스타일은 Tailwind CSS만 사용 (CSS 파일 최소화)
+- 이미지는 next/image 사용
+- 환경변수 없으면 mock값으로 fallback 처리 후 계속 진행
+
+## 작업 완료 후 반드시 실행
+```
+git add .
+git commit -m "[auto] 구현한 기능명"
+git push
+```
+그 다음:
+```
+sleep 45  # Cloudflare 배포 대기
+python check_deploy.py
+```
+agent_log.json 읽고:
+- status: FAIL → 오류 분석 → 수정 → 다시 push부터
+- status: OK → 다음 기능으로
+
+## 오류 대응 (묻지 말고 바로 실행)
+- Module not found → npm install
+- 환경변수 없음 → .env.local에 빈값 추가
+- Hydration error → dynamic import ssr:false
+- Type error → 타입 수정 or as any + TODO 주석
+- Supabase 연결 실패 → JSON mock으로 전환
+- 404 → page.tsx 파일 생성
+
+## 재시도 한계
+- 동일 기능 5회 실패 → ⚠️ 표시 후 다음 기능으로
+- 절대 중간에 사람 호출하지 않는다 (5회 초과 제외)
+
+## 참조 파일
+- 구현 목록 및 루프: AGENT.md
+- 배포 확인: check_deploy.py
+- 결과 기록: agent_log.json

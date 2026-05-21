@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, getUsernameSetupState } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeUsername, validateUsername } from "@/lib/username";
 
 export const runtime = "edge";
+
+export async function GET() {
+  const state = await getUsernameSetupState();
+  if (!state) {
+    return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+  }
+  return NextResponse.json(state);
+}
 
 export async function POST(request: Request) {
   try {
