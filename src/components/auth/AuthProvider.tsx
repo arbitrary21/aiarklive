@@ -106,10 +106,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (nextPath = "/") => {
       if (!configured) return;
 
-      sessionStorage.setItem("auth_next", nextPath);
-
       const supabase = createClient();
-      const redirectTo = `${window.location.origin}/auth/callback`;
+      const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
 
       await supabase.auth.signInWithOAuth({
         provider: "google",

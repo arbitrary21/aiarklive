@@ -30,8 +30,8 @@ Last updated: iteration 3
 | 2 | `supabase/migrations/add_auth_policies.sql` | Google auth RLS policies |
 | 3 | `supabase/migrations/add_downloads_and_notifications.sql` | Download counts + notifications |
 | 4 | `supabase/migrations/add_user_profile_insert_policy.sql` | Profile insert on signup |
-| 5 | `supabase/migrations/add_username_confirmation.sql` | Nickname confirmation flow |
-| 6 | `supabase/migrations/add_comments.sql` | Video comments table + RLS |
+| 5 | `supabase/migrations/add_username_confirmation.sql` | Nickname confirmation flow | ✅ Applied via browser agent (iter 4) |
+| 6 | `supabase/migrations/add_comments.sql` | Video comments table + RLS | ✅ Applied via browser agent (iter 4) |
 
 ---
 
