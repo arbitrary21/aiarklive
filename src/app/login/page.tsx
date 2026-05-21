@@ -9,11 +9,11 @@ export const metadata = {
 };
 
 interface LoginPageProps {
-  searchParams: Promise<{ next?: string; error?: string }>;
+  searchParams: Promise<{ next?: string; error?: string; reason?: string }>;
 }
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const { next = "/", error } = await searchParams;
+  const { next = "/", error, reason } = await searchParams;
 
   const configured = Boolean(
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -40,6 +40,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       {error && (
         <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
           Sign in failed. Check Google OAuth settings in Supabase and try again.
+          {reason ? (
+            <span className="mt-2 block text-xs opacity-80">{decodeURIComponent(reason)}</span>
+          ) : null}
         </p>
       )}
 

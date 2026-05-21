@@ -64,7 +64,10 @@ export async function GET(request: NextRequest) {
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    return NextResponse.redirect(new URL("/login?error=auth", origin));
+    const reason = encodeURIComponent(error.message);
+    return NextResponse.redirect(
+      new URL(`/login?error=auth&reason=${reason}`, origin)
+    );
   }
 
   try {
