@@ -28,10 +28,11 @@ export const GENRES: { value: Genre; label: string }[] = [
   { value: "loop", label: "Loop" },
 ];
 
-export const FEED_TABS: { value: "latest" | "popular" | "recommended"; label: string }[] = [
+export const FEED_TABS: { value: "latest" | "popular" | "recommended" | "following"; label: string }[] = [
   { value: "latest", label: "Latest" },
   { value: "popular", label: "Popular" },
   { value: "recommended", label: "Recommended" },
+  { value: "following", label: "Following" },
 ];
 
 export function getAiToolLabel(tool: AiTool): string {

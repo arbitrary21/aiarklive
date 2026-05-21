@@ -75,16 +75,54 @@ create policy "Public users read" on public.users for select using (true);
 create policy "Public videos read" on public.videos for select using (not is_nsfw);
 create policy "Authenticated video insert" on public.videos for insert with check (auth.uid() = user_id);
 create policy "Owner video update" on public.videos for update using (auth.uid() = user_id);
+create policy "User can update own profile" on public.users for update using (auth.uid() = id);
+create policy "Public follows read" on public.follows for select using (true);
+create policy "User can follow" on public.follows for insert with check (auth.uid() = follower_id and follower_id != following_id);
+create policy "User can unfollow" on public.follows for delete using (auth.uid() = follower_id);
+create policy "Public likes read" on public.likes for select using (true);
+create policy "User can like" on public.likes for insert with check (auth.uid() = user_id);
+create policy "User can unlike" on public.likes for delete using (auth.uid() = user_id);
+create policy "Public saves read" on public.saves for select using (true);
+create policy "User can save" on public.saves for insert with check (auth.uid() = user_id);
+create policy "User can unsave" on public.saves for delete using (auth.uid() = user_id);
 
 -- auto-create user profile on signup
 create or replace function public.handle_new_user()
 returns trigger as $$
+declare
+  base_username text;
+  final_username text;
+  suffix int := 0;
 begin
-  insert into public.users (id, email, username)
+  base_username := lower(regexp_replace(
+    coalesce(
+      new.raw_user_meta_data->>'username',
+      new.raw_user_meta_data->>'full_name',
+      new.raw_user_meta_data->>'name',
+      split_part(new.email, '@', 1)
+    ),
+    '[^a-zA-Z0-9_]', '', 'g'
+  ));
+
+  if base_username = '' then
+    base_username := 'user';
+  end if;
+
+  final_username := base_username;
+  while exists (select 1 from public.users where username = final_username) loop
+    suffix := suffix + 1;
+    final_username := base_username || suffix::text;
+  end loop;
+
+  insert into public.users (id, email, username, avatar_url)
   values (
     new.id,
     new.email,
-    coalesce(new.raw_user_meta_data->>'username', split_part(new.email, '@', 1))
+    final_username,
+    coalesce(
+      new.raw_user_meta_data->>'avatar_url',
+      new.raw_user_meta_data->>'picture'
+    )
   );
   return new;
 end;

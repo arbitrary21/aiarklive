@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getFollowingIds } from "@/lib/follows";
 import { attachUsersToVideos, mockUsers, mockVideos } from "@/lib/mock-data";
 import type { CreateVideoInput, User, Video, VideoFilters } from "@/lib/types";
 
@@ -55,7 +56,13 @@ function filterMockVideos(videos: Video[], filters: VideoFilters): Video[] {
 
 export async function getVideos(filters: VideoFilters = {}): Promise<Video[]> {
   if (!isSupabaseConfigured()) {
-    return attachUsersToVideos(filterMockVideos(mockVideos, filters), mockUsers);
+    let filtered = filterMockVideos(mockVideos, filters);
+    if (filters.followingUserId) {
+      const followingIds = await getFollowingIds(filters.followingUserId);
+      if (followingIds.length === 0) return [];
+      filtered = filtered.filter((v) => followingIds.includes(v.user_id));
+    }
+    return attachUsersToVideos(filtered, mockUsers);
   }
 
   const supabase = await createClient();
@@ -72,6 +79,11 @@ export async function getVideos(filters: VideoFilters = {}): Promise<Video[]> {
   }
   if (filters.userId) {
     query = query.eq("user_id", filters.userId);
+  }
+  if (filters.followingUserId) {
+    const followingIds = await getFollowingIds(filters.followingUserId);
+    if (followingIds.length === 0) return [];
+    query = query.in("user_id", followingIds);
   }
   if (filters.q) {
     query = query.or(
@@ -200,6 +212,10 @@ export async function createVideo(
     };
     mockVideos.unshift(newVideo);
     return newVideo;
+  }
+
+  if (!userId) {
+    throw new Error("Sign in required to upload videos.");
   }
 
   const supabase = await createClient();

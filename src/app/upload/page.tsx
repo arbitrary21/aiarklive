@@ -1,10 +1,24 @@
+import { redirect } from "next/navigation";
 import { UploadForm } from "@/components/UploadForm";
+import { getCurrentUser } from "@/lib/auth";
 
 export const metadata = {
   title: "Upload",
 };
 
-export default function UploadPage() {
+export default async function UploadPage() {
+  const configured = Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+
+  if (configured) {
+    const user = await getCurrentUser();
+    if (!user) {
+      redirect("/login?next=/upload");
+    }
+  }
+
   return (
     <div className="mx-auto max-w-2xl space-y-8">
       <div>

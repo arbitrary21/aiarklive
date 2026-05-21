@@ -68,6 +68,10 @@ export function UploadForm() {
         }),
       });
       const data = await res.json();
+      if (res.status === 401) {
+        router.push("/login?next=/upload");
+        return;
+      }
       if (!res.ok) throw new Error(data.error ?? "Upload failed");
       router.push(`/video/${data.id}`);
     } catch (err) {

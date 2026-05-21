@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/auth";
 import { detectPlatform, fetchYouTubeMetadata } from "@/lib/youtube";
 import { createVideo, getVideos } from "@/lib/videos";
 import type { AiTool, Genre } from "@/lib/types";
@@ -12,12 +13,23 @@ export async function GET(request: Request) {
   const sort = searchParams.get("sort") as "latest" | "popular" | "recommended" | null;
   const userId = searchParams.get("userId");
   const q = searchParams.get("q");
+  const following = searchParams.get("following") === "true";
+
+  let followingUserId: string | undefined;
+  if (following) {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json([]);
+    }
+    followingUserId = user.id;
+  }
 
   const videos = await getVideos({
     aiTool: aiTool ?? undefined,
     genre: genre ?? undefined,
     sort: sort ?? undefined,
     userId: userId ?? undefined,
+    followingUserId,
     q: q ?? undefined,
   });
 
@@ -26,6 +38,15 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const user = await getCurrentUser();
+    if (
+      process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
+      !user
+    ) {
+      return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+    }
+
     const body = await request.json();
     const { embed_url, title, description, ai_tools, genre, prompt } = body;
     const source_url = embed_url as string;
@@ -57,17 +78,20 @@ export async function POST(request: Request) {
       resolvedEmbedUrl = meta.embed_url;
     }
 
-    const video = await createVideo({
-      embed_url: resolvedEmbedUrl,
-      source_url,
-      title,
-      description,
-      platform,
-      thumbnail_url,
-      ai_tools,
-      genre,
-      prompt,
-    });
+    const video = await createVideo(
+      {
+        embed_url: resolvedEmbedUrl,
+        source_url,
+        title,
+        description,
+        platform,
+        thumbnail_url,
+        ai_tools,
+        genre,
+        prompt,
+      },
+      user?.id
+    );
 
     return NextResponse.json(video, { status: 201 });
   } catch (err) {

@@ -22,7 +22,7 @@ export type AiTool =
   | "pixverse"
   | "other";
 
-export type FeedSort = "latest" | "popular" | "recommended";
+export type FeedSort = "latest" | "popular" | "recommended" | "following";
 
 export interface User {
   id: string;
@@ -57,6 +57,7 @@ export interface VideoFilters {
   genre?: Genre;
   sort?: FeedSort;
   userId?: string;
+  followingUserId?: string;
   q?: string;
 }
 
