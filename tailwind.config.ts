@@ -11,6 +11,15 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        surface: "var(--surface)",
+        muted: "var(--muted)",
+        brand: {
+          300: "var(--brand-300)",
+          500: "var(--brand-500)",
+        },
+        accent: {
+          500: "var(--accent-500)",
+        },
       },
     },
   },
