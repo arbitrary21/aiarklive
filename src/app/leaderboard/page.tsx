@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getTopCreators } from "@/lib/videos";
 
+export const runtime = "edge";
+
 export const metadata = {
   title: "리더보드",
 };

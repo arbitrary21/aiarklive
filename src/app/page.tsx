@@ -5,6 +5,8 @@ import { SITE_TAGLINE } from "@/lib/constants";
 import { getVideos } from "@/lib/videos";
 import type { FeedSort } from "@/lib/types";
 
+export const runtime = "edge";
+
 interface HomeProps {
   searchParams: { sort?: FeedSort };
 }

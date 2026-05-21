@@ -5,6 +5,8 @@ import { VideoEmbed } from "@/components/VideoEmbed";
 import { getAiToolLabel, getGenreLabel } from "@/lib/constants";
 import { getVideoById } from "@/lib/videos";
 
+export const runtime = "edge";
+
 interface VideoPageProps {
   params: { id: string };
 }

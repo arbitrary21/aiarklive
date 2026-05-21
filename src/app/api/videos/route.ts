@@ -3,6 +3,8 @@ import { detectPlatform, fetchYouTubeMetadata } from "@/lib/youtube";
 import { createVideo, getVideos } from "@/lib/videos";
 import type { AiTool, Genre } from "@/lib/types";
 
+export const runtime = "edge";
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const aiTool = searchParams.get("aiTool") as AiTool | null;

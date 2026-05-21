@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { VideoGrid } from "@/components/VideoGrid";
 import { getUserById, getVideos } from "@/lib/videos";
 
+export const runtime = "edge";
+
 interface ProfilePageProps {
   params: { id: string };
 }

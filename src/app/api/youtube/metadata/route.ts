@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { fetchYouTubeMetadata } from "@/lib/youtube";
 
+export const runtime = "edge";
+
 export async function POST(request: Request) {
   try {
     const { url } = await request.json();
