@@ -15,9 +15,9 @@ export function SiteBrand() {
         <img
           src="/images/sidebar-banner.webp"
           alt=""
-          width={360}
-          height={96}
-          className="h-14 w-full object-cover object-left"
+          width={400}
+          height={200}
+          className="aspect-[2/1] h-auto w-full object-cover object-center"
         />
       </div>
       <div className="mt-3 px-1">
