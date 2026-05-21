@@ -101,7 +101,7 @@ async def main() -> str:
                 result = await check_route_playwright(page, route)
                 results.append(result)
                 mark = "OK" if result["ok"] else "FAIL"
-                print(f"[{mark}] {route} — {result['status_code']}")
+                print(f"[{mark}] {route} - {result['status_code']}")
             await browser.close()
     except Exception as exc:
         print(f"Playwright unavailable ({exc}); falling back to HTTP checks.")
@@ -109,7 +109,7 @@ async def main() -> str:
             result = check_route_http(route)
             results.append(result)
             mark = "OK" if result["ok"] else "FAIL"
-            print(f"[{mark}] {route} — {result['status_code']}")
+            print(f"[{mark}] {route} - {result['status_code']}")
 
     failed = [item for item in results if not item["ok"]]
     report = {

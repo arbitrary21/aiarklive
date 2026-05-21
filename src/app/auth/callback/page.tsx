@@ -3,6 +3,10 @@
 import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import {
+  ensureUserProfileWithClient,
+  getUsernameSetupStateWithClient,
+} from "@/lib/auth-profile";
 
 function safeNextPath(next: string | null): string {
   if (!next || !next.startsWith("/") || next.startsWith("//")) {
@@ -45,10 +49,8 @@ function AuthCallbackHandler() {
         return;
       }
 
-      await fetch("/api/profile/ensure", { method: "POST" });
-
-      const setupRes = await fetch("/api/profile/setup");
-      const setup = setupRes.ok ? await setupRes.json() : null;
+      await ensureUserProfileWithClient(supabase);
+      const setup = await getUsernameSetupStateWithClient(supabase);
 
       if (cancelled) return;
 
