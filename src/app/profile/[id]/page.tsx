@@ -6,17 +6,17 @@ import { getUserById, getVideos } from "@/lib/videos";
 export const runtime = "edge";
 
 interface ProfilePageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({ params }: ProfilePageProps) {
-  const { id } = params;
+  const { id } = await params;
   const user = await getUserById(id);
   return { title: user?.username ?? "프로필" };
 }
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
-  const { id } = params;
+  const { id } = await params;
   const user = await getUserById(id);
 
   if (!user) notFound();

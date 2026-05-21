@@ -8,17 +8,17 @@ import { getVideoById } from "@/lib/videos";
 export const runtime = "edge";
 
 interface VideoPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({ params }: VideoPageProps) {
-  const { id } = params;
+  const { id } = await params;
   const video = await getVideoById(id);
   return { title: video?.title ?? "영상" };
 }
 
 export default async function VideoPage({ params }: VideoPageProps) {
-  const { id } = params;
+  const { id } = await params;
   const video = await getVideoById(id);
 
   if (!video) notFound();

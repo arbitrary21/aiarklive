@@ -8,11 +8,11 @@ import type { FeedSort } from "@/lib/types";
 export const runtime = "edge";
 
 interface HomeProps {
-  searchParams: { sort?: FeedSort };
+  searchParams: Promise<{ sort?: FeedSort }>;
 }
 
 export default async function Home({ searchParams }: HomeProps) {
-  const { sort = "latest" } = searchParams;
+  const { sort = "latest" } = await searchParams;
   const videos = await getVideos({ sort });
 
   return (
