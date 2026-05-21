@@ -95,4 +95,26 @@ body {
     @apply rounded-full px-4 py-2 text-sm text-white transition;
     background: var(--accent-500);
   }
+
+  .masonry-grid {
+    columns: 2;
+    column-gap: 0.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .masonry-grid {
+      columns: 3;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .masonry-grid {
+      columns: 4;
+    }
+  }
+
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 0.75rem;
+  }
 }

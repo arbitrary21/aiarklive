@@ -61,7 +61,11 @@ export interface VideoFilters {
   userId?: string;
   followingUserId?: string;
   q?: string;
+  limit?: number;
+  offset?: number;
 }
+
+export const FEED_PAGE_SIZE = 20;
 
 export interface CreateVideoInput {
   embed_url: string;

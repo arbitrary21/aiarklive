@@ -3,9 +3,10 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { FilterChips } from "@/components/FilterChips";
-import { VideoGrid } from "@/components/VideoGrid";
+import { InfiniteVideoGrid } from "@/components/InfiniteVideoGrid";
 import { AI_TOOLS, GENRES } from "@/lib/constants";
 import type { AiTool, Genre, Video } from "@/lib/types";
+import { FEED_PAGE_SIZE } from "@/lib/types";
 
 function ExploreContent() {
   const searchParams = useSearchParams();
@@ -24,6 +25,8 @@ function ExploreContent() {
     if (aiTool) params.set("aiTool", aiTool);
     if (genre) params.set("genre", genre);
     if (q) params.set("q", q);
+    params.set("limit", String(FEED_PAGE_SIZE));
+    params.set("offset", "0");
 
     setLoading(true);
     fetch(`/api/videos?${params.toString()}`)
@@ -60,8 +63,9 @@ function ExploreContent() {
       {loading ? (
         <div className="py-20 text-center text-muted">Loading...</div>
       ) : (
-        <VideoGrid
-          videos={videos}
+        <InfiniteVideoGrid
+          initialVideos={videos}
+          query={{ aiTool, genre, q: q || undefined }}
           emptyMessage="No videos match your filters."
         />
       )}

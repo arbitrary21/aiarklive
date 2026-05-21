@@ -1,10 +1,11 @@
 import { Suspense } from "react";
 import { SignInPrompt } from "@/components/auth/SignInPrompt";
+import { InfiniteVideoGrid } from "@/components/InfiniteVideoGrid";
 import { FeedTabs } from "@/components/FeedTabs";
-import { VideoGrid } from "@/components/VideoGrid";
 import { getCurrentUser } from "@/lib/auth";
 import { getVideos } from "@/lib/videos";
 import type { FeedSort } from "@/lib/types";
+import { FEED_PAGE_SIZE } from "@/lib/types";
 
 export const runtime = "edge";
 
@@ -18,8 +19,8 @@ export default async function Home({ searchParams }: HomeProps) {
 
   const videos = await getVideos(
     sort === "following" && currentUser
-      ? { followingUserId: currentUser.id, sort: "latest" }
-      : { sort: sort === "following" ? "latest" : sort }
+      ? { followingUserId: currentUser.id, sort: "latest", limit: FEED_PAGE_SIZE, offset: 0 }
+      : { sort: sort === "following" ? "latest" : sort, limit: FEED_PAGE_SIZE, offset: 0 }
   );
 
   const showFollowingSignIn = sort === "following" && !currentUser;
@@ -49,8 +50,12 @@ export default async function Home({ searchParams }: HomeProps) {
       {showFollowingSignIn ? (
         <SignInPrompt />
       ) : (
-        <VideoGrid
-          videos={videos}
+        <InfiniteVideoGrid
+          initialVideos={videos}
+          query={{
+            sort: sort === "following" ? "latest" : sort,
+            following: sort === "following" && Boolean(currentUser),
+          }}
           emptyMessage={
             sort === "following"
               ? "Follow creators to see their videos here."

@@ -14,6 +14,8 @@ export async function GET(request: Request) {
   const sort = searchParams.get("sort") as "latest" | "popular" | "recommended" | null;
   const userId = searchParams.get("userId");
   const q = searchParams.get("q");
+  const limit = searchParams.get("limit");
+  const offset = searchParams.get("offset");
   const following = searchParams.get("following") === "true";
 
   let followingUserId: string | undefined;
@@ -32,6 +34,8 @@ export async function GET(request: Request) {
     userId: userId ?? undefined,
     followingUserId,
     q: q ?? undefined,
+    limit: limit ? Number(limit) : undefined,
+    offset: offset ? Number(offset) : undefined,
   });
 
   return NextResponse.json(videos);

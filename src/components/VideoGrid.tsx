@@ -19,9 +19,11 @@ export function VideoGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    <div className="masonry-grid">
       {videos.map((video) => (
-        <VideoCard key={video.id} video={video} />
+        <div key={video.id} className="masonry-item">
+          <VideoCard video={video} />
+        </div>
       ))}
     </div>
   );

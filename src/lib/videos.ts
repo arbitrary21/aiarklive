@@ -51,6 +51,12 @@ function filterMockVideos(videos: Video[], filters: VideoFilters): Video[] {
       );
   }
 
+  const offset = filters.offset ?? 0;
+  const limit = filters.limit;
+  if (typeof limit === "number") {
+    return result.slice(offset, offset + limit);
+  }
+
   return result;
 }
 
@@ -100,6 +106,12 @@ export async function getVideos(filters: VideoFilters = {}): Promise<Video[]> {
       break;
     default:
       query = query.order("created_at", { ascending: false });
+  }
+
+  const offset = filters.offset ?? 0;
+  const limit = filters.limit;
+  if (typeof limit === "number") {
+    query = query.range(offset, offset + limit - 1);
   }
 
   const { data, error } = await query;

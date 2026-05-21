@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Download, ExternalLink } from "lucide-react";
 import { ShareMenu } from "@/components/ShareMenu";
+import { VideoActions } from "@/components/VideoActions";
 import { getPlatformLabel } from "@/lib/youtube";
 import type { Platform } from "@/lib/types";
 
@@ -12,6 +13,7 @@ interface VideoToolbarProps {
   platform: Platform;
   sourceUrl: string;
   pageUrl: string;
+  likesCount: number;
 }
 
 export function VideoToolbar({
@@ -20,9 +22,11 @@ export function VideoToolbar({
   platform,
   sourceUrl,
   pageUrl,
+  likesCount,
 }: VideoToolbarProps) {
   return (
     <div className="flex flex-wrap items-center gap-2">
+      <VideoActions videoId={videoId} initialLikes={likesCount} />
       <a
         href={`/api/download/thumbnail?id=${videoId}`}
         download

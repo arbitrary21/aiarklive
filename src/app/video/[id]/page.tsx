@@ -41,6 +41,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
           platform={video.platform}
           sourceUrl={sourceUrl}
           pageUrl={pageUrl}
+          likesCount={video.likes_count}
         />
       </div>
 
