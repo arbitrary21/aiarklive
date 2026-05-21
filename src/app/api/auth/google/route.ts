@@ -57,7 +57,10 @@ export async function GET(request: NextRequest) {
   });
 
   if (error || !data.url) {
-    return NextResponse.redirect(new URL("/login?error=auth", origin));
+    const reason = encodeURIComponent(error?.message ?? "missing_oauth_url");
+    return NextResponse.redirect(
+      new URL(`/login?error=auth&reason=${reason}`, origin)
+    );
   }
 
   const response = NextResponse.redirect(data.url);
