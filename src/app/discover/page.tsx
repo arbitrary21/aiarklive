@@ -3,6 +3,8 @@ import { Compass } from "lucide-react";
 import { getDiscoverCollections } from "@/lib/discover";
 import { TrendingKeywords } from "@/components/TrendingKeywords";
 
+export const runtime = "edge";
+
 export const metadata = {
   title: "Discover",
 };
