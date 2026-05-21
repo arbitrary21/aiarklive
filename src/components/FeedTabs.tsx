@@ -22,10 +22,10 @@ export function FeedTabs() {
             key={tab.value}
             href={href}
             className={clsx(
-              "rounded-full px-4 py-2 text-sm font-medium transition",
+              "rounded-lg px-4 py-2 text-sm font-medium transition",
               current === tab.value
-                ? "bg-white text-background"
-                : "bg-surface text-muted hover:text-white"
+                ? "bg-brand-500 text-white"
+                : "bg-[var(--surface-elevated)] text-muted hover:text-foreground"
             )}
           >
             {tab.label}

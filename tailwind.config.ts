@@ -12,7 +12,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         surface: "var(--surface)",
+        "surface-elevated": "var(--surface-elevated)",
         muted: "var(--muted)",
+        border: "var(--border)",
         brand: {
           300: "var(--brand-300)",
           500: "var(--brand-500)",

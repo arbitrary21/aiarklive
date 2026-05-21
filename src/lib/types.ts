@@ -57,6 +57,7 @@ export interface VideoFilters {
   genre?: Genre;
   sort?: FeedSort;
   userId?: string;
+  q?: string;
 }
 
 export interface CreateVideoInput {

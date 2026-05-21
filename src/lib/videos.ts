@@ -21,6 +21,15 @@ function filterMockVideos(videos: Video[], filters: VideoFilters): Video[] {
   if (filters.userId) {
     result = result.filter((v) => v.user_id === filters.userId);
   }
+  if (filters.q) {
+    const q = filters.q.toLowerCase();
+    result = result.filter(
+      (v) =>
+        v.title.toLowerCase().includes(q) ||
+        v.description?.toLowerCase().includes(q) ||
+        v.ai_tools.some((t) => t.includes(q))
+    );
+  }
 
   switch (filters.sort) {
     case "popular":
@@ -63,6 +72,11 @@ export async function getVideos(filters: VideoFilters = {}): Promise<Video[]> {
   }
   if (filters.userId) {
     query = query.eq("user_id", filters.userId);
+  }
+  if (filters.q) {
+    query = query.or(
+      `title.ilike.%${filters.q}%,description.ilike.%${filters.q}%`
+    );
   }
 
   switch (filters.sort) {

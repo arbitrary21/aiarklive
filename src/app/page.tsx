@@ -15,24 +15,21 @@ export default async function Home({ searchParams }: HomeProps) {
   const videos = await getVideos({ sort });
 
   return (
-    <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-brand-500/20 via-surface to-accent-500/10 p-8 sm:p-12">
-        <div className="relative z-10 max-w-2xl">
-          <p className="mb-2 text-sm font-medium uppercase tracking-widest text-brand-300">
-            AI Creator Archive
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
-            AI 크리에이터의 영상,
-            <br />
-            한곳에서 모아 보여주세요
-          </h1>
-          <p className="mt-4 text-lg text-muted">
-            YouTube·Shorts 링크로 포트폴리오를 만들고, AI 툴·장르별로
-            찾아보세요
-          </p>
-        </div>
-        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 -left-10 h-48 w-48 rounded-full bg-accent-500/20 blur-3xl" />
+    <div className="space-y-6">
+      <section className="panel relative overflow-hidden p-6 sm:p-8">
+        <p className="text-xs font-semibold uppercase tracking-widest text-brand-300">
+          AI Video Gallery
+        </p>
+        <h1 className="mt-2 max-w-xl text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          AI 크리에이터의 영상,
+          <br />
+          한곳에서 모아 보여주세요
+        </h1>
+        <p className="mt-3 max-w-lg text-sm text-muted">
+          YouTube·Shorts 링크로 포트폴리오를 만들고, AI 툴·장르별로
+          찾아보세요
+        </p>
+        <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand-500/10 blur-3xl" />
       </section>
 
       <Suspense fallback={<div className="h-10" />}>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Header } from "@/components/Header";
+import { AppShell } from "@/components/layout/AppShell";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
 import "./globals.css";
 
@@ -30,12 +31,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('aiarklive-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme: light)').matches)document.documentElement.setAttribute('data-theme','light');else document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
       >
-        <Header />
-        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">{children}</main>
+        <ThemeProvider>
+          <AppShell>{children}</AppShell>
+        </ThemeProvider>
       </body>
     </html>
   );

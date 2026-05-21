@@ -11,12 +11,14 @@ export async function GET(request: Request) {
   const genre = searchParams.get("genre") as Genre | null;
   const sort = searchParams.get("sort") as "latest" | "popular" | "recommended" | null;
   const userId = searchParams.get("userId");
+  const q = searchParams.get("q");
 
   const videos = await getVideos({
     aiTool: aiTool ?? undefined,
     genre: genre ?? undefined,
     sort: sort ?? undefined,
     userId: userId ?? undefined,
+    q: q ?? undefined,
   });
 
   return NextResponse.json(videos);

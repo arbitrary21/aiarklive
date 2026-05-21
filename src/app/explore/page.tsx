@@ -11,6 +11,7 @@ function ExploreContent() {
   const searchParams = useSearchParams();
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
+  const q = searchParams.get("q") ?? "";
   const [aiTool, setAiTool] = useState<AiTool | undefined>(
     (searchParams.get("tool") as AiTool) || undefined
   );
@@ -22,30 +23,35 @@ function ExploreContent() {
     const params = new URLSearchParams();
     if (aiTool) params.set("aiTool", aiTool);
     if (genre) params.set("genre", genre);
+    if (q) params.set("q", q);
 
     setLoading(true);
     fetch(`/api/videos?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => setVideos(data))
       .finally(() => setLoading(false));
-  }, [aiTool, genre]);
+  }, [aiTool, genre, q]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-white">탐색</h1>
-        <p className="mt-2 text-muted">AI 툴과 장르별로 영상을 찾아보세요</p>
+        <h1 className="text-2xl font-bold text-foreground">탐색</h1>
+        <p className="mt-1 text-sm text-muted">
+          {q
+            ? `"${q}" 검색 결과`
+            : "AI 툴과 장르별로 영상을 찾아보세요"}
+        </p>
       </div>
 
-      <section className="space-y-3">
-        <h2 className="text-sm font-medium uppercase tracking-wider text-muted">
+      <section className="panel space-y-3 p-4">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
           AI 툴
         </h2>
         <FilterChips options={AI_TOOLS} value={aiTool} onChange={setAiTool} />
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-sm font-medium uppercase tracking-wider text-muted">
+      <section className="panel space-y-3 p-4">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
           장르
         </h2>
         <FilterChips options={GENRES} value={genre} onChange={setGenre} />
@@ -65,7 +71,9 @@ function ExploreContent() {
 
 export default function ExplorePage() {
   return (
-    <Suspense fallback={<div className="py-20 text-center text-muted">불러오는 중...</div>}>
+    <Suspense
+      fallback={<div className="py-20 text-center text-muted">불러오는 중...</div>}
+    >
       <ExploreContent />
     </Suspense>
   );

@@ -13,7 +13,7 @@ export default async function LeaderboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white">인기 크리에이터</h1>
+        <h1 className="text-2xl font-bold text-foreground">인기 크리에이터</h1>
         <p className="mt-2 text-muted">좋아요 기준 상위 크리에이터</p>
       </div>
 
@@ -22,7 +22,7 @@ export default async function LeaderboardPage() {
           <Link
             key={creator.id}
             href={`/profile/${creator.id}`}
-            className="flex items-center gap-4 rounded-2xl border border-white/10 bg-surface p-4 transition hover:border-brand-500/30"
+            className="panel flex items-center gap-4 p-4 transition hover:border-brand-500/30"
           >
             <span
               className={`flex h-10 w-10 items-center justify-center rounded-full text-lg font-bold ${

@@ -11,21 +11,25 @@ export function VideoCard({ video }: VideoCardProps) {
   return (
     <Link
       href={`/video/${video.id}`}
-      className="group overflow-hidden rounded-2xl border border-white/5 bg-surface transition hover:border-brand-500/30 hover:shadow-xl hover:shadow-brand-500/10"
+      className="group panel overflow-hidden transition hover:shadow-lg hover:shadow-brand-500/5"
     >
-      <div className="relative aspect-video overflow-hidden bg-black/40">
+      <div className="relative aspect-[4/5] overflow-hidden bg-[var(--surface-elevated)] sm:aspect-video">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={video.thumbnail_url}
           alt={video.title}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
-        <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5 opacity-0 transition group-hover:opacity-100">
-          {video.ai_tools.slice(0, 2).map((tool) => (
+        <div
+          className="absolute inset-0 opacity-0 transition group-hover:opacity-100"
+          style={{ background: "var(--overlay)" }}
+        />
+        <div className="absolute bottom-0 left-0 right-0 flex flex-wrap gap-1.5 p-3 opacity-0 transition group-hover:opacity-100">
+          {video.ai_tools.slice(0, 3).map((tool) => (
             <span
               key={tool}
-              className="rounded-full bg-black/60 px-2 py-0.5 text-xs text-white backdrop-blur-sm"
+              className="rounded-lg px-2 py-0.5 text-xs font-medium text-foreground backdrop-blur-sm"
+              style={{ background: "var(--chip-bg)" }}
             >
               {getAiToolLabel(tool)}
             </span>
@@ -33,14 +37,14 @@ export function VideoCard({ video }: VideoCardProps) {
         </div>
       </div>
 
-      <div className="p-4">
-        <h3 className="line-clamp-2 font-semibold text-white group-hover:text-brand-300">
+      <div className="p-3.5">
+        <h3 className="line-clamp-2 text-sm font-semibold text-foreground group-hover:text-brand-300">
           {video.title}
         </h3>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mt-1 text-xs text-muted">
           {video.user?.username ?? "Unknown"} · {getGenreLabel(video.genre)}
         </p>
-        <div className="mt-3 flex items-center gap-4 text-xs text-muted">
+        <div className="mt-2.5 flex items-center gap-3 text-xs text-muted">
           <span className="flex items-center gap-1">
             <Heart className="h-3.5 w-3.5" />
             {video.likes_count.toLocaleString()}
