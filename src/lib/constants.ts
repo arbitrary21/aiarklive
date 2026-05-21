@@ -1,6 +1,6 @@
 import type { AiTool, Genre } from "./types";
 
-export const SITE_NAME = "aiarklive";
+export const SITE_NAME = "AIARKLIVE";
 export const SITE_TAGLINE =
   "AI creator videos, curated in one place";
 

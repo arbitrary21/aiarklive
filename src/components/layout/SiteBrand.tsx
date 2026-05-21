@@ -17,11 +17,11 @@ export function SiteBrand() {
           alt=""
           width={360}
           height={96}
-          className="h-14 w-full object-cover object-center"
+          className="h-14 w-full object-cover object-left"
         />
       </div>
       <div className="mt-3 px-1">
-        <p className="font-bold text-foreground">{SITE_NAME}</p>
+        <p className="font-bold tracking-wide text-foreground">{SITE_NAME}</p>
         <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-muted">
           {SITE_TAGLINE}
         </p>
