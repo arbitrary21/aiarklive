@@ -35,34 +35,34 @@ function ExploreContent() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">탐색</h1>
+        <h1 className="text-2xl font-bold text-foreground">Explore</h1>
         <p className="mt-1 text-sm text-muted">
           {q
-            ? `"${q}" 검색 결과`
-            : "AI 툴과 장르별로 영상을 찾아보세요"}
+            ? `Results for "${q}"`
+            : "Browse videos by AI tool and genre"}
         </p>
       </div>
 
       <section className="panel space-y-3 p-4">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
-          AI 툴
+          AI tools
         </h2>
         <FilterChips options={AI_TOOLS} value={aiTool} onChange={setAiTool} />
       </section>
 
       <section className="panel space-y-3 p-4">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
-          장르
+          Genre
         </h2>
         <FilterChips options={GENRES} value={genre} onChange={setGenre} />
       </section>
 
       {loading ? (
-        <div className="py-20 text-center text-muted">불러오는 중...</div>
+        <div className="py-20 text-center text-muted">Loading...</div>
       ) : (
         <VideoGrid
           videos={videos}
-          emptyMessage="조건에 맞는 영상이 없습니다."
+          emptyMessage="No videos match your filters."
         />
       )}
     </div>
@@ -72,7 +72,7 @@ function ExploreContent() {
 export default function ExplorePage() {
   return (
     <Suspense
-      fallback={<div className="py-20 text-center text-muted">불러오는 중...</div>}
+      fallback={<div className="py-20 text-center text-muted">Loading...</div>}
     >
       <ExploreContent />
     </Suspense>

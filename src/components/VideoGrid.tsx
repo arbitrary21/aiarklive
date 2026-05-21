@@ -8,7 +8,7 @@ interface VideoGridProps {
 
 export function VideoGrid({
   videos,
-  emptyMessage = "표시할 영상이 없습니다.",
+  emptyMessage = "No videos to display.",
 }: VideoGridProps) {
   if (videos.length === 0) {
     return (

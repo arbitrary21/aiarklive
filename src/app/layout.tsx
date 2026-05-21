@@ -18,7 +18,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: `${SITE_NAME} — AI 영상 아카이브`,
+    default: `${SITE_NAME} — AI Video Archive`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_TAGLINE,
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

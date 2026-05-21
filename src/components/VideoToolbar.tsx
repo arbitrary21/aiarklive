@@ -27,7 +27,7 @@ export function VideoToolbar({
         href={`/api/download/thumbnail?id=${videoId}`}
         download
         className="btn-icon"
-        title="썸네일 저장"
+        title="Save thumbnail"
       >
         <Download className="h-4 w-4" />
       </a>
@@ -37,7 +37,7 @@ export function VideoToolbar({
         target="_blank"
         rel="noopener noreferrer"
         className="btn-icon"
-        title={`${getPlatformLabel(platform)}에서 보기`}
+        title={`View on ${getPlatformLabel(platform)}`}
       >
         <ExternalLink className="h-4 w-4" />
       </a>
@@ -48,7 +48,7 @@ export function VideoToolbar({
         className="ml-auto hidden rounded-xl border px-3 py-1.5 text-xs text-muted transition hover:text-foreground sm:inline-block"
         style={{ borderColor: "var(--border)" }}
       >
-        {getPlatformLabel(platform)} 원본
+        {getPlatformLabel(platform)} source
       </Link>
     </div>
   );

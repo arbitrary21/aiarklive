@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
     if (!url) {
       return NextResponse.json(
-        { error: "URL을 입력해주세요." },
+        { error: "Please enter a URL." },
         { status: 400 }
       );
     }
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     return NextResponse.json(metadata);
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "조회 실패" },
+      { error: err instanceof Error ? err.message : "Failed to fetch metadata" },
       { status: 400 }
     );
   }

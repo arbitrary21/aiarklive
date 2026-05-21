@@ -19,8 +19,8 @@ export function ThemeToggle({ compact }: ThemeToggleProps) {
           ? "btn-icon"
           : "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted transition hover:bg-[var(--surface-elevated)] hover:text-foreground"
       }
-      aria-label={theme === "dark" ? "라이트 모드" : "다크 모드"}
-      title={theme === "dark" ? "라이트 모드" : "다크 모드"}
+      aria-label={theme === "dark" ? "Light mode" : "Dark mode"}
+      title={theme === "dark" ? "Light mode" : "Dark mode"}
     >
       {theme === "dark" ? (
         <Sun className="h-4 w-4 shrink-0" />
@@ -28,7 +28,7 @@ export function ThemeToggle({ compact }: ThemeToggleProps) {
         <Moon className="h-4 w-4 shrink-0" />
       )}
       {!compact && (
-        <span>{theme === "dark" ? "라이트 모드" : "다크 모드"}</span>
+        <span>{theme === "dark" ? "Light mode" : "Dark mode"}</span>
       )}
     </button>
   );

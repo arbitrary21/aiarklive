@@ -13,7 +13,7 @@ export function FilterChips<T extends string>({
   options,
   value,
   onChange,
-  allLabel = "전체",
+  allLabel = "All",
 }: FilterChipsProps<T>) {
   return (
     <div className="flex flex-wrap gap-2">

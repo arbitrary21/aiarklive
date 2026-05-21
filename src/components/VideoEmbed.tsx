@@ -24,14 +24,14 @@ export function VideoEmbed({ embedUrl, platform, title }: VideoEmbedProps) {
   return (
     <div className="flex aspect-video items-center justify-center rounded-2xl border border-white/10 bg-surface">
       <div className="text-center">
-        <p className="text-muted">임베드 미리보기</p>
+        <p className="text-muted">Embed preview</p>
         <a
           href={embedUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-2 inline-block text-brand-400 hover:underline"
         >
-          원본 링크 열기 →
+          Open source link →
         </a>
       </div>
     </div>

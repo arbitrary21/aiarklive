@@ -4,7 +4,7 @@ import { getTopCreators } from "@/lib/videos";
 export const runtime = "edge";
 
 export const metadata = {
-  title: "리더보드",
+  title: "Leaderboard",
 };
 
 export default async function LeaderboardPage() {
@@ -13,8 +13,8 @@ export default async function LeaderboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">인기 크리에이터</h1>
-        <p className="mt-2 text-muted">좋아요 기준 상위 크리에이터</p>
+        <h1 className="text-2xl font-bold text-foreground">Top creators</h1>
+        <p className="mt-2 text-muted">Ranked by total likes</p>
       </div>
 
       <div className="space-y-3">
@@ -43,14 +43,14 @@ export default async function LeaderboardPage() {
             <div className="flex-1">
               <p className="font-semibold text-white">{creator.username}</p>
               <p className="text-sm text-muted line-clamp-1">
-                {creator.bio ?? "AI 크리에이터"}
+                {creator.bio ?? "AI creator"}
               </p>
             </div>
             <div className="text-right text-sm">
               <p className="font-medium text-white">
                 {creator.total_likes.toLocaleString()} ♥
               </p>
-              <p className="text-muted">{creator.video_count}개 영상</p>
+              <p className="text-muted">{creator.video_count} videos</p>
             </div>
           </Link>
         ))}

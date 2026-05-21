@@ -49,7 +49,7 @@ export function ShareMenu({ title, url }: ShareMenuProps) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         className="btn-icon"
-        aria-label="공유"
+        aria-label="Share"
       >
         <Share2 className="h-4 w-4" />
       </button>
@@ -62,7 +62,7 @@ export function ShareMenu({ title, url }: ShareMenuProps) {
             background: "var(--surface)",
           }}
         >
-          <p className="px-4 pb-2 text-xs font-medium text-muted">공유</p>
+          <p className="px-4 pb-2 text-xs font-medium text-muted">Share</p>
           <button
             type="button"
             onClick={copyUrl}
@@ -73,7 +73,7 @@ export function ShareMenu({ title, url }: ShareMenuProps) {
             ) : (
               <Copy className="h-4 w-4" />
             )}
-            {copied ? "복사됨" : "링크 복사"}
+            {copied ? "Copied" : "Copy link"}
           </button>
           {canShare && (
             <button
@@ -82,7 +82,7 @@ export function ShareMenu({ title, url }: ShareMenuProps) {
               className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-foreground transition hover:bg-[var(--surface-elevated)]"
             >
               <Share2 className="h-4 w-4" />
-              공유하기
+              Share
             </button>
           )}
         </div>

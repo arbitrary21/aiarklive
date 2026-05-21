@@ -61,7 +61,7 @@ export function getPlatformLabel(platform: Platform): string {
 export async function fetchYouTubeMetadata(url: string, apiKey?: string) {
   const videoId = extractYouTubeId(url);
   if (!videoId) {
-    throw new Error("유효한 YouTube URL이 아닙니다.");
+    throw new Error("Invalid YouTube URL.");
   }
 
   const thumbnail_url = getYouTubeThumbnail(videoId);
@@ -70,7 +70,7 @@ export async function fetchYouTubeMetadata(url: string, apiKey?: string) {
   if (!apiKey) {
     return {
       videoId,
-      title: "YouTube 영상",
+      title: "YouTube video",
       description: "",
       thumbnail_url,
       embed_url,
@@ -89,14 +89,14 @@ export async function fetchYouTubeMetadata(url: string, apiKey?: string) {
   );
 
   if (!res.ok) {
-    throw new Error("YouTube API 요청에 실패했습니다.");
+    throw new Error("YouTube API request failed.");
   }
 
   const data = await res.json();
   const snippet = data.items?.[0]?.snippet;
 
   if (!snippet) {
-    throw new Error("영상 정보를 찾을 수 없습니다.");
+    throw new Error("Video not found.");
   }
 
   return {

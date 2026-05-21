@@ -14,13 +14,13 @@ import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const navItems = [
-  { href: "/", label: "홈", icon: Home },
-  { href: "/explore", label: "탐색", icon: Compass },
-  { href: "/upload", label: "등록", icon: Link2 },
-  { href: "/leaderboard", label: "순위", icon: Trophy },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/explore", label: "Explore", icon: Compass },
+  { href: "/upload", label: "Upload", icon: Link2 },
+  { href: "/leaderboard", label: "Rankings", icon: Trophy },
   {
     href: "/profile/11111111-1111-1111-1111-111111111101",
-    label: "프로필",
+    label: "Profile",
     icon: User,
   },
 ];

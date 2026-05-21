@@ -26,7 +26,7 @@ export function CreateMenu() {
         className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-accent-500 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-brand-500/20 transition hover:opacity-90"
       >
         <Plus className="h-4 w-4" />
-        <span className="hidden sm:inline">만들기</span>
+        <span className="hidden sm:inline">Create</span>
         <ChevronDown className="h-4 w-4 opacity-80" />
       </button>
 
@@ -44,7 +44,7 @@ export function CreateMenu() {
             className="flex items-center gap-3 px-4 py-3 text-sm text-foreground transition hover:bg-[var(--surface-elevated)]"
           >
             <Video className="h-4 w-4 text-brand-300" />
-            영상 링크 등록
+            Add video link
           </Link>
         </div>
       )}

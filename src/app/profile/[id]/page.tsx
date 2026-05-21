@@ -12,7 +12,7 @@ interface ProfilePageProps {
 export async function generateMetadata({ params }: ProfilePageProps) {
   const { id } = await params;
   const user = await getUserById(id);
-  return { title: user?.username ?? "프로필" };
+  return { title: user?.username ?? "Profile" };
 }
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
@@ -33,22 +33,22 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           <h1 className="text-3xl font-bold text-foreground">{user.username}</h1>
           {user.bio && <p className="mt-2 max-w-xl text-muted">{user.bio}</p>}
           <p className="mt-3 text-sm text-muted">
-            {videos.length}개 영상 ·{" "}
-            {new Date(user.created_at).toLocaleDateString("ko-KR")} 가입
+            {videos.length} videos · Joined{" "}
+            {new Date(user.created_at).toLocaleDateString("en-US")}
           </p>
         </div>
       </section>
 
       <div>
-        <h2 className="mb-6 text-xl font-semibold text-foreground">포트폴리오</h2>
-        <VideoGrid videos={videos} emptyMessage="아직 등록한 영상이 없습니다." />
+        <h2 className="mb-6 text-xl font-semibold text-foreground">Portfolio</h2>
+        <VideoGrid videos={videos} emptyMessage="No videos uploaded yet." />
       </div>
 
       <Link
         href="/upload"
         className="inline-block rounded-xl border border-white/10 px-4 py-2 text-sm text-muted transition hover:text-foreground"
       >
-        + 새 영상 등록
+        + Add video
       </Link>
     </div>
   );

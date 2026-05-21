@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
     if (!embed_url || !title || !ai_tools?.length || !genre) {
       return NextResponse.json(
-        { error: "필수 항목을 입력해주세요." },
+        { error: "Please fill in all required fields." },
         { status: 400 }
       );
     }
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     const platform = detectPlatform(embed_url);
     if (!platform) {
       return NextResponse.json(
-        { error: "지원하지 않는 플랫폼 URL입니다." },
+        { error: "Unsupported platform URL." },
         { status: 400 }
       );
     }
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     return NextResponse.json(video, { status: 201 });
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "등록 실패" },
+      { error: err instanceof Error ? err.message : "Upload failed" },
       { status: 500 }
     );
   }

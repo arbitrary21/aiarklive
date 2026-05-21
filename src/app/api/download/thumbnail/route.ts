@@ -8,21 +8,21 @@ export async function GET(request: Request) {
   const id = searchParams.get("id");
 
   if (!id) {
-    return NextResponse.json({ error: "id가 필요합니다." }, { status: 400 });
+    return NextResponse.json({ error: "id is required." }, { status: 400 });
   }
 
   const video = await getVideoById(id);
   if (!video?.thumbnail_url) {
-    return NextResponse.json({ error: "영상을 찾을 수 없습니다." }, { status: 404 });
+    return NextResponse.json({ error: "Video not found." }, { status: 404 });
   }
 
   const res = await fetch(video.thumbnail_url);
   if (!res.ok) {
-    return NextResponse.json({ error: "썸네일 조회 실패" }, { status: 502 });
+    return NextResponse.json({ error: "Failed to fetch thumbnail" }, { status: 502 });
   }
 
   const buffer = await res.arrayBuffer();
-  const safeName = video.title.replace(/[^\w\s가-힣-]/g, "").slice(0, 80);
+  const safeName = video.title.replace(/[^\w\s-]/g, "").slice(0, 80);
 
   return new NextResponse(buffer, {
     headers: {

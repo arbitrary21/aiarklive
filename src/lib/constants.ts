@@ -2,7 +2,7 @@ import type { AiTool, Genre } from "./types";
 
 export const SITE_NAME = "aiarklive";
 export const SITE_TAGLINE =
-  "AI 크리에이터의 영상, 한곳에서 모아 보여주세요";
+  "AI creator videos, curated in one place";
 
 export const AI_TOOLS: { value: AiTool; label: string }[] = [
   { value: "kling", label: "Kling" },
@@ -15,23 +15,23 @@ export const AI_TOOLS: { value: AiTool; label: string }[] = [
   { value: "ltx-video", label: "LTX-Video" },
   { value: "wan", label: "Wan" },
   { value: "pixverse", label: "PixVerse" },
-  { value: "other", label: "기타" },
+  { value: "other", label: "Other" },
 ];
 
 export const GENRES: { value: Genre; label: string }[] = [
-  { value: "short-film", label: "단편영화" },
-  { value: "ad", label: "광고" },
-  { value: "music-video", label: "뮤직비디오" },
-  { value: "short-form", label: "숏폼" },
-  { value: "experimental", label: "실험영상" },
-  { value: "animation", label: "애니메이션" },
-  { value: "loop", label: "루프" },
+  { value: "short-film", label: "Short Film" },
+  { value: "ad", label: "Ad" },
+  { value: "music-video", label: "Music Video" },
+  { value: "short-form", label: "Short Form" },
+  { value: "experimental", label: "Experimental" },
+  { value: "animation", label: "Animation" },
+  { value: "loop", label: "Loop" },
 ];
 
 export const FEED_TABS: { value: "latest" | "popular" | "recommended"; label: string }[] = [
-  { value: "latest", label: "최신" },
-  { value: "popular", label: "인기" },
-  { value: "recommended", label: "추천" },
+  { value: "latest", label: "Latest" },
+  { value: "popular", label: "Popular" },
+  { value: "recommended", label: "Recommended" },
 ];
 
 export function getAiToolLabel(tool: AiTool): string {

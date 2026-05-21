@@ -16,7 +16,7 @@ interface VideoPageProps {
 export async function generateMetadata({ params }: VideoPageProps) {
   const { id } = await params;
   const video = await getVideoById(id);
-  return { title: video?.title ?? "영상" };
+  return { title: video?.title ?? "Video" };
 }
 
 export default async function VideoPage({ params }: VideoPageProps) {
@@ -69,7 +69,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
               </span>
               <span>{getGenreLabel(video.genre)}</span>
               <span>
-                {new Date(video.created_at).toLocaleDateString("ko-KR")}
+                {new Date(video.created_at).toLocaleDateString("en-US")}
               </span>
             </div>
           </div>
@@ -84,7 +84,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
         <aside className="space-y-4">
           <div className="panel p-4">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
-              크리에이터
+              Creator
             </h3>
             <Link
               href={`/profile/${video.user_id}`}
@@ -108,7 +108,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
 
           <div className="panel p-4">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
-              AI 툴
+              AI tools
             </h3>
             <div className="flex flex-wrap gap-2">
               {video.ai_tools.map((tool) => (
@@ -127,7 +127,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
           {video.prompt && (
             <div className="panel p-4">
               <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-accent-500">
-                프롬프트
+                Prompt
               </h3>
               <p className="whitespace-pre-wrap text-sm text-muted">
                 {video.prompt}
@@ -136,8 +136,9 @@ export default async function VideoPage({ params }: VideoPageProps) {
           )}
 
           <p className="text-xs leading-relaxed text-muted">
-            링크 영상은 썸네일 저장과 원본 플랫폼 이동만 지원합니다. 영상
-            파일 다운로드는 Pro 직접 업로드(예정)에서 제공됩니다.
+            Linked videos support thumbnail download and opening the source
+            platform only. Full video file download will be available with Pro
+            direct upload (coming soon).
           </p>
         </aside>
       </div>

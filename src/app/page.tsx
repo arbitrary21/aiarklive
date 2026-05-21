@@ -21,13 +21,12 @@ export default async function Home({ searchParams }: HomeProps) {
           AI Video Gallery
         </p>
         <h1 className="mt-2 max-w-xl text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-          AI 크리에이터의 영상,
+          AI creator videos,
           <br />
-          한곳에서 모아 보여주세요
+          curated in one place
         </h1>
         <p className="mt-3 max-w-lg text-sm text-muted">
-          YouTube·Shorts 링크로 포트폴리오를 만들고, AI 툴·장르별로
-          찾아보세요
+          Build a portfolio with YouTube and Shorts links. Browse by AI tool and genre.
         </p>
         <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand-500/10 blur-3xl" />
       </section>
