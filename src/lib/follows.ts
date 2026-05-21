@@ -110,6 +110,23 @@ export async function unfollowUser(
   if (error) throw error;
 }
 
+export async function getFollowerIds(userId: string): Promise<string[]> {
+  if (!isSupabaseConfigured()) {
+    return Array.from(mockFollows)
+      .filter((key) => key.endsWith(`:${userId}`))
+      .map((key) => key.split(":")[0]!);
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("follows")
+    .select("follower_id")
+    .eq("following_id", userId);
+
+  if (error || !data) return [];
+  return data.map((row) => row.follower_id);
+}
+
 export async function getFollowingIds(followerId: string): Promise<string[]> {
   if (!isSupabaseConfigured()) {
     return Array.from(mockFollows)

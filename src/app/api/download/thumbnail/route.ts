@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getVideoById } from "@/lib/videos";
+import { getVideoById, incrementVideoDownloads } from "@/lib/videos";
 
 export const runtime = "edge";
 
@@ -23,6 +23,12 @@ export async function GET(request: Request) {
 
   const buffer = await res.arrayBuffer();
   const safeName = video.title.replace(/[^\w\s-]/g, "").slice(0, 80);
+
+  try {
+    await incrementVideoDownloads(id);
+  } catch {
+    // Non-blocking if count update fails
+  }
 
   return new NextResponse(buffer, {
     headers: {

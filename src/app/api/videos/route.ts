@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
+import { notifyFollowersOfNewVideo } from "@/lib/notifications";
 import { detectPlatform, fetchYouTubeMetadata } from "@/lib/youtube";
 import { createVideo, getVideos } from "@/lib/videos";
 import type { AiTool, Genre } from "@/lib/types";
@@ -92,6 +93,14 @@ export async function POST(request: Request) {
       },
       user?.id
     );
+
+    if (user?.id) {
+      try {
+        await notifyFollowersOfNewVideo(user.id, video.id, video.title);
+      } catch {
+        // Non-blocking if notifications fail
+      }
+    }
 
     return NextResponse.json(video, { status: 201 });
   } catch (err) {

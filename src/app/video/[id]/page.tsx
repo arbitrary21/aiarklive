@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Eye, Heart } from "lucide-react";
+import { Download, Eye, Heart } from "lucide-react";
 import { VideoEmbed } from "@/components/VideoEmbed";
 import { VideoToolbar } from "@/components/VideoToolbar";
 import { getAiToolLabel, getGenreLabel } from "@/lib/constants";
@@ -67,6 +67,10 @@ export default async function VideoPage({ params }: VideoPageProps) {
                 <Eye className="h-4 w-4" />
                 {video.views_count.toLocaleString()}
               </span>
+              <span className="flex items-center gap-1">
+                <Download className="h-4 w-4" />
+                {(video.downloads_count ?? 0).toLocaleString()}
+              </span>
               <span>{getGenreLabel(video.genre)}</span>
               <span>
                 {new Date(video.created_at).toLocaleDateString("en-US")}
@@ -94,9 +98,12 @@ export default async function VideoPage({ params }: VideoPageProps) {
                 {(video.user?.username ?? "?").charAt(0).toUpperCase()}
               </div>
               <div>
-                <p className="font-medium text-foreground">
+                <Link
+                  href={`/profile/${video.user_id}`}
+                  className="font-medium text-foreground transition hover:text-brand-300"
+                >
                   {video.user?.username ?? "Unknown"}
-                </p>
+                </Link>
                 {video.user?.bio && (
                   <p className="text-xs text-muted line-clamp-2">
                     {video.user.bio}

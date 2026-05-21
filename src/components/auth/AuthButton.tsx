@@ -24,7 +24,17 @@ export function AuthButton({ nextPath }: AuthButtonProps) {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  if (!configured) return null;
+  if (!configured) {
+    return (
+      <Link
+        href="/login"
+        className="rounded-xl border px-3 py-2 text-sm font-medium text-foreground transition hover:bg-[var(--surface-elevated)]"
+        style={{ borderColor: "var(--border)" }}
+      >
+        Sign in
+      </Link>
+    );
+  }
 
   if (loading) {
     return (

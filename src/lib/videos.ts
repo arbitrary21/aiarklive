@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
-import { getFollowingIds } from "@/lib/follows";
+import { getFollowingIds, getFollowStats } from "@/lib/follows";
 import { attachUsersToVideos, mockUsers, mockVideos } from "@/lib/mock-data";
-import type { CreateVideoInput, User, Video, VideoFilters } from "@/lib/types";
+import type { CreateVideoInput, User, UserProfileStats, Video, VideoFilters } from "@/lib/types";
 
 function isSupabaseConfigured(): boolean {
   return Boolean(
@@ -207,6 +207,7 @@ export async function createVideo(
       prompt: input.prompt ?? null,
       likes_count: 0,
       views_count: 0,
+      downloads_count: 0,
       is_nsfw: false,
       created_at: new Date().toISOString(),
     };
@@ -226,6 +227,7 @@ export async function createVideo(
       user_id: userId,
       likes_count: 0,
       views_count: 0,
+      downloads_count: 0,
       is_nsfw: false,
     })
     .select()
@@ -233,4 +235,39 @@ export async function createVideo(
 
   if (error) throw error;
   return data as Video;
+}
+
+export async function getUserProfileStats(
+  userId: string
+): Promise<UserProfileStats> {
+  const [videos, followStats] = await Promise.all([
+    getVideos({ userId }),
+    getFollowStats(userId),
+  ]);
+
+  return {
+    videoCount: videos.length,
+    followers: followStats.followers,
+    following: followStats.following,
+    totalLikes: videos.reduce((sum, video) => sum + video.likes_count, 0),
+    totalDownloads: videos.reduce(
+      (sum, video) => sum + (video.downloads_count ?? 0),
+      0
+    ),
+  };
+}
+
+export async function incrementVideoDownloads(videoId: string): Promise<void> {
+  if (!isSupabaseConfigured()) {
+    const video = mockVideos.find((v) => v.id === videoId);
+    if (video) video.downloads_count = (video.downloads_count ?? 0) + 1;
+    return;
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("increment_video_downloads", {
+    video_id: videoId,
+  });
+
+  if (error) throw error;
 }

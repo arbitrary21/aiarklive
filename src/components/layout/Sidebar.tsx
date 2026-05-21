@@ -106,6 +106,7 @@ function useSidebarWidth() {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
   const navItems = useNavItems();
   const { width, isResizing, onResizeStart } = useSidebarWidth();
 
@@ -154,7 +155,15 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t p-3" style={{ borderColor: "var(--border)" }}>
+      <div className="space-y-2 border-t p-3" style={{ borderColor: "var(--border)" }}>
+        {!user && (
+          <Link
+            href="/login"
+            className="flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-brand-500 to-accent-500 px-3 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+          >
+            Sign in with Google
+          </Link>
+        )}
         <ThemeToggle />
       </div>
 

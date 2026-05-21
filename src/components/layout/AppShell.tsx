@@ -2,6 +2,7 @@
 
 import { SearchBar } from "@/components/SearchBar";
 import { AuthButton } from "@/components/auth/AuthButton";
+import { NotificationBell } from "@/components/auth/NotificationBell";
 import { CreateMenu } from "@/components/CreateMenu";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { MobileNav, Sidebar } from "./Sidebar";
@@ -18,6 +19,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <SearchBar />
           <div className="flex items-center gap-2">
             <ThemeToggle compact />
+            <NotificationBell />
             <AuthButton />
             <CreateMenu />
           </div>

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import clsx from "clsx";
 import { AI_TOOLS, GENRES } from "@/lib/constants";
 import type { AiTool, Genre } from "@/lib/types";
 
@@ -82,26 +83,26 @@ export function UploadForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className="panel space-y-8 p-6 sm:p-8">
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold text-white">1. Video link</h2>
+        <h2 className="form-label">1. Video link</h2>
         <p className="text-sm text-muted">
           Paste a YouTube, TikTok, or X link. $0 storage — embed only.
         </p>
-        <div className="flex gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row">
           <input
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://www.youtube.com/watch?v=..."
             required
-            className="flex-1 rounded-xl border border-white/10 bg-surface px-4 py-3 text-white placeholder:text-muted focus:border-brand-500 focus:outline-none"
+            className="input-field flex-1"
           />
           <button
             type="button"
             onClick={fetchMetadata}
             disabled={loading || !url.trim()}
-            className="rounded-xl border border-white/10 px-4 py-3 text-sm text-white transition hover:bg-white/5 disabled:opacity-50"
+            className="btn-secondary shrink-0"
           >
             Fetch info
           </button>
@@ -109,18 +110,16 @@ export function UploadForm() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold text-white">2. AI tools (required)</h2>
+        <h2 className="form-label">2. AI tools (required)</h2>
         <div className="flex flex-wrap gap-2">
           {AI_TOOLS.map((tool) => (
             <button
               key={tool.value}
               type="button"
               onClick={() => toggleTool(tool.value)}
-              className={`rounded-full px-4 py-2 text-sm transition ${
-                aiTools.includes(tool.value)
-                  ? "bg-accent-500 text-white"
-                  : "bg-surface text-muted hover:text-white"
-              }`}
+              className={clsx(
+                aiTools.includes(tool.value) ? "chip-btn-active" : "chip-btn"
+              )}
             >
               {tool.label}
             </button>
@@ -129,11 +128,11 @@ export function UploadForm() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold text-white">3. Genre</h2>
+        <h2 className="form-label">3. Genre</h2>
         <select
           value={genre}
           onChange={(e) => setGenre(e.target.value as Genre)}
-          className="w-full rounded-xl border border-white/10 bg-surface px-4 py-3 text-white focus:border-brand-500 focus:outline-none"
+          className="input-field"
         >
           {GENRES.map((g) => (
             <option key={g.value} value={g.value}>
@@ -144,33 +143,33 @@ export function UploadForm() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold text-white">4. Details</h2>
+        <h2 className="form-label">4. Details</h2>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
           required
-          className="w-full rounded-xl border border-white/10 bg-surface px-4 py-3 text-white placeholder:text-muted focus:border-brand-500 focus:outline-none"
+          className="input-field"
         />
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description (optional)"
           rows={3}
-          className="w-full rounded-xl border border-white/10 bg-surface px-4 py-3 text-white placeholder:text-muted focus:border-brand-500 focus:outline-none"
+          className="input-field"
         />
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="Share your prompt (optional)"
           rows={3}
-          className="w-full rounded-xl border border-white/10 bg-surface px-4 py-3 text-white placeholder:text-muted focus:border-brand-500 focus:outline-none"
+          className="input-field"
         />
       </section>
 
       {error && (
-        <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-700 [data-theme=dark]:text-red-300">
           {error}
         </p>
       )}

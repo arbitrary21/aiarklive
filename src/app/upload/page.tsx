@@ -12,7 +12,7 @@ export default async function UploadPage() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 
-  if (configured) {
+  if (configured && process.env.NODE_ENV === "production") {
     const user = await getCurrentUser();
     if (!user) {
       redirect("/login?next=/upload");

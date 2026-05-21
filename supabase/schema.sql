@@ -26,6 +26,7 @@ create table public.videos (
   prompt text,
   likes_count integer default 0 not null,
   views_count integer default 0 not null,
+  downloads_count integer default 0 not null,
   is_nsfw boolean default false not null,
   created_at timestamptz default now() not null
 );
@@ -57,11 +58,25 @@ create table public.follows (
   unique(follower_id, following_id)
 );
 
+-- notifications (in-app alerts for followed creators)
+create table public.notifications (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references public.users(id) on delete cascade not null,
+  type text not null default 'new_video',
+  actor_id uuid references public.users(id) on delete cascade not null,
+  video_id uuid references public.videos(id) on delete cascade,
+  message text not null,
+  read_at timestamptz,
+  created_at timestamptz default now() not null
+);
+
 -- indexes
 create index videos_created_at_idx on public.videos(created_at desc);
 create index videos_likes_count_idx on public.videos(likes_count desc);
 create index videos_ai_tools_idx on public.videos using gin(ai_tools);
 create index videos_genre_idx on public.videos(genre);
+create index notifications_user_created_idx on public.notifications(user_id, created_at desc);
+create index notifications_user_unread_idx on public.notifications(user_id) where read_at is null;
 
 -- RLS
 alter table public.users enable row level security;
@@ -69,6 +84,7 @@ alter table public.videos enable row level security;
 alter table public.likes enable row level security;
 alter table public.saves enable row level security;
 alter table public.follows enable row level security;
+alter table public.notifications enable row level security;
 
 -- public read policies (MVP)
 create policy "Public users read" on public.users for select using (true);
@@ -85,6 +101,9 @@ create policy "User can unlike" on public.likes for delete using (auth.uid() = u
 create policy "Public saves read" on public.saves for select using (true);
 create policy "User can save" on public.saves for insert with check (auth.uid() = user_id);
 create policy "User can unsave" on public.saves for delete using (auth.uid() = user_id);
+create policy "Users read own notifications" on public.notifications for select using (auth.uid() = user_id);
+create policy "Users update own notifications" on public.notifications for update using (auth.uid() = user_id);
+create policy "Actor can create notifications" on public.notifications for insert with check (auth.uid() = actor_id);
 
 -- auto-create user profile on signup
 create or replace function public.handle_new_user()
@@ -132,13 +151,26 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
--- Data API grants (Automatically expose new tables = OFF 일 때 필수)
+create or replace function public.increment_video_downloads(video_id uuid)
+returns void as $$
+begin
+  update public.videos
+  set downloads_count = downloads_count + 1
+  where id = video_id;
+end;
+$$ language plpgsql security definer;
+
+grant execute on function public.increment_video_downloads(uuid) to anon, authenticated;
+
+-- Data API grants
 grant usage on schema public to anon, authenticated;
 grant select on public.users to anon, authenticated;
 grant select on public.videos to anon, authenticated;
 grant select on public.likes to anon, authenticated;
 grant select on public.saves to anon, authenticated;
 grant select on public.follows to anon, authenticated;
+grant select, update on public.notifications to authenticated;
+grant insert on public.notifications to authenticated;
 grant insert, update on public.videos to authenticated;
 grant insert, delete on public.likes to authenticated;
 grant insert, delete on public.saves to authenticated;

@@ -47,6 +47,7 @@ export interface Video {
   prompt: string | null;
   likes_count: number;
   views_count: number;
+  downloads_count: number;
   is_nsfw: boolean;
   created_at: string;
   user?: User;
@@ -71,4 +72,24 @@ export interface CreateVideoInput {
   ai_tools: AiTool[];
   genre: Genre;
   prompt?: string;
+}
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  type: "new_video";
+  actor_id: string;
+  video_id: string | null;
+  message: string;
+  read_at: string | null;
+  created_at: string;
+  actor?: User;
+}
+
+export interface UserProfileStats {
+  videoCount: number;
+  followers: number;
+  following: number;
+  totalLikes: number;
+  totalDownloads: number;
 }

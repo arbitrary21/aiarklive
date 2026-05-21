@@ -41,13 +41,13 @@ export default async function LeaderboardPage() {
               {creator.username.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1">
-              <p className="font-semibold text-white">{creator.username}</p>
+              <p className="font-semibold text-foreground">{creator.username}</p>
               <p className="text-sm text-muted line-clamp-1">
                 {creator.bio ?? "AI creator"}
               </p>
             </div>
             <div className="text-right text-sm">
-              <p className="font-medium text-white">
+              <p className="font-medium text-foreground">
                 {creator.total_likes.toLocaleString()} ♥
               </p>
               <p className="text-muted">{creator.video_count} videos</p>
