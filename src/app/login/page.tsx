@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { AuthButton } from "@/components/auth/AuthButton";
 
+export const runtime = "edge";
+
 export const metadata = {
   title: "Sign in",
 };

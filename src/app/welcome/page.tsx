@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { UsernameSetupForm } from "@/components/auth/UsernameSetupForm";
 import { getCurrentUser, getUsernameSetupState } from "@/lib/auth";
 
+export const runtime = "edge";
+
 export const metadata = {
   title: "Choose your nickname",
 };

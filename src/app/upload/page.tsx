@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { UploadForm } from "@/components/UploadForm";
 import { getCurrentUser } from "@/lib/auth";
 
+export const runtime = "edge";
+
 export const metadata = {
   title: "Upload",
 };

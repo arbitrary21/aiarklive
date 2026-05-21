@@ -6,6 +6,8 @@ import {
   markNotificationsRead,
 } from "@/lib/notifications";
 
+export const runtime = "edge";
+
 export async function GET() {
   const user = await getCurrentUser();
   if (!user) {

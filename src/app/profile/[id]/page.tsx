@@ -1,5 +1,7 @@
 import { ProfilePageClient } from "@/components/profile/ProfilePageClient";
 
+export const runtime = "edge";
+
 export const metadata = {
   title: "Profile",
 };
