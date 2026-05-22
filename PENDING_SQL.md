@@ -4,7 +4,7 @@
 > Run these in **Supabase Dashboard → SQL Editor** when ready.
 > After login locally: `npx supabase login` then `.\scripts\apply-supabase-migrations.ps1`
 
-Last updated: iteration 3
+Last updated: 2026-05-22 (iteration 5 — add_reports)
 
 ## Status legend
 
@@ -32,6 +32,7 @@ Last updated: iteration 3
 | 4 | `supabase/migrations/add_user_profile_insert_policy.sql` | Profile insert on signup |
 | 5 | `supabase/migrations/add_username_confirmation.sql` | Nickname confirmation flow | ✅ Applied via browser agent (iter 4) |
 | 6 | `supabase/migrations/add_comments.sql` | Video comments table + RLS | ✅ Applied via browser agent (iter 4) |
+| 7 | `supabase/migrations/add_reports.sql` | Reports table + RLS (replaces in-memory store) | ⬜ |
 
 ---
 

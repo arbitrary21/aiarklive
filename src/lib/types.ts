@@ -100,6 +100,17 @@ export interface Comment {
   user?: User;
 }
 
+export type ReportStatus = "pending" | "reviewed" | "dismissed";
+
+export interface Report {
+  id: string;
+  video_id: string;
+  user_id: string | null;
+  reason: string;
+  status: ReportStatus;
+  created_at: string;
+}
+
 export interface Challenge {
   id: string;
   title: string;
