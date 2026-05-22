@@ -62,6 +62,14 @@
 
 _완료된 handoff는 날짜와 함께 여기로 이동_
 
+### 2026-05-23 — /api/report DB 저장 감사 + Likes/saves 영속성 감사
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 06-data-backend |
+| **To** | (완료, 배포됨) |
+| **Result** | `/api/report` — Supabase DB INSERT 이미 완료 확인 (`cce538b`). `interactions.ts` — unlikeVideo count-corruption 버그 수정: 삭제된 행이 없을 때 `likes_count` 감소하지 않도록 `.select('id')` 반환값 체크 추가 → `96288d2` 배포 완료 |
+
 ### 2026-05-22 — Google OAuth + Supabase SQL 정상화
 
 | 항목 | 내용 |

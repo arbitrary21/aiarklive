@@ -19,11 +19,11 @@
 
 ---
 
-## 현재 상태 (Last updated: 2026-05-22)
+## 현재 상태 (Last updated: 2026-05-23 — unlikeVideo count-corruption fix deployed)
 
 ### 배포
 - **Status:** ✅ ALL 8/8 routes passing
-- **Last deploy:** `fd242e9` — interactions.ts 23505 fix + adjustLikesCount atomic RPC
+- **Last deploy:** `96288d2` — interactions.ts unlikeVideo: only decrement likes_count when row is actually deleted
 
 ### 인증
 - **Status:** ✅ Google OAuth 정상 동작
@@ -31,14 +31,19 @@
 - **Fix:** `/api/auth/google` server route에서 `skipBrowserRedirect` + Set-Cookie
 
 ### DB 마이그레이션
+- ✅ `source_url` 컬럼 (videos 테이블, Applied 2026-05-22)
+- ✅ Google OAuth RLS 정책 — follows/likes/saves + handle_new_user() (Applied 2026-05-22)
+- ✅ `downloads_count` 컬럼 + `notifications` 테이블 + RLS (Applied 2026-05-22)
+- ✅ `users` insert policy + auth.users 백필 (Applied 2026-05-22)
 - ✅ `username_confirmed` 컬럼 (Applied 2026-05-22)
 - ✅ `comments` 테이블 + RLS (Applied 2026-05-22)
 - ✅ `reports` 테이블 + RLS (Applied 2026-05-22)
-- ✅ Likes/saves 영속성 감사 완료 (2026-05-22) — 23505 중복 처리 추가, adjustLikesCount 레이스컨디션 atomic RPC fallback 패턴으로 수정
+- ✅ Likes/saves 영속성 감사 완료 (2026-05-23) — 23505 중복 처리, atomic RPC fallback, unlikeVideo count-corruption 버그 수정 (spurious unlike 시 count 감소 방지)
+- ⬜ `add_likes_count_functions.sql` (#8) 미적용
 - ⬜ Notification delivery 미구현
 
 ### 알려진 이슈
-- ~~`reports` API: `/api/report` 메모리 전용 — DB 저장 없음~~ → ✅ 해결됨 (2026-05-22)
+- ~~`reports` API: `/api/report` 메모리 전용 — DB 저장 없음~~ → ✅ 해결됨 (2026-05-22) — Supabase INSERT + 23505 idempotency
 - ~~Likes/saves 23505 에러 미처리~~ → ✅ 해결됨 (2026-05-22)
 - `adjustLikesCount` 레이스컨디션 → 코드 수정 완료, **migration #8 적용 필요** (`add_likes_count_functions.sql`)
 - Upload: 저작권 고지 UI 없음 → **Legal → UI P2**
