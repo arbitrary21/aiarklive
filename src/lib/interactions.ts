@@ -90,12 +90,27 @@ export async function unlikeVideo(userId: string, videoId: string): Promise<numb
   if (!isSupabaseConfigured()) return 0;
 
   const supabase = await createClient();
-  const { error } = await supabase
+  // Use .select() so we can check whether a row was actually deleted.
+  // Without this, a spurious unlike call would decrement likes_count even
+  // though no like row existed, permanently corrupting the counter.
+  const { data: deleted, error } = await supabase
     .from("likes")
     .delete()
     .eq("user_id", userId)
-    .eq("video_id", videoId);
+    .eq("video_id", videoId)
+    .select("id");
   if (error) throw error;
+
+  if (!deleted || deleted.length === 0) {
+    // Nothing was deleted — return current count unchanged.
+    const { data: video } = await supabase
+      .from("videos")
+      .select("likes_count")
+      .eq("id", videoId)
+      .maybeSingle();
+    return video?.likes_count ?? 0;
+  }
+
   return adjustLikesCount(videoId, -1);
 }
 
