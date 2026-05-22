@@ -15,12 +15,20 @@ export interface VideoInteractionState {
 
 async function adjustLikesCount(videoId: string, delta: number): Promise<number> {
   const supabase = await createClient();
+
+  // Prefer atomic DB-level increment/decrement (migration add_likes_count_functions.sql).
+  // Falls back to a non-atomic read-modify-write if that migration has not been applied yet,
+  // so the code is safe to deploy ahead of the SQL being run.
+  const fn = delta > 0 ? "increment_video_likes" : "decrement_video_likes";
+  const { data: rpcCount, error: rpcErr } = await supabase.rpc(fn, { vid: videoId });
+  if (!rpcErr) return (rpcCount as number) ?? 0;
+
+  // Fallback (non-atomic): acceptable for low-traffic until migration is applied.
   const { data: video } = await supabase
     .from("videos")
     .select("likes_count")
     .eq("id", videoId)
     .single();
-
   const next = Math.max(0, (video?.likes_count ?? 0) + delta);
   await supabase.from("videos").update({ likes_count: next }).eq("id", videoId);
   return next;
@@ -63,7 +71,18 @@ export async function likeVideo(userId: string, videoId: string): Promise<number
 
   const supabase = await createClient();
   const { error } = await supabase.from("likes").insert({ user_id: userId, video_id: videoId });
-  if (error) throw error;
+  if (error) {
+    // 23505 = unique_violation: already liked — return current count without incrementing.
+    if (error.code === "23505") {
+      const { data: video } = await supabase
+        .from("videos")
+        .select("likes_count")
+        .eq("id", videoId)
+        .maybeSingle();
+      return video?.likes_count ?? 0;
+    }
+    throw error;
+  }
   return adjustLikesCount(videoId, 1);
 }
 
@@ -85,7 +104,11 @@ export async function saveVideo(userId: string, videoId: string): Promise<void> 
 
   const supabase = await createClient();
   const { error } = await supabase.from("saves").insert({ user_id: userId, video_id: videoId });
-  if (error) throw error;
+  if (error) {
+    // 23505 = unique_violation: already saved — treat as success (idempotent).
+    if (error.code === "23505") return;
+    throw error;
+  }
 }
 
 export async function unsaveVideo(userId: string, videoId: string): Promise<void> {

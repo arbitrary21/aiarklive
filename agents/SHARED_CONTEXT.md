@@ -23,7 +23,7 @@
 
 ### 배포
 - **Status:** ✅ ALL 8/8 routes passing
-- **Last deploy:** `e5cba0f` — Document Cloudflare env var update
+- **Last deploy:** pending push — interactions.ts 23505 fix + adjustLikesCount atomic RPC
 
 ### 인증
 - **Status:** ✅ Google OAuth 정상 동작
@@ -34,11 +34,13 @@
 - ✅ `username_confirmed` 컬럼 (Applied 2026-05-22)
 - ✅ `comments` 테이블 + RLS (Applied 2026-05-22)
 - ✅ `reports` 테이블 + RLS (Applied 2026-05-22)
-- ⬜ Likes/saves 영속성 감사 필요
+- ✅ Likes/saves 영속성 감사 완료 (2026-05-22) — 23505 중복 처리 추가, adjustLikesCount 레이스컨디션 atomic RPC fallback 패턴으로 수정
 - ⬜ Notification delivery 미구현
 
 ### 알려진 이슈
 - ~~`reports` API: `/api/report` 메모리 전용 — DB 저장 없음~~ → ✅ 해결됨 (2026-05-22)
+- ~~Likes/saves 23505 에러 미처리~~ → ✅ 해결됨 (2026-05-22)
+- `adjustLikesCount` 레이스컨디션 → 코드 수정 완료, **migration #8 적용 필요** (`add_likes_count_functions.sql`)
 - Upload: 저작권 고지 UI 없음 → **Legal → UI P2**
 
 ---
