@@ -19,7 +19,7 @@
 
 ---
 
-## 현재 상태 (Last updated: 2026-05-23 — unlikeVideo count-corruption fix deployed)
+## 현재 상태 (Last updated: 2026-05-23 — migration #8 likes_count atomic functions applied)
 
 ### 배포
 - **Status:** ✅ ALL 8/8 routes passing
@@ -39,13 +39,13 @@
 - ✅ `comments` 테이블 + RLS (Applied 2026-05-22)
 - ✅ `reports` 테이블 + RLS (Applied 2026-05-22)
 - ✅ Likes/saves 영속성 감사 완료 (2026-05-23) — 23505 중복 처리, atomic RPC fallback, unlikeVideo count-corruption 버그 수정 (spurious unlike 시 count 감소 방지)
-- ⬜ `add_likes_count_functions.sql` (#8) 미적용
+- ✅ `add_likes_count_functions.sql` — `increment_video_likes` / `decrement_video_likes` atomic RPC 함수 (Applied 2026-05-23)
 - ⬜ Notification delivery 미구현
 
 ### 알려진 이슈
 - ~~`reports` API: `/api/report` 메모리 전용 — DB 저장 없음~~ → ✅ 해결됨 (2026-05-22) — Supabase INSERT + 23505 idempotency
 - ~~Likes/saves 23505 에러 미처리~~ → ✅ 해결됨 (2026-05-22)
-- `adjustLikesCount` 레이스컨디션 → 코드 수정 완료, **migration #8 적용 필요** (`add_likes_count_functions.sql`)
+- ~~`adjustLikesCount` 레이스컨디션~~ → ✅ 해결됨 (2026-05-23) — migration #8 적용 완료, atomic RPC 사용 중
 - Upload: 저작권 고지 UI 없음 → **Legal → UI P2**
 
 ---

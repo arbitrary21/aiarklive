@@ -6,6 +6,19 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 
+try:
+    import requests as _requests
+
+    def notify(msg="✅ 작업 완료!", title="AIARKLIVE"):
+        _requests.post(
+            "https://ntfy.sh/aiarklive-agents",
+            data=msg.encode("utf-8"),
+            headers={"Title": title},
+        )
+except ImportError:
+    def notify(msg="✅ 작업 완료!", title="Cursor 작업"):
+        pass
+
 BASE_URL = os.environ.get("DEPLOY_BASE_URL", "https://aiarklive.com")
 
 ROUTES_TO_CHECK = [
@@ -132,6 +145,19 @@ async def main() -> str:
         f"\n{'ALL PASS' if report['status'] == 'OK' else 'FAILURES'} "
         f"({report['passed']}/{report['total']})"
     )
+
+    if report["status"] == "OK":
+        notify(
+            f"✅ 배포 정상 {report['passed']}/{report['total']} 통과",
+            "AIARKLIVE Deploy OK",
+        )
+    else:
+        routes = ", ".join(r["route"] for r in failed)
+        notify(
+            f"❌ 배포 실패 {report['failed']}개 오류: {routes}",
+            "AIARKLIVE Deploy FAIL",
+        )
+
     return report["status"]
 
 

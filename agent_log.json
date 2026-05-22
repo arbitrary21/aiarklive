@@ -1,84 +1,60 @@
 {
-  "timestamp": "2026-05-21T20:26:30.467868+00:00",
+  "timestamp": "2026-05-22T15:12:08.397451+00:00",
   "base_url": "https://aiarklive.com",
   "total": 8,
-  "passed": 7,
-  "failed": 1,
-  "status": "FAIL",
-  "failed_routes": [
-    {
-      "route": "/discover",
-      "status_code": 404,
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 404 ()"
-      ],
-      "warnings": [],
-      "ok": false
-    }
-  ],
+  "passed": 8,
+  "failed": 0,
+  "status": "OK",
+  "failed_routes": [],
   "all_results": [
     {
       "route": "/",
       "status_code": 200,
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 404 ()"
-      ],
+      "console_errors": [],
       "warnings": [],
       "ok": true
     },
     {
       "route": "/login",
       "status_code": 200,
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 404 ()"
-      ],
+      "console_errors": [],
       "warnings": [],
       "ok": true
     },
     {
       "route": "/explore",
       "status_code": 200,
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 404 ()"
-      ],
+      "console_errors": [],
       "warnings": [],
       "ok": true
     },
     {
       "route": "/leaderboard",
       "status_code": 200,
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 404 ()"
-      ],
+      "console_errors": [],
       "warnings": [],
       "ok": true
     },
     {
       "route": "/upload",
       "status_code": 200,
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 404 ()"
-      ],
+      "console_errors": [],
       "warnings": [],
       "ok": true
     },
     {
       "route": "/auth/callback",
       "status_code": 200,
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 404 ()"
-      ],
+      "console_errors": [],
       "warnings": [],
       "ok": true
     },
     {
       "route": "/discover",
-      "status_code": 404,
-      "console_errors": [
-        "Failed to load resource: the server responded with a status of 404 ()"
-      ],
+      "status_code": 200,
+      "console_errors": [],
       "warnings": [],
-      "ok": false
+      "ok": true
     },
     {
       "route": "/challenges",

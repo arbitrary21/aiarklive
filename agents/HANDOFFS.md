@@ -8,19 +8,20 @@
 
 ## 📥 Active (미완료)
 
-### 2026-05-22 — likes_count atomic functions 마이그레이션 적용 요청
+### 2026-05-23 — upload-notice.md 기반 저작권 동의 체크박스 UI 구현
 
 | 항목 | 내용 |
 |------|------|
-| **From** | 06-data-backend |
-| **To** | 01-ops-sre |
+| **From** | 02-legal-trust |
+| **To** | 07-product-ui |
 | **Priority** | P2 |
-| **Goal** | `supabase/migrations/add_likes_count_functions.sql` 을 Supabase SQL Editor에서 실행 |
-| **Context** | `PENDING_SQL.md` migration #8 — `increment_video_likes` / `decrement_video_likes` Postgres 함수 생성. 현재 코드는 이 함수가 없으면 비원자적 read-write fallback 사용. 적용 후 자동으로 atomic RPC 사용됨. |
-| **Acceptance** | - [ ] SQL Editor에서 오류 없이 실행 완료<br>- [ ] `public.increment_video_likes(uuid)` 함수 존재 확인<br>- [ ] `PENDING_SQL.md` #8 ⬜ → ✅ 표시<br>- [ ] `SHARED_CONTEXT.md` migration 항목 갱신 |
-| **Out of scope** | 코드 변경 없음 (이미 배포됨) |
+| **Goal** | `agents/02-legal-trust/POLICY_DRAFTS/upload-notice.md` 초안 기반으로 업로드 페이지에 저작권 동의 체크박스 UI 구현 |
+| **Context** | 업로드 폼(`src/components/UploadForm.tsx`)에 체크박스 3종 추가: (1) 권리 확인 필수 체크박스 — 미체크 시 제출 비활성화, (2) AI 생성 여부 체크박스 (권장), (3) AI 생성 면책 고지 인포박스. 상세 문구는 `upload-notice.md` §1, §2 참고. DB 플래그 `license_confirmed`, `ai_generated` 는 06-data-backend와 협의. |
+| **Acceptance** | - [ ] 권리 확인 체크박스 미체크 시 제출 버튼 비활성화<br>- [ ] AI 생성 면책 고지 인포박스 표시<br>- [ ] 체크박스 문구 한국어 버전 적용 (upload-notice.md §1-A)<br>- [ ] NSFW/신고 안내 링크 비디오 상세 페이지에 연결 |
+| **Out of scope** | DB 스키마 변경 (06-data-backend 담당), ToS 전체 페이지 구현 |
 | **Blocked by** | 없음 |
 | **Status** | ⬜ pending |
+
 
 ### 2026-05-22 — reports 테이블 마이그레이션 SQL 적용
 
@@ -61,6 +62,14 @@
 ## ✅ Done
 
 _완료된 handoff는 날짜와 함께 여기로 이동_
+
+### 2026-05-23 — likes_count atomic functions 마이그레이션 적용
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 06-data-backend |
+| **To** | 01-ops-sre (완료) |
+| **Result** | `add_likes_count_functions.sql` — `public.increment_video_likes(uuid)` / `public.decrement_video_likes(uuid)` 함수 생성 + `authenticated` role GRANT 완료. `PENDING_SQL.md` #8 ✅, `SHARED_CONTEXT.md` 갱신. |
 
 ### 2026-05-23 — /api/report DB 저장 감사 + Likes/saves 영속성 감사
 
