@@ -19,11 +19,11 @@
 
 ---
 
-## 현재 상태 (Last updated: 2026-05-23 — migration #8 likes_count atomic functions applied)
+## 현재 상태 (Last updated: 2026-05-23 — SEO + Affiliate CTA + Legal compliance sprint)
 
 ### 배포
 - **Status:** ✅ ALL 8/8 routes passing
-- **Last deploy:** `96288d2` — interactions.ts unlikeVideo: only decrement likes_count when row is actually deleted
+- **Last deploy:** `a421779` — SEO (sitemap/robots/OG), AffiliateCTABanner, /tools/kling, legal copy fixes
 
 ### 인증
 - **Status:** ✅ Google OAuth 정상 동작
@@ -40,13 +40,20 @@
 - ✅ `reports` 테이블 + RLS (Applied 2026-05-22)
 - ✅ Likes/saves 영속성 감사 완료 (2026-05-23) — 23505 중복 처리, atomic RPC fallback, unlikeVideo count-corruption 버그 수정 (spurious unlike 시 count 감소 방지)
 - ✅ `add_likes_count_functions.sql` — `increment_video_likes` / `decrement_video_likes` atomic RPC 함수 (Applied 2026-05-23)
+- ✅ `robots.ts` + `sitemap.ts` (Applied 2026-05-23)
+- ✅ `video/[id]/opengraph-image.tsx` + generateMetadata OG/Twitter 태그 (Applied 2026-05-23)
+- ✅ `/tools/kling` SEO 랜딩 페이지 (Applied 2026-05-23)
+- ✅ `AffiliateCTABanner` — kling/runway/pixverse/pika/hailuo CTA (Applied 2026-05-23)
+- ⬜ `add_ai_tool_columns.sql` — videos.ai_tool + videos.ai_disclosed (Pending SQL)
+- ⬜ `add_comment_spam_guard.sql` — 댓글 스팸 방지 trigger + is_flagged (Pending SQL)
 - ⬜ Notification delivery 미구현
 
 ### 알려진 이슈
 - ~~`reports` API: `/api/report` 메모리 전용 — DB 저장 없음~~ → ✅ 해결됨 (2026-05-22) — Supabase INSERT + 23505 idempotency
 - ~~Likes/saves 23505 에러 미처리~~ → ✅ 해결됨 (2026-05-22)
 - ~~`adjustLikesCount` 레이스컨디션~~ → ✅ 해결됨 (2026-05-23) — migration #8 적용 완료, atomic RPC 사용 중
-- Upload: 저작권 고지 UI 없음 → **Legal → UI P2**
+- ~~Upload: 저작권 고지 UI~~ → ✅ 해결됨 (upload-notice 체크박스 구현 완료)
+- **DB SQL 미적용:** `add_ai_tool_columns.sql` + `add_comment_spam_guard.sql` → Supabase SQL Editor 수동 실행 필요
 
 ---
 

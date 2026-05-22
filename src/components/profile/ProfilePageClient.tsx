@@ -7,6 +7,7 @@ import {
   ProfileLoadingState,
   ProfileView,
 } from "@/components/profile/ProfileView";
+import { EditProfileModal } from "@/components/profile/EditProfileModal";
 import { createClient } from "@/lib/supabase/client";
 import type { User, UserProfileStats, Video } from "@/lib/types";
 
@@ -58,6 +59,7 @@ export function ProfilePageClient({ profileId }: ProfilePageClientProps) {
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -162,13 +164,25 @@ export function ProfilePageClient({ profileId }: ProfilePageClientProps) {
     );
   }
 
+  const isOwnProfile = authUser?.id === profileId;
+
   return (
-    <ProfileView
-      user={user}
-      videos={videos}
-      stats={stats}
-      isOwnProfile={authUser?.id === profileId}
-      isFollowing={isFollowing}
-    />
+    <>
+      <ProfileView
+        user={user}
+        videos={videos}
+        stats={stats}
+        isOwnProfile={isOwnProfile}
+        isFollowing={isFollowing}
+        onEdit={isOwnProfile ? () => setEditOpen(true) : undefined}
+      />
+      {editOpen && isOwnProfile && (
+        <EditProfileModal
+          user={user}
+          onClose={() => setEditOpen(false)}
+          onSaved={(updates) => setUser((prev) => prev ? { ...prev, ...updates } : prev)}
+        />
+      )}
+    </>
   );
 }

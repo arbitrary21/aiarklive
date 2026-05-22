@@ -8,6 +8,34 @@
 
 ## 📥 Active (미완료)
 
+### 2026-05-23 — 프로필 편집 API + Supabase Storage 아바타 업로드
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 06-data-backend |
+| **Priority** | P1 |
+| **Goal** | 유저가 닉네임·자기소개·프로필 사진을 직접 변경할 수 있도록 API + Storage 구축 |
+| **Context** | 현재 로그인은 Google OAuth 전용. `users` 테이블에 `username`, `bio`, `avatar_url` 컬럼 존재. `username`은 최초 설정 시 `/api/profile/setup` POST로만 변경 가능 — 이후 재편집 불가. `bio`는 DB 컬럼이 없을 수 있음(타입에는 존재). 프로필 사진은 Google avatar URL 고정. |
+| **Acceptance** | - [ ] `users` 테이블에 `bio TEXT` 컬럼 존재 확인 (없으면 migration 추가)<br>- [ ] `PUT /api/profile/update` 라우트 — `{ username?, bio? }` 수신, 본인 인증 후 업데이트<br>- [ ] username 중복 체크 + 동일 유효성 검사 (`validateUsername`) 재사용<br>- [ ] Supabase Storage bucket `avatars` 생성 (public read, authenticated write)<br>- [ ] `POST /api/profile/avatar` 라우트 — multipart/form-data 수신, Storage upload, `users.avatar_url` 업데이트 후 URL 반환<br>- [ ] RLS: `users` 테이블에 `UPDATE (username, bio, avatar_url) WHERE id = auth.uid()` 정책 확인/추가<br>- [ ] `PENDING_SQL.md` 에 필요한 migration 항목 추가 |
+| **Out of scope** | 프로필 편집 UI (07-product-ui 담당), 소셜 링크 등 추가 필드 |
+| **Blocked by** | 없음 |
+| **Status** | ⬜ pending |
+
+### 2026-05-23 — 프로필 편집 UI (닉네임·소개·사진 변경)
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 07-product-ui |
+| **Priority** | P1 |
+| **Goal** | `/profile/me` 에서 닉네임·자기소개·프로필 사진을 변경하는 인라인 편집 UI 구현 |
+| **Context** | `src/components/profile/ProfileView.tsx` — `isOwnProfile=true` 일 때 현재 "+ Add video" 링크만 있음. Google 로그인이라도 닉네임·bio·avatar는 자체 편집 가능해야 함. API 의존: `PUT /api/profile/update` + `POST /api/profile/avatar` (06-data-backend 선행 필요). `User` 타입: `{ username, bio, avatar_url }`. |
+| **Acceptance** | - [ ] `ProfileView` — `isOwnProfile=true` 시 "프로필 편집" 버튼 표시<br>- [ ] `EditProfileModal` (또는 인라인 슬라이드): username, bio 텍스트 필드<br>- [ ] 아바타 이미지 클릭 시 파일 업로드 (PNG/JPG ≤5MB) → `POST /api/profile/avatar`<br>- [ ] 저장 후 AuthProvider 혹은 로컬 상태 즉시 반영 (새로고침 불필요)<br>- [ ] username 중복 에러 표시<br>- [ ] 로딩/에러 상태 처리<br>- [ ] 모바일 반응형 |
+| **Out of scope** | 비밀번호 변경 (OAuth 전용), 계정 삭제, 소셜 링크 |
+| **Blocked by** | 06-data-backend — `PUT /api/profile/update` + `POST /api/profile/avatar` 완료 후 진행 |
+| **Status** | ⬜ pending |
+
 ### 2026-05-23 — `videos.ai_tool` + `videos.ai_disclosed` 컬럼 추가
 
 | 항목 | 내용 |
@@ -43,12 +71,7 @@
 | **From** | 00-orchestrator |
 | **To** | 07-product-ui |
 | **Priority** | P1 |
-| **Goal** | UI에 비디오 다운로드 버튼이 없는지 확인, `/api/download/thumbnail` 외 동영상 다운로드 경로 차단 |
-| **Context** | Legal 결정(2026-05-23): YouTube ToS + DMCA §1201 리스크로 다운로드 기능 영구 미제공. `/api/download/thumbnail` (썸네일 이미지 다운로드)는 허용. 동영상 파일 다운로드 버튼/API는 존재하면 제거. |
-| **Acceptance** | - [ ] VideoLightbox / VideoActions 다운로드 버튼 없음 확인 (있으면 제거)<br>- [ ] 동영상 파일 다운로드 API route 없음 확인<br>- [ ] `/api/download/thumbnail` 썸네일 다운로드는 유지 (이미지만, OK) |
-| **Out of scope** | 썸네일 다운로드 제거, ToS 페이지 구현 |
-| **Blocked by** | 없음 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done — 동영상 다운로드 버튼 없음 확인. 썸네일 전용 `/api/download/thumbnail` 유지. video/[id]/page.tsx "coming soon" 카피 제거 완료. |
 
 ### 2026-05-23 — sitemap + OG 이미지 + /tools/kling 페이지 구현
 
@@ -57,13 +80,7 @@
 | **From** | 05-growth-seo |
 | **To** | 07-product-ui |
 | **Priority** | P1 |
-| **Goal** | SEO 핵심 3종 구현: `robots.ts`, `sitemap.ts`, `video/[id]/opengraph-image.tsx` + `/tools/kling` 랜딩 페이지 |
-| **Context** | `agents/05-growth-seo/briefs/2026-05-23-kling-seo.md` — 전체 spec 포함 (섹션 B: sitemap/robots, 섹션 C: OG 이미지, 섹션 A: /tools/kling SEO). Stack: Next.js 15 App Router + Cloudflare Pages edge. |
-| **Acceptance** | - [ ] `src/app/robots.ts` 생성 — auth 라우트 disallow, GPTBot disallow<br>- [ ] `src/app/sitemap.ts` 생성 — 정적 라우트 + DB에서 video/profile 동적 라우트 (runtime: 'nodejs')<br>- [ ] `src/app/video/[id]/opengraph-image.tsx` 생성 — 1200×630, 썸네일+제목+AI도구명+작성자<br>- [ ] `src/app/video/[id]/page.tsx` — `generateMetadata`에 OG/Twitter 카드 추가<br>- [ ] `src/app/tools/kling/page.tsx` 생성 — SEO brief A 섹션 기반 (H1, H2 구조, 커뮤니티 영상 피드, schema.org) |
-| **Out of scope** | 키워드 카피 집필 (08-editorial 담당), DB 스키마 변경 |
-| **Blocked by** | 없음 |
-| **Files** | `agents/05-growth-seo/briefs/2026-05-23-kling-seo.md` |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done |
 
 ### 2026-05-23 — 업로드 & 댓글 Rate Limit 구현
 
@@ -100,12 +117,7 @@
 | **From** | 04-monetization |
 | **To** | 07-product-ui |
 | **Priority** | P1 |
-| **Goal** | 비디오 상세 페이지(VideoLightbox / VideoActions)에 AI 도구 Affiliate CTA 배너 컴포넌트 추가 |
-| **Context** | Spec: `agents/04-monetization/models/2026-05-23-monetization-spec.md` §A 참고. `videos.source_url` 컬럼은 이미 존재(✅ 2026-05-22). MVP는 source_url 도메인 파싱으로 Kling/Runway/PixVerse 추론. `ai_tool` 전용 컬럼은 별도 06-data-backend 작업 예정이므로 현재는 없다고 가정. |
-| **Acceptance** | - [ ] `src/components/video/AffiliateCTABanner.tsx` 컴포넌트 생성<br>- [ ] `inferTool(sourceUrl)` 유틸 함수 포함<br>- [ ] VideoLightbox 또는 VideoActions 하단에 배너 삽입<br>- [ ] `rel="nofollow noopener sponsored"` 적용<br>- [ ] 도구 미식별 시 배너 미표시(null 처리)<br>- [ ] Tailwind 스타일: 반투명 글래스 bg, 소형 텍스트, 외부 링크 아이콘 |
-| **Out of scope** | `ai_tool` DB 컬럼 추가 (06-data-backend 담당), Stripe 결제 연동, Pro tier UI |
-| **Blocked by** | 없음 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done |
 
 ### 2026-05-23 — upload-notice.md 기반 저작권 동의 체크박스 UI 구현
 

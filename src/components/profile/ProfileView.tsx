@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Download, Heart, Users, Video } from "lucide-react";
+import { Heart, Pencil, Users, Video } from "lucide-react";
 import { FollowButton } from "@/components/auth/FollowButton";
 import { ProfileTabs } from "@/components/profile/ProfileTabs";
 import type { User, UserProfileStats, Video as VideoType } from "@/lib/types";
@@ -33,6 +33,7 @@ interface ProfileViewProps {
   stats: UserProfileStats;
   isOwnProfile: boolean;
   isFollowing: boolean;
+  onEdit?: () => void;
 }
 
 export function ProfileView({
@@ -41,6 +42,7 @@ export function ProfileView({
   stats,
   isOwnProfile,
   isFollowing,
+  onEdit,
 }: ProfileViewProps) {
   return (
     <div className="space-y-8">
@@ -68,12 +70,25 @@ export function ProfileView({
           </div>
         </div>
 
-        {!isOwnProfile && (
-          <FollowButton followingId={user.id} initialIsFollowing={isFollowing} />
-        )}
+        <div className="flex shrink-0 items-center gap-2">
+          {isOwnProfile && onEdit && (
+            <button
+              type="button"
+              onClick={onEdit}
+              className="flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-sm text-muted transition hover:text-foreground"
+              style={{ borderColor: "var(--border)" }}
+            >
+              <Pencil className="h-3.5 w-3.5" />
+              Edit profile
+            </button>
+          )}
+          {!isOwnProfile && (
+            <FollowButton followingId={user.id} initialIsFollowing={isFollowing} />
+          )}
+        </div>
       </section>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <StatCard
           icon={Users}
           label="Followers"
@@ -83,11 +98,6 @@ export function ProfileView({
           icon={Heart}
           label="Likes"
           value={stats.totalLikes.toLocaleString()}
-        />
-        <StatCard
-          icon={Download}
-          label="Downloads"
-          value={stats.totalDownloads.toLocaleString()}
         />
         <StatCard
           icon={Video}
