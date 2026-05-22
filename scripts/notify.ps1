@@ -10,11 +10,22 @@
 param(
     [string]$Agent = "Agent",
     [string]$Message = "작업이 완료되었습니다.",
-    [string]$Priority = "default"  # min, low, default, high, urgent
+    [string]$Details = "",          # 변경 내용 상세 (선택)
+    [string]$Priority = "default"   # min, low, default, high, urgent
 )
 
 $TOPIC = "aiarklive-agents"
 $NTFY_URL = "https://ntfy.sh/$TOPIC"
+
+# 마지막 git 커밋 메시지 추가
+$gitCommit = ""
+try {
+    $gitCommit = (git log -1 --pretty="%s (%h)" 2>$null).Trim()
+} catch {}
+
+$Body = $Message
+if ($Details) { $Body += "`n`n$Details" }
+if ($gitCommit) { $Body += "`n최근 변경: $gitCommit" }
 
 # --- ntfy.sh 푸시 알림 (모바일/웹) ---
 try {
@@ -23,7 +34,7 @@ try {
         "Priority" = $Priority
         "Tags"     = "white_check_mark,robot"
     }
-    Invoke-RestMethod -Uri $NTFY_URL -Method POST -Body $Message -Headers $headers -TimeoutSec 5 | Out-Null
+    Invoke-RestMethod -Uri $NTFY_URL -Method POST -Body $Body -Headers $headers -TimeoutSec 5 | Out-Null
     Write-Host "[notify] ntfy.sh 전송 완료 → $NTFY_URL"
 } catch {
     Write-Host "[notify] ntfy.sh 전송 실패 (오프라인?): $_"

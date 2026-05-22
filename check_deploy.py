@@ -1,22 +1,37 @@
 import asyncio
 import json
 import os
+import subprocess
 import sys
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 
+def _last_commit() -> str:
+    """최근 git 커밋 메시지 한 줄 반환 (실패 시 빈 문자열)."""
+    try:
+        result = subprocess.run(
+            ["git", "log", "-1", "--pretty=%s (%h)"],
+            capture_output=True, text=True, timeout=5
+        )
+        return result.stdout.strip()
+    except Exception:
+        return ""
+
 try:
     import requests as _requests
 
-    def notify(msg="✅ 작업 완료!", title="AIARKLIVE"):
+    def notify(msg="✅ 작업 완료!", title="AIARKLIVE", details=""):
+        body = msg
+        if details:
+            body += f"\n\n{details}"
         _requests.post(
             "https://ntfy.sh/aiarklive-agents",
-            data=msg.encode("utf-8"),
+            data=body.encode("utf-8"),
             headers={"Title": title},
         )
 except ImportError:
-    def notify(msg="✅ 작업 완료!", title="Cursor 작업"):
+    def notify(msg="✅ 작업 완료!", title="Cursor 작업", details=""):
         pass
 
 BASE_URL = os.environ.get("DEPLOY_BASE_URL", "https://aiarklive.com")
@@ -146,16 +161,19 @@ async def main() -> str:
         f"({report['passed']}/{report['total']})"
     )
 
+    commit = _last_commit()
     if report["status"] == "OK":
         notify(
             f"✅ 배포 정상 {report['passed']}/{report['total']} 통과",
             "AIARKLIVE Deploy OK",
+            details=f"최근 변경: {commit}" if commit else "",
         )
     else:
         routes = ", ".join(r["route"] for r in failed)
         notify(
             f"❌ 배포 실패 {report['failed']}개 오류: {routes}",
             "AIARKLIVE Deploy FAIL",
+            details=f"최근 변경: {commit}" if commit else "",
         )
 
     return report["status"]

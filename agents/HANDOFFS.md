@@ -8,6 +8,63 @@
 
 ## 📥 Active (미완료)
 
+### 2026-05-23 — sitemap + OG 이미지 + /tools/kling 페이지 구현
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 05-growth-seo |
+| **To** | 07-product-ui |
+| **Priority** | P1 |
+| **Goal** | SEO 핵심 3종 구현: `robots.ts`, `sitemap.ts`, `video/[id]/opengraph-image.tsx` + `/tools/kling` 랜딩 페이지 |
+| **Context** | `agents/05-growth-seo/briefs/2026-05-23-kling-seo.md` — 전체 spec 포함 (섹션 B: sitemap/robots, 섹션 C: OG 이미지, 섹션 A: /tools/kling SEO). Stack: Next.js 15 App Router + Cloudflare Pages edge. |
+| **Acceptance** | - [ ] `src/app/robots.ts` 생성 — auth 라우트 disallow, GPTBot disallow<br>- [ ] `src/app/sitemap.ts` 생성 — 정적 라우트 + DB에서 video/profile 동적 라우트 (runtime: 'nodejs')<br>- [ ] `src/app/video/[id]/opengraph-image.tsx` 생성 — 1200×630, 썸네일+제목+AI도구명+작성자<br>- [ ] `src/app/video/[id]/page.tsx` — `generateMetadata`에 OG/Twitter 카드 추가<br>- [ ] `src/app/tools/kling/page.tsx` 생성 — SEO brief A 섹션 기반 (H1, H2 구조, 커뮤니티 영상 피드, schema.org) |
+| **Out of scope** | 키워드 카피 집필 (08-editorial 담당), DB 스키마 변경 |
+| **Blocked by** | 없음 |
+| **Files** | `agents/05-growth-seo/briefs/2026-05-23-kling-seo.md` |
+| **Status** | ⬜ pending |
+
+### 2026-05-23 — 업로드 & 댓글 Rate Limit 구현
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 09-security-abuse |
+| **To** | 01-ops-sre |
+| **Priority** | P1 |
+| **Goal** | Cloudflare Workers KV 기반 업로드 rate limit 엣지 구현 (유저당 10회/시간, IP당 20회/시간) |
+| **Context** | `agents/09-security-abuse/notes/2026-05-23-security-audit.md` §A 참고. Cloudflare Pages + Next.js edge middleware 조합. KV namespace 생성 후 `wrangler.toml` 바인딩 추가. `/api/upload` 엔트리포인트에 rate limit 미들웨어 적용. |
+| **Acceptance** | - [ ] Cloudflare KV namespace `RATE_LIMIT_KV` 생성<br>- [ ] wrangler.toml 바인딩 추가<br>- [ ] 업로드 route에 user_id/IP 이중 rate limit 적용<br>- [ ] 초과 시 `429 + Retry-After` 응답 확인 |
+| **Out of scope** | 댓글 spam trigger (06-data-backend 담당) |
+| **Blocked by** | 없음 |
+| **Status** | ⬜ pending |
+
+### 2026-05-23 — 댓글 스팸 방지 DB 마이그레이션
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 09-security-abuse |
+| **To** | 06-data-backend |
+| **Priority** | P2 |
+| **Goal** | 댓글 중복 방지 trigger + `is_flagged` 컬럼 마이그레이션 작성 및 적용 |
+| **Context** | `agents/09-security-abuse/notes/2026-05-23-security-audit.md` §C 참고. `check_comment_spam()` trigger — 60초 내 동일 content 재작성 방지. `comments` 테이블에 `is_flagged boolean default false` 컬럼 추가 (admin 검토 큐용). |
+| **Acceptance** | - [ ] `supabase/migrations/add_comment_spam_guard.sql` 작성<br>- [ ] trigger: 60초 내 동일 content 시 `P0001` 에러 발생<br>- [ ] `is_flagged` 컬럼 추가<br>- [ ] `PENDING_SQL.md` 에 항목 추가 |
+| **Out of scope** | admin 큐 UI, rate limit API 변경 |
+| **Blocked by** | 없음 |
+| **Status** | ⬜ pending |
+
+### 2026-05-23 — Affiliate CTA 배너 컴포넌트 구현
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 04-monetization |
+| **To** | 07-product-ui |
+| **Priority** | P1 |
+| **Goal** | 비디오 상세 페이지(VideoLightbox / VideoActions)에 AI 도구 Affiliate CTA 배너 컴포넌트 추가 |
+| **Context** | Spec: `agents/04-monetization/models/2026-05-23-monetization-spec.md` §A 참고. `videos.source_url` 컬럼은 이미 존재(✅ 2026-05-22). MVP는 source_url 도메인 파싱으로 Kling/Runway/PixVerse 추론. `ai_tool` 전용 컬럼은 별도 06-data-backend 작업 예정이므로 현재는 없다고 가정. |
+| **Acceptance** | - [ ] `src/components/video/AffiliateCTABanner.tsx` 컴포넌트 생성<br>- [ ] `inferTool(sourceUrl)` 유틸 함수 포함<br>- [ ] VideoLightbox 또는 VideoActions 하단에 배너 삽입<br>- [ ] `rel="nofollow noopener sponsored"` 적용<br>- [ ] 도구 미식별 시 배너 미표시(null 처리)<br>- [ ] Tailwind 스타일: 반투명 글래스 bg, 소형 텍스트, 외부 링크 아이콘 |
+| **Out of scope** | `ai_tool` DB 컬럼 추가 (06-data-backend 담당), Stripe 결제 연동, Pro tier UI |
+| **Blocked by** | 없음 |
+| **Status** | ⬜ pending |
+
 ### 2026-05-23 — upload-notice.md 기반 저작권 동의 체크박스 UI 구현
 
 | 항목 | 내용 |
