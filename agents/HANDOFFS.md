@@ -20,7 +20,7 @@
 | **Acceptance** | - [ ] 권리 확인 체크박스 미체크 시 제출 버튼 비활성화<br>- [ ] AI 생성 면책 고지 인포박스 표시<br>- [ ] 체크박스 문구 한국어 버전 적용 (upload-notice.md §1-A)<br>- [ ] NSFW/신고 안내 링크 비디오 상세 페이지에 연결 |
 | **Out of scope** | DB 스키마 변경 (06-data-backend 담당), ToS 전체 페이지 구현 |
 | **Blocked by** | 없음 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done |
 
 
 ### 2026-05-22 — reports 테이블 마이그레이션 SQL 적용
