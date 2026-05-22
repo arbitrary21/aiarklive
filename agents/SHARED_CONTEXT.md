@@ -23,7 +23,7 @@
 
 ### 배포
 - **Status:** ✅ ALL 8/8 routes passing
-- **Last deploy:** pending push — interactions.ts 23505 fix + adjustLikesCount atomic RPC
+- **Last deploy:** `fd242e9` — interactions.ts 23505 fix + adjustLikesCount atomic RPC
 
 ### 인증
 - **Status:** ✅ Google OAuth 정상 동작

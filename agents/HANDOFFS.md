@@ -8,6 +8,20 @@
 
 ## 📥 Active (미완료)
 
+### 2026-05-22 — likes_count atomic functions 마이그레이션 적용 요청
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 06-data-backend |
+| **To** | 01-ops-sre |
+| **Priority** | P2 |
+| **Goal** | `supabase/migrations/add_likes_count_functions.sql` 을 Supabase SQL Editor에서 실행 |
+| **Context** | `PENDING_SQL.md` migration #8 — `increment_video_likes` / `decrement_video_likes` Postgres 함수 생성. 현재 코드는 이 함수가 없으면 비원자적 read-write fallback 사용. 적용 후 자동으로 atomic RPC 사용됨. |
+| **Acceptance** | - [ ] SQL Editor에서 오류 없이 실행 완료<br>- [ ] `public.increment_video_likes(uuid)` 함수 존재 확인<br>- [ ] `PENDING_SQL.md` #8 ⬜ → ✅ 표시<br>- [ ] `SHARED_CONTEXT.md` migration 항목 갱신 |
+| **Out of scope** | 코드 변경 없음 (이미 배포됨) |
+| **Blocked by** | 없음 |
+| **Status** | ⬜ pending |
+
 ### 2026-05-22 — reports 테이블 마이그레이션 SQL 적용
 
 | 항목 | 내용 |
