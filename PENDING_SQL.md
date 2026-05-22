@@ -35,7 +35,8 @@ Last updated: 2026-05-23 (migration #10 ù add_comment_spam_guard added to queue)
 | 7 | `supabase/migrations/add_reports.sql` | Reports table + RLS (replaces in-memory store) | ? Applied via browser agent (2026-05-22) |
 | 8 | `supabase/migrations/add_likes_count_functions.sql` | Atomic increment/decrement RPCs ó fixes race in adjustLikesCount | ? Applied (2026-05-23) |
 | 9 | `supabase/migrations/add_ai_tool_columns.sql` | videos.ai_tool + videos.ai_disclosed ó Affiliate CTA, AI ?? ?? | ? Pending |
-| 10 | `supabase/migrations/add_comment_spam_guard.sql` | ?? ?? ?? trigger + comments.is_flagged | ? Pending | ù fixes read-modify-write race in `adjustLikesCount` | ? Applied via browser agent (2026-05-23) |
+| 10 | `supabase/migrations/add_comment_spam_guard.sql` | ?? ?? ?? trigger + comments.is_flagged | ? Pending |
+| 11 | `supabase/migrations/add_avatar_storage.sql` | Supabase Storage avatars bucket + RLS (??? ?? ???) | ? Pending |ù fixes read-modify-write race in `adjustLikesCount` | ? Applied via browser agent (2026-05-23) |
 
 ---
 
