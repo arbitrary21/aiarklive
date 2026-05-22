@@ -20,7 +20,7 @@
 | **Acceptance** | - [ ] SQL Editor에서 오류 없이 실행 완료<br>- [ ] `public.reports` 테이블 존재 확인<br>- [ ] `PENDING_SQL.md` #7 ⬜ → ✅ 표시<br>- [ ] `SHARED_CONTEXT.md` "⬜ reports DB 저장" → ✅ 갱신 |
 | **Out of scope** | API route 수정 (별도 Data 에이전트 후속 작업) |
 | **Blocked by** | 없음 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done |
 
 ---
 
