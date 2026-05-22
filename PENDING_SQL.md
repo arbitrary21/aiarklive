@@ -4,7 +4,7 @@
 > Run these in **Supabase Dashboard ? SQL Editor** when ready.
 > After login locally: `npx supabase login` then `.\scripts\apply-supabase-migrations.ps1`
 
-Last updated: 2026-05-23 (migration #8 ó add_likes_count_functions applied)
+Last updated: 2026-05-23 (migration #10 ù add_comment_spam_guard added to queue)
 
 ## Status legend
 
@@ -33,7 +33,9 @@ Last updated: 2026-05-23 (migration #8 ó add_likes_count_functions applied)
 | 5 | `supabase/migrations/add_username_confirmation.sql` | Nickname confirmation flow | ? Applied via browser agent (iter 4) |
 | 6 | `supabase/migrations/add_comments.sql` | Video comments table + RLS | ? Applied via browser agent (iter 4) |
 | 7 | `supabase/migrations/add_reports.sql` | Reports table + RLS (replaces in-memory store) | ? Applied via browser agent (2026-05-22) |
-| 8 | `supabase/migrations/add_likes_count_functions.sql` | Atomic `increment_video_likes` / `decrement_video_likes` RPCs ó fixes read-modify-write race in `adjustLikesCount` | ? Applied via browser agent (2026-05-23) |
+| 8 | `supabase/migrations/add_likes_count_functions.sql` | Atomic increment/decrement RPCs ó fixes race in adjustLikesCount | ? Applied (2026-05-23) |
+| 9 | `supabase/migrations/add_ai_tool_columns.sql` | videos.ai_tool + videos.ai_disclosed ó Affiliate CTA, AI ?? ?? | ? Pending |
+| 10 | `supabase/migrations/add_comment_spam_guard.sql` | ?? ?? ?? trigger + comments.is_flagged | ? Pending | ù fixes read-modify-write race in `adjustLikesCount` | ? Applied via browser agent (2026-05-23) |
 
 ---
 

@@ -8,6 +8,48 @@
 
 ## 📥 Active (미완료)
 
+### 2026-05-23 — `videos.ai_tool` + `videos.ai_disclosed` 컬럼 추가
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 06-data-backend |
+| **Priority** | P1 |
+| **Goal** | `videos` 테이블에 AI 도구 식별 컬럼 추가 — Affiliate CTA 정확도 향상 + 업로드 정책 반영 |
+| **Context** | Legal 결정(2026-05-23): AI 생성 여부 및 사용 도구를 DB에 저장. 현재 `AffiliateCTABanner`는 `source_url` 파싱으로 도구 추론하나, 직접 컬럼이 있으면 정확도 100%. `upload-notice.md` §2의 AI 생성 체크박스 값을 영속화. |
+| **Acceptance** | - [ ] `supabase/migrations/add_ai_tool_columns.sql` 작성<br>- [ ] `videos.ai_tool varchar(100) nullable` — 'kling', 'runway', 'pixverse' 등<br>- [ ] `videos.ai_disclosed boolean default false` — AI 생성 여부 공개 플래그<br>- [ ] RLS: `authenticated` INSERT/UPDATE 허용<br>- [ ] `PENDING_SQL.md` 에 항목 추가 |
+| **Out of scope** | 업로드 폼 UI 수정 (07-product-ui 담당), Affiliate 로직 변경 |
+| **Blocked by** | 없음 |
+| **Status** | ⬜ pending |
+
+### 2026-05-23 — ToS 초안 페이지 작성
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 02-legal-trust |
+| **Priority** | P2 |
+| **Goal** | AIARKLIVE 서비스 이용약관(ToS) 초안 문서 작성 |
+| **Context** | Legal 결정(2026-05-23): "다운로드·재배포·AI학습 목적 사용 금지" 조항 포함 필요. `agents/02-legal-trust/POLICY_DRAFTS/download-policy.md` 내용 기반. 최종 ToS는 `src/app/terms/page.tsx` 로 구현 (07-product-ui에 별도 handoff). |
+| **Acceptance** | - [ ] `agents/02-legal-trust/POLICY_DRAFTS/tos-draft.md` 작성<br>- [ ] 다운로드·재배포·AI학습 금지 조항 포함<br>- [ ] YouTube 임베드 전용 정책 명시<br>- [ ] 사용자 콘텐츠 권리 확인 조항 포함<br>- [ ] 한국어 버전 (영문은 별도 검토) |
+| **Out of scope** | 실제 법률 자문, ToS 페이지 UI 구현 |
+| **Blocked by** | 없음 |
+| **Status** | ⬜ pending |
+
+### 2026-05-23 — 다운로드 버튼 미표시 확인 + `/api/download` 노출 제거
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 07-product-ui |
+| **Priority** | P1 |
+| **Goal** | UI에 비디오 다운로드 버튼이 없는지 확인, `/api/download/thumbnail` 외 동영상 다운로드 경로 차단 |
+| **Context** | Legal 결정(2026-05-23): YouTube ToS + DMCA §1201 리스크로 다운로드 기능 영구 미제공. `/api/download/thumbnail` (썸네일 이미지 다운로드)는 허용. 동영상 파일 다운로드 버튼/API는 존재하면 제거. |
+| **Acceptance** | - [ ] VideoLightbox / VideoActions 다운로드 버튼 없음 확인 (있으면 제거)<br>- [ ] 동영상 파일 다운로드 API route 없음 확인<br>- [ ] `/api/download/thumbnail` 썸네일 다운로드는 유지 (이미지만, OK) |
+| **Out of scope** | 썸네일 다운로드 제거, ToS 페이지 구현 |
+| **Blocked by** | 없음 |
+| **Status** | ⬜ pending |
+
 ### 2026-05-23 — sitemap + OG 이미지 + /tools/kling 페이지 구현
 
 | 항목 | 내용 |
@@ -119,6 +161,14 @@
 ## ✅ Done
 
 _완료된 handoff는 날짜와 함께 여기로 이동_
+
+### 2026-05-23 — 콘텐츠 사용 정책 결정 사항 workflow 반영
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 02-legal-trust |
+| **To** | 00-orchestrator (완료) |
+| **Result** | ROADMAP.md 업데이트: 다운로드 기능 미구현 명시, Phase 2 YouTube 채널 인증 추가. 후속 handoff 발행: 06-data-backend (ai_tool/ai_disclosed), 02-legal-trust (ToS 초안), 07-product-ui (다운로드 버튼 확인). |
 
 ### 2026-05-23 — likes_count atomic functions 마이그레이션 적용
 

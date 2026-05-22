@@ -1,23 +1,57 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Download, Eye, Heart } from "lucide-react";
+import { Eye, Heart } from "lucide-react";
 import { VideoEmbed } from "@/components/VideoEmbed";
 import { CommentSection } from "@/components/CommentSection";
 import { VideoToolbar } from "@/components/VideoToolbar";
+import { AffiliateCTABanner } from "@/components/video/AffiliateCTABanner";
 import { getAiToolLabel, getGenreLabel } from "@/lib/constants";
 import { getSourceUrl } from "@/lib/youtube";
 import { getVideoById } from "@/lib/videos";
+import type { Metadata } from "next";
 
 export const runtime = "edge";
+
+const BASE_URL = "https://aiarklive.com";
 
 interface VideoPageProps {
   params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({ params }: VideoPageProps) {
+export async function generateMetadata({
+  params,
+}: VideoPageProps): Promise<Metadata> {
   const { id } = await params;
   const video = await getVideoById(id);
-  return { title: video?.title ?? "Video" };
+  if (!video) return { title: "Video | AIARKLIVE" };
+
+  const firstTool = video.ai_tools[0];
+  const toolLabel = firstTool
+    ? String(firstTool).charAt(0).toUpperCase() + String(firstTool).slice(1)
+    : null;
+  const ogImageUrl = `${BASE_URL}/video/${id}/opengraph-image`;
+  const description =
+    video.description ??
+    `Watch this AI-generated video${toolLabel ? ` made with ${toolLabel}` : ""} on AIARKLIVE.`;
+
+  return {
+    title: `${video.title}${toolLabel ? ` — ${toolLabel}` : ""} | AIARKLIVE`,
+    description,
+    openGraph: {
+      title: video.title,
+      description,
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: video.title }],
+      type: "video.other",
+      siteName: "AIARKLIVE",
+      url: `${BASE_URL}/video/${id}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: video.title,
+      description,
+      images: [ogImageUrl],
+    },
+  };
 }
 
 export default async function VideoPage({ params }: VideoPageProps) {
@@ -69,10 +103,6 @@ export default async function VideoPage({ params }: VideoPageProps) {
                 <Eye className="h-4 w-4" />
                 {video.views_count.toLocaleString()}
               </span>
-              <span className="flex items-center gap-1">
-                <Download className="h-4 w-4" />
-                {(video.downloads_count ?? 0).toLocaleString()}
-              </span>
               <span>{getGenreLabel(video.genre)}</span>
               <span>
                 {new Date(video.created_at).toLocaleDateString("en-US")}
@@ -85,6 +115,11 @@ export default async function VideoPage({ params }: VideoPageProps) {
               {video.description}
             </p>
           )}
+
+          <AffiliateCTABanner
+            aiTools={video.ai_tools}
+            sourceUrl={video.source_url ?? undefined}
+          />
 
           <CommentSection videoId={video.id} />
         </div>
@@ -147,9 +182,8 @@ export default async function VideoPage({ params }: VideoPageProps) {
           )}
 
           <p className="text-xs leading-relaxed text-muted">
-            Linked videos support thumbnail download and opening the source
-            platform only. Full video file download will be available with Pro
-            direct upload (coming soon).
+            Videos are streamed via official platform embeds. Thumbnail
+            download is available via the toolbar above.
           </p>
         </aside>
       </div>
