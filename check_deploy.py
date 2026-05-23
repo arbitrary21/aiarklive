@@ -45,6 +45,10 @@ ROUTES_TO_CHECK = [
     "/auth/callback",
     "/discover",
     "/challenges",
+    "/terms",
+    "/tools/kling",
+    "/tools/runway",
+    "/tools/pixverse",
 ]
 
 

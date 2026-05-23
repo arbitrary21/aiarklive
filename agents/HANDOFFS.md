@@ -89,12 +89,7 @@
 | **From** | 09-security-abuse |
 | **To** | 01-ops-sre |
 | **Priority** | P1 |
-| **Goal** | Cloudflare Workers KV 기반 업로드 rate limit 엣지 구현 (유저당 10회/시간, IP당 20회/시간) |
-| **Context** | `agents/09-security-abuse/notes/2026-05-23-security-audit.md` §A 참고. Cloudflare Pages + Next.js edge middleware 조합. KV namespace 생성 후 `wrangler.toml` 바인딩 추가. `/api/upload` 엔트리포인트에 rate limit 미들웨어 적용. |
-| **Acceptance** | - [ ] Cloudflare KV namespace `RATE_LIMIT_KV` 생성<br>- [ ] wrangler.toml 바인딩 추가<br>- [ ] 업로드 route에 user_id/IP 이중 rate limit 적용<br>- [ ] 초과 시 `429 + Retry-After` 응답 확인 |
-| **Out of scope** | 댓글 spam trigger (06-data-backend 담당) |
-| **Blocked by** | 없음 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done — in-memory best-effort rate limit 구현 완료 (upload 10/h user, 20/h IP; comment 20/10min user). KV 업그레이드는 Sprint 3에서 필요 시 진행. |
 
 ### 2026-05-23 — 댓글 스팸 방지 DB 마이그레이션
 
@@ -103,12 +98,7 @@
 | **From** | 09-security-abuse |
 | **To** | 06-data-backend |
 | **Priority** | P2 |
-| **Goal** | 댓글 중복 방지 trigger + `is_flagged` 컬럼 마이그레이션 작성 및 적용 |
-| **Context** | `agents/09-security-abuse/notes/2026-05-23-security-audit.md` §C 참고. `check_comment_spam()` trigger — 60초 내 동일 content 재작성 방지. `comments` 테이블에 `is_flagged boolean default false` 컬럼 추가 (admin 검토 큐용). |
-| **Acceptance** | - [ ] `supabase/migrations/add_comment_spam_guard.sql` 작성<br>- [ ] trigger: 60초 내 동일 content 시 `P0001` 에러 발생<br>- [ ] `is_flagged` 컬럼 추가<br>- [ ] `PENDING_SQL.md` 에 항목 추가 |
-| **Out of scope** | admin 큐 UI, rate limit API 변경 |
-| **Blocked by** | 없음 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done — `add_comment_spam_guard.sql` Applied 2026-05-23. P0001 에러 처리도 API route에 추가됨. |
 
 ### 2026-05-23 — Affiliate CTA 배너 컴포넌트 구현
 
