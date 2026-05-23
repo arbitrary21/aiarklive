@@ -21,7 +21,7 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
   const [aiGenerated, setAiGenerated] = useState(video.ai_disclosed);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const backdropPressed = useRef(false);
+  const suppressBackdropClose = useRef(false);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -30,6 +30,20 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
+
+  useEffect(() => {
+    const resetBackdropClose = () => {
+      window.setTimeout(() => {
+        suppressBackdropClose.current = false;
+      }, 0);
+    };
+    window.addEventListener("pointerup", resetBackdropClose);
+    window.addEventListener("pointercancel", resetBackdropClose);
+    return () => {
+      window.removeEventListener("pointerup", resetBackdropClose);
+      window.removeEventListener("pointercancel", resetBackdropClose);
+    };
+  }, []);
 
   const toggleTool = (tool: AiTool) => {
     setAiTools((prev) =>
@@ -80,20 +94,15 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: "var(--overlay)" }}
-      onPointerDown={(e) => {
-        backdropPressed.current = e.target === e.currentTarget;
-      }}
       onPointerUp={(e) => {
-        if (backdropPressed.current && e.target === e.currentTarget) {
-          onClose();
-        }
-        backdropPressed.current = false;
+        if (suppressBackdropClose.current) return;
+        if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
         className="panel max-h-[90vh] w-full max-w-lg overflow-y-auto p-6"
-        onPointerDown={() => {
-          backdropPressed.current = false;
+        onPointerDownCapture={() => {
+          suppressBackdropClose.current = true;
         }}
       >
         <div className="mb-5 flex items-center justify-between">
