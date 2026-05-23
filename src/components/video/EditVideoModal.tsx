@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { X } from "lucide-react";
 import { AI_TOOLS, GENRES } from "@/lib/constants";
@@ -21,7 +21,6 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
   const [aiGenerated, setAiGenerated] = useState(video.ai_disclosed);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const suppressBackdropClose = useRef(false);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -30,20 +29,6 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
-
-  useEffect(() => {
-    const resetBackdropClose = () => {
-      window.setTimeout(() => {
-        suppressBackdropClose.current = false;
-      }, 0);
-    };
-    window.addEventListener("pointerup", resetBackdropClose);
-    window.addEventListener("pointercancel", resetBackdropClose);
-    return () => {
-      window.removeEventListener("pointerup", resetBackdropClose);
-      window.removeEventListener("pointercancel", resetBackdropClose);
-    };
-  }, []);
 
   const toggleTool = (tool: AiTool) => {
     setAiTools((prev) =>
@@ -94,16 +79,13 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: "var(--overlay)" }}
-      onPointerUp={(e) => {
-        if (suppressBackdropClose.current) return;
+      onPointerDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
         className="panel max-h-[90vh] w-full max-w-lg overflow-y-auto p-6"
-        onPointerDownCapture={() => {
-          suppressBackdropClose.current = true;
-        }}
+        onPointerDown={(e) => e.stopPropagation()}
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">Edit video</h2>
