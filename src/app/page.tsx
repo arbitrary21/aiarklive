@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { HomeFeatured } from "@/components/home/HomeFeatured";
 import { SignInPrompt } from "@/components/auth/SignInPrompt";
 import { InfiniteVideoGrid } from "@/components/InfiniteVideoGrid";
 import { FeedTabs } from "@/components/FeedTabs";
@@ -18,11 +19,15 @@ export default async function Home({ searchParams }: HomeProps) {
   const { sort = "latest" } = await searchParams;
   const currentUser = await getCurrentUser();
 
-  const videos = await getVideos(
+  const feedFilters =
     sort === "following" && currentUser
-      ? { followingUserId: currentUser.id, sort: "latest", limit: FEED_PAGE_SIZE, offset: 0 }
-      : { sort: sort === "following" ? "latest" : sort, limit: FEED_PAGE_SIZE, offset: 0 }
-  );
+      ? { followingUserId: currentUser.id, sort: "latest" as const, limit: FEED_PAGE_SIZE, offset: 0 }
+      : { sort: (sort === "following" ? "latest" : sort) as FeedSort, limit: FEED_PAGE_SIZE, offset: 0 };
+
+  const [videos, featuredVideos] = await Promise.all([
+    getVideos(feedFilters),
+    getVideos({ sort: "popular", limit: 4 }),
+  ]);
 
   const showFollowingSignIn = sort === "following" && !currentUser;
 
@@ -43,6 +48,8 @@ export default async function Home({ searchParams }: HomeProps) {
         </p>
         <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand-500/10 blur-3xl" />
       </section>
+
+      <HomeFeatured videos={featuredVideos} />
 
       <Suspense fallback={<div className="h-10" />}>
         <FeedTabs />

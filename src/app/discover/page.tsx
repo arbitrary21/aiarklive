@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Compass } from "lucide-react";
 import { DiscoverChallengeBanner } from "@/components/discover/DiscoverChallengeBanner";
 import { DiscoverCollectionCard } from "@/components/discover/DiscoverCollectionCard";
@@ -11,7 +12,9 @@ export const metadata = {
 };
 
 export default async function DiscoverPage() {
-  const collections = await getDiscoverCollectionsWithPreviews();
+  const collections = await getDiscoverCollectionsWithPreviews({
+    onlyWithContent: true,
+  });
 
   return (
     <div className="space-y-8">
@@ -34,15 +37,29 @@ export default async function DiscoverPage() {
 
       <DiscoverChallengeBanner />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {collections.map((collection) => (
-          <DiscoverCollectionCard
-            key={collection.id}
-            collection={collection}
-            previews={collection.previews}
-          />
-        ))}
-      </div>
+      {collections.length > 0 ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {collections.map((collection) => (
+            <DiscoverCollectionCard
+              key={collection.id}
+              collection={collection}
+              previews={collection.previews}
+            />
+          ))}
+        </div>
+      ) : (
+        <section className="panel p-8 text-center">
+          <p className="text-sm text-muted">
+            Collections appear here as creators upload videos.
+          </p>
+          <Link
+            href="/upload"
+            className="mt-4 inline-block text-sm font-medium text-brand-300 hover:text-brand-200"
+          >
+            Upload the first video →
+          </Link>
+        </section>
+      )}
     </div>
   );
 }

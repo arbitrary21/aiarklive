@@ -99,15 +99,21 @@ export async function getCollectionPreviewVideos(
   return getVideos(filters);
 }
 
-export async function getDiscoverCollectionsWithPreviews(): Promise<
-  (DiscoverCollection & { previews: Video[] })[]
-> {
+export async function getDiscoverCollectionsWithPreviews(options?: {
+  onlyWithContent?: boolean;
+}): Promise<(DiscoverCollection & { previews: Video[] })[]> {
   const collections = getDiscoverCollections();
   const previews = await Promise.all(
     collections.map((collection) => getCollectionPreviewVideos(collection.id))
   );
-  return collections.map((collection, index) => ({
+  const withPreviews = collections.map((collection, index) => ({
     ...collection,
     previews: previews[index] ?? [],
   }));
+
+  if (options?.onlyWithContent) {
+    return withPreviews.filter((collection) => collection.previews.length > 0);
+  }
+
+  return withPreviews;
 }
