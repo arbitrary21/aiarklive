@@ -56,8 +56,10 @@
 - ✅ Discover 실DB 연동 — 컬렉션별 preview 썸네일 + collection/tag explore 필터 (2026-05-23)
 - ✅ YouTube 채널 인증 MVP — connect/callback/status API + upload guard (2026-05-23)
 - ✅ Rate limit Cloudflare KV — `RATE_LIMIT_KV` namespace + async limiter (2026-05-23)
-- ⬜ `add_youtube_channel_verify.sql` — Supabase SQL Editor 적용 필요 (#12)
-- ⬜ Cloudflare Pages KV 바인딩 확인 — Dashboard > aiarklive > Settings > Functions
+- ✅ `add_youtube_channel_verify.sql` — Applied 2026-05-23 (#12)
+- ✅ Supabase redirect `https://aiarklive.com/api/youtube/callback` — Applied 2026-05-23
+- ✅ Cloudflare KV binding `RATE_LIMIT_KV` — production verified 2026-05-23
+- ⬜ Google Cloud: YouTube Data API v3 + `youtube.readonly` scope on OAuth consent screen
 
 ### 알려진 이슈
 - ~~`reports` API: `/api/report` 메모리 전용 — DB 저장 없음~~ → ✅ 해결됨 (2026-05-22) — Supabase INSERT + 23505 idempotency

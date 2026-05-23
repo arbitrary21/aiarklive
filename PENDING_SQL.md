@@ -37,18 +37,22 @@ Last updated: 2026-05-23 (migration #10 ?add_comment_spam_guard added to queue)
 | 9 | `supabase/migrations/add_ai_tool_columns.sql` | videos.ai_tool + videos.ai_disclosed ?Affiliate CTA, AI ?? ?? | ✅ Applied (2026-05-23) |
 | 10 | `supabase/migrations/add_comment_spam_guard.sql` | ?? ?? ?? trigger + comments.is_flagged | ✅ Applied (2026-05-23) |
 | 11 | `supabase/migrations/add_avatar_storage.sql` | Supabase Storage avatars bucket + RLS | ? Applied (2026-05-23) |
-| 12 | `supabase/migrations/add_youtube_channel_verify.sql` | users.youtube_channel_id + verified_at | ? Pending |
+| 12 | `supabase/migrations/add_youtube_channel_verify.sql` | users.youtube_channel_id + verified_at | Applied (2026-05-23) |
 
 ---
 
 ## Manual ops (non-SQL)
 
 ### Cloudflare Pages KV binding (rate limit)
-In **Cloudflare Dashboard ? Workers & Pages ? aiarklive ? Settings ? Functions ? KV namespace bindings**:
-- Variable name: `RATE_LIMIT_KV`
-- KV namespace: `RATE_LIMIT_KV` (id: `f1138b5fc3294b82996182890a1fbfba`)
+Applied (2026-05-23) — production binding `RATE_LIMIT_KV` -> namespace `f1138b5fc3294b82996182890a1fbfba` (wrangler.toml + API verified).
 
-Also add Supabase redirect URL: `https://aiarklive.com/api/youtube/callback`
+Supabase redirect URL `https://aiarklive.com/api/youtube/callback` — Applied (2026-05-23)
+
+### Google Cloud (YouTube channel connect)
+In Google Cloud Console for OAuth client `1034274460807-...`:
+1. Enable **YouTube Data API v3** (API Library)
+2. OAuth consent screen -> add scope `https://www.googleapis.com/auth/youtube.readonly`
+3. Ensure authorized redirect URI includes `https://vsaqwmiwcbsuxcysbwru.supabase.co/auth/v1/callback`
 
 ### Cloudflare Pages environment variables
 If OAuth still shows **Invalid API key** after deploy, update in **Cloudflare Dashboard ? Workers & Pages ? aiarklive ? Settings ? Environment variables**:
