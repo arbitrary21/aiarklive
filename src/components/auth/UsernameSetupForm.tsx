@@ -86,11 +86,17 @@ export function UsernameSetupForm({
           type="text"
           value={username}
           onChange={(e) => {
-            setUsername(normalizeUsername(e.target.value));
+            setUsername(e.target.value);
             setError("");
           }}
+          onBlur={(e) => {
+            setUsername(normalizeUsername(e.target.value));
+          }}
           autoComplete="username"
-          className="form-input w-full"
+          autoCapitalize="off"
+          autoCorrect="off"
+          spellCheck={false}
+          className="input-field"
           placeholder="your_nickname"
         />
         <p className="text-xs text-muted">

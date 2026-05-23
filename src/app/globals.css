@@ -70,6 +70,8 @@ body {
   .input-field {
     @apply w-full rounded-xl border bg-surface px-4 py-3 text-foreground placeholder:text-muted focus:border-brand-500 focus:outline-none;
     border-color: var(--border);
+    color: var(--foreground);
+    caret-color: var(--brand-300);
   }
 
   .btn-secondary {
