@@ -64,6 +64,16 @@ export function NotificationBell() {
     }
   };
 
+  const getNotificationHref = (notification: Notification): string => {
+    if (notification.type === "follow") {
+      return `/profile/${notification.actor_id}`;
+    }
+    if (notification.video_id) {
+      return `/video/${notification.video_id}`;
+    }
+    return "#";
+  };
+
   return (
     <div className="relative" ref={ref}>
       <button
@@ -95,7 +105,7 @@ export function NotificationBell() {
           >
             <p className="text-sm font-semibold text-foreground">Notifications</p>
             <p className="text-xs text-muted">
-              New uploads from creators you follow
+              Likes, comments, follows, and new uploads
             </p>
           </div>
 
@@ -112,11 +122,7 @@ export function NotificationBell() {
               notifications.map((notification) => (
                 <Link
                   key={notification.id}
-                  href={
-                    notification.video_id
-                      ? `/video/${notification.video_id}`
-                      : "#"
-                  }
+                  href={getNotificationHref(notification)}
                   onClick={() => {
                     setOpen(false);
                     if (!notification.read_at) {

@@ -15,6 +15,8 @@ export async function GET(request: Request) {
   const sort = searchParams.get("sort") as "latest" | "popular" | "recommended" | "trending" | null;
   const userId = searchParams.get("userId");
   const q = searchParams.get("q");
+  const collection = searchParams.get("collection") as "tool-starter-kit" | null;
+  const tag = searchParams.get("tag");
   const limit = searchParams.get("limit");
   const offset = searchParams.get("offset");
   const following = searchParams.get("following") === "true";
@@ -35,6 +37,8 @@ export async function GET(request: Request) {
     userId: userId ?? undefined,
     followingUserId,
     q: q ?? undefined,
+    collection: collection ?? undefined,
+    tag: tag ?? undefined,
     limit: limit ? Number(limit) : undefined,
     offset: offset ? Number(offset) : undefined,
   });

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { likeVideo, unlikeVideo } from "@/lib/interactions";
+import { notifyVideoOwnerOfLike } from "@/lib/notifications";
+import { getVideoById } from "@/lib/videos";
 
 export const runtime = "edge";
 
@@ -17,6 +19,16 @@ export async function POST(request: Request) {
     }
 
     const likesCount = await likeVideo(user.id, videoId);
+
+    try {
+      const video = await getVideoById(videoId);
+      if (video && video.user_id !== user.id) {
+        await notifyVideoOwnerOfLike(user.id, videoId, video.user_id, video.title);
+      }
+    } catch {
+      // Non-blocking if notifications fail
+    }
+
     return NextResponse.json({ ok: true, liked: true, likesCount });
   } catch (err) {
     return NextResponse.json(

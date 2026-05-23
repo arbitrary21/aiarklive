@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { FilterChips } from "@/components/FilterChips";
 import { InfiniteVideoGrid } from "@/components/InfiniteVideoGrid";
 import { AI_TOOLS, GENRES } from "@/lib/constants";
-import type { AiTool, Genre, Video } from "@/lib/types";
+import type { AiTool, FeedSort, Genre, Video } from "@/lib/types";
 import { FEED_PAGE_SIZE } from "@/lib/types";
 
 function ExploreContent() {
@@ -14,6 +14,8 @@ function ExploreContent() {
   const [loading, setLoading] = useState(true);
   const q = searchParams.get("q") ?? "";
   const sortParam = searchParams.get("sort") ?? "";
+  const collectionParam = searchParams.get("collection") ?? "";
+  const tagParam = searchParams.get("tag") ?? "";
   const [aiTool, setAiTool] = useState<AiTool | undefined>(
     (searchParams.get("tool") as AiTool) || undefined
   );
@@ -27,6 +29,8 @@ function ExploreContent() {
     if (genre) params.set("genre", genre);
     if (q) params.set("q", q);
     if (sortParam) params.set("sort", sortParam);
+    if (collectionParam) params.set("collection", collectionParam);
+    if (tagParam) params.set("tag", tagParam);
     params.set("limit", String(FEED_PAGE_SIZE));
     params.set("offset", "0");
 
@@ -35,7 +39,14 @@ function ExploreContent() {
       .then((res) => res.json())
       .then((data) => setVideos(data))
       .finally(() => setLoading(false));
-  }, [aiTool, genre, q, sortParam]);
+  }, [aiTool, genre, q, sortParam, collectionParam, tagParam]);
+
+  const collectionLabel =
+    collectionParam === "tool-starter-kit"
+      ? "Tool Starter Kit"
+      : tagParam
+        ? `Tag: ${tagParam}`
+        : null;
 
   return (
     <div className="space-y-6">
@@ -44,7 +55,11 @@ function ExploreContent() {
         <p className="mt-1 text-sm text-muted">
           {q
             ? `Results for "${q}"`
-            : "Browse videos by AI tool and genre"}
+            : collectionLabel
+              ? collectionLabel
+              : sortParam === "trending"
+                ? "Trending this week"
+                : "Browse videos by AI tool and genre"}
         </p>
       </div>
 
@@ -67,7 +82,17 @@ function ExploreContent() {
       ) : (
         <InfiniteVideoGrid
           initialVideos={videos}
-          query={{ aiTool, genre, q: q || undefined }}
+          query={{
+            aiTool,
+            genre,
+            q: q || undefined,
+            sort: (sortParam as FeedSort) || undefined,
+            collection:
+              collectionParam === "tool-starter-kit"
+                ? "tool-starter-kit"
+                : undefined,
+            tag: tagParam || undefined,
+          }}
           emptyMessage="No videos match your filters."
         />
       )}

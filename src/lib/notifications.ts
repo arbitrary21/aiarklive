@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { getFollowerIds } from "@/lib/follows";
 import { getUserById } from "@/lib/videos";
-import type { Notification } from "@/lib/types";
+import type { Notification, NotificationType } from "@/lib/types";
 
 function isSupabaseConfigured(): boolean {
   return Boolean(
@@ -11,6 +11,40 @@ function isSupabaseConfigured(): boolean {
 }
 
 const mockNotifications: Notification[] = [];
+
+async function insertNotification(
+  recipientId: string,
+  actorId: string,
+  type: NotificationType,
+  message: string,
+  videoId?: string | null
+): Promise<void> {
+  if (recipientId === actorId) return;
+
+  if (!isSupabaseConfigured()) {
+    mockNotifications.unshift({
+      id: `notif-${Date.now()}-${recipientId}`,
+      user_id: recipientId,
+      type,
+      actor_id: actorId,
+      video_id: videoId ?? null,
+      message,
+      read_at: null,
+      created_at: new Date().toISOString(),
+    });
+    return;
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("notifications").insert({
+    user_id: recipientId,
+    type,
+    actor_id: actorId,
+    video_id: videoId ?? null,
+    message,
+  });
+  if (error) throw error;
+}
 
 export async function notifyFollowersOfNewVideo(
   actorId: string,
@@ -125,4 +159,52 @@ export async function markNotificationsRead(
 
   const { error } = await query;
   if (error) throw error;
+}
+
+export async function notifyVideoOwnerOfLike(
+  actorId: string,
+  videoId: string,
+  videoOwnerId: string,
+  videoTitle: string
+): Promise<void> {
+  const actor = await getUserById(actorId);
+  const username = actor?.username ?? "Someone";
+  await insertNotification(
+    videoOwnerId,
+    actorId,
+    "like",
+    `${username} liked your video: ${videoTitle}`,
+    videoId
+  );
+}
+
+export async function notifyVideoOwnerOfComment(
+  actorId: string,
+  videoId: string,
+  videoOwnerId: string,
+  videoTitle: string
+): Promise<void> {
+  const actor = await getUserById(actorId);
+  const username = actor?.username ?? "Someone";
+  await insertNotification(
+    videoOwnerId,
+    actorId,
+    "comment",
+    `${username} commented on your video: ${videoTitle}`,
+    videoId
+  );
+}
+
+export async function notifyUserOfFollow(
+  actorId: string,
+  followingId: string
+): Promise<void> {
+  const actor = await getUserById(actorId);
+  const username = actor?.username ?? "Someone";
+  await insertNotification(
+    followingId,
+    actorId,
+    "follow",
+    `${username} started following you`
+  );
 }

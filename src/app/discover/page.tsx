@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Compass } from "lucide-react";
-import { getDiscoverCollections } from "@/lib/discover";
+import { DiscoverCollectionCard } from "@/components/discover/DiscoverCollectionCard";
 import { TrendingKeywords } from "@/components/TrendingKeywords";
+import { getDiscoverCollectionsWithPreviews } from "@/lib/discover";
 
 export const runtime = "edge";
 
@@ -9,8 +9,8 @@ export const metadata = {
   title: "Discover",
 };
 
-export default function DiscoverPage() {
-  const collections = getDiscoverCollections();
+export default async function DiscoverPage() {
+  const collections = await getDiscoverCollectionsWithPreviews();
 
   return (
     <div className="space-y-8">
@@ -33,19 +33,11 @@ export default function DiscoverPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {collections.map((collection) => (
-          <Link
+          <DiscoverCollectionCard
             key={collection.id}
-            href={collection.href}
-            className={`panel group overflow-hidden bg-gradient-to-br p-5 transition hover:scale-[1.01] ${collection.accent}`}
-          >
-            <h2 className="text-lg font-semibold text-foreground group-hover:text-brand-200">
-              {collection.title}
-            </h2>
-            <p className="mt-2 text-sm text-muted">{collection.description}</p>
-            <span className="mt-4 inline-block text-xs font-medium text-brand-300">
-              Browse collection →
-            </span>
-          </Link>
+            collection={collection}
+            previews={collection.previews}
+          />
         ))}
       </div>
     </div>

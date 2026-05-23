@@ -63,6 +63,8 @@ export interface VideoFilters {
   userId?: string;
   followingUserId?: string;
   q?: string;
+  collection?: "tool-starter-kit";
+  tag?: string;
   limit?: number;
   offset?: number;
 }
@@ -83,10 +85,12 @@ export interface CreateVideoInput {
   prompt?: string;
 }
 
+export type NotificationType = "new_video" | "like" | "comment" | "follow";
+
 export interface Notification {
   id: string;
   user_id: string;
-  type: "new_video";
+  type: NotificationType;
   actor_id: string;
   video_id: string | null;
   message: string;

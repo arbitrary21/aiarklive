@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { createComment, getComments } from "@/lib/comments";
+import { notifyVideoOwnerOfComment } from "@/lib/notifications";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { getVideoById } from "@/lib/videos";
 
 export const runtime = "edge";
 
@@ -42,6 +44,16 @@ export async function POST(request: Request) {
     }
 
     const comment = await createComment(videoId, user.id, String(content));
+
+    try {
+      const video = await getVideoById(videoId);
+      if (video && video.user_id !== user.id) {
+        await notifyVideoOwnerOfComment(user.id, videoId, video.user_id, video.title);
+      }
+    } catch {
+      // Non-blocking if notifications fail
+    }
+
     return NextResponse.json(comment, { status: 201 });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to post comment.";

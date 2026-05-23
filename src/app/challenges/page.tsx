@@ -7,6 +7,8 @@ export const metadata = {
   title: "Challenges",
 };
 
+export const runtime = "edge";
+
 export default async function ChallengesPage() {
   const challenges = await getChallenges();
 

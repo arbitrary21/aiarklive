@@ -11,6 +11,8 @@ interface FeedQuery {
   aiTool?: AiTool;
   genre?: Genre;
   q?: string;
+  collection?: "tool-starter-kit";
+  tag?: string;
   following?: boolean;
   userId?: string;
 }
@@ -29,6 +31,8 @@ function buildParams(query: FeedQuery, offset: number): string {
   if (query.aiTool) params.set("aiTool", query.aiTool);
   if (query.genre) params.set("genre", query.genre);
   if (query.q) params.set("q", query.q);
+  if (query.collection) params.set("collection", query.collection);
+  if (query.tag) params.set("tag", query.tag);
   if (query.following) params.set("following", "true");
   if (query.userId) params.set("userId", query.userId);
   return params.toString();

@@ -29,9 +29,9 @@
 
 ## Next (P2) — Sprint 3
 
-- [ ] **Notification delivery 구현** (06-data-backend → 07-ui)
+- [x] **Notification delivery 구현** — like/comment/follow + new_video (06-data-backend → 07-ui)
 - [ ] **YouTube 채널 인증 MVP** — Google OAuth로 채널 소유 확인
-- [ ] `/discover` 큐레이션 실DB 연동 — 트렌딩 쿼리 실제 반영
+- [x] `/discover` 큐레이션 실DB 연동 — 컬렉션별 preview + collection/tag explore 필터
 - [ ] **Pro tier spec** — 업로드 quota, analytics 기획
 - [ ] Rate limit: Cloudflare KV 기반으로 업그레이드 (multi-worker 공유 필요 시)
 

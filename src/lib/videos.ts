@@ -10,9 +10,24 @@ function isSupabaseConfigured(): boolean {
   );
 }
 
+const STARTER_KIT_TOOLS = ["kling", "runway", "pixverse"] as const;
+
 function filterMockVideos(videos: Video[], filters: VideoFilters): Video[] {
   let result = [...videos];
 
+  if (filters.collection === "tool-starter-kit") {
+    result = result.filter((v) =>
+      v.ai_tools.some((t) => STARTER_KIT_TOOLS.includes(t as (typeof STARTER_KIT_TOOLS)[number]))
+    );
+  }
+  if (filters.tag) {
+    const tag = filters.tag.toLowerCase();
+    result = result.filter(
+      (v) =>
+        v.title.toLowerCase().includes(tag) ||
+        v.description?.toLowerCase().includes(tag)
+    );
+  }
   if (filters.aiTool) {
     result = result.filter((v) => v.ai_tools.includes(filters.aiTool!));
   }
@@ -44,6 +59,14 @@ function filterMockVideos(videos: Video[], filters: VideoFilters): Video[] {
           (a.likes_count * 2 + a.views_count)
       );
       break;
+    case "trending": {
+      const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+      result = result.filter(
+        (v) => new Date(v.created_at).getTime() >= sevenDaysAgo
+      );
+      result.sort((a, b) => b.likes_count - a.likes_count);
+      break;
+    }
     default:
       result.sort(
         (a, b) =>
@@ -94,6 +117,14 @@ export async function getVideos(filters: VideoFilters = {}): Promise<Video[]> {
   if (filters.q) {
     query = query.or(
       `title.ilike.%${filters.q}%,description.ilike.%${filters.q}%`
+    );
+  }
+  if (filters.collection === "tool-starter-kit") {
+    query = query.overlaps("ai_tools", ["kling", "runway", "pixverse"]);
+  }
+  if (filters.tag) {
+    query = query.or(
+      `title.ilike.%${filters.tag}%,description.ilike.%${filters.tag}%`
     );
   }
 

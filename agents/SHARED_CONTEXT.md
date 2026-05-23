@@ -19,11 +19,11 @@
 
 ---
 
-## 현재 상태 (Last updated: 2026-05-23 — Sprint 2: SQL migrations, rate limit, tools pages, ToS)
+## 현재 상태 (Last updated: 2026-05-23 — Sprint 3: notifications, discover DB previews)
 
 ### 배포
-- **Status:** ✅ ALL 8/8 routes passing
-- **Last deploy:** `a421779` — SEO (sitemap/robots/OG), AffiliateCTABanner, /tools/kling, legal copy fixes
+- **Status:** ✅ ALL 12/12 routes passing
+- **Last deploy:** `a9ab679` — edge runtime fix for sitemap/robots
 
 ### 인증
 - **Status:** ✅ Google OAuth 정상 동작
@@ -52,7 +52,8 @@
 - ✅ Discover 컬렉션 3개 추가 (Trending This Week, Tool Starter Kit, Challenge Gallery)
 - ✅ Trending sort (7일 창) getVideos 지원
 - ✅ ai_tool/ai_disclosed 업로드 API + createVideo 연동
-- ⬜ Notification delivery 미구현
+- ✅ Notification delivery — new_video + like/comment/follow (2026-05-23)
+- ✅ Discover 실DB 연동 — 컬렉션별 preview 썸네일 + collection/tag explore 필터 (2026-05-23)
 
 ### 알려진 이슈
 - ~~`reports` API: `/api/report` 메모리 전용 — DB 저장 없음~~ → ✅ 해결됨 (2026-05-22) — Supabase INSERT + 23505 idempotency

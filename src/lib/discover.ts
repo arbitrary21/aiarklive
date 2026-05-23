@@ -1,3 +1,6 @@
+import { getVideos } from "@/lib/videos";
+import type { AiTool, Genre, Video, VideoFilters } from "@/lib/types";
+
 export interface DiscoverCollection {
   id: string;
   title: string;
@@ -72,6 +75,39 @@ export const discoverCollections: DiscoverCollection[] = [
   },
 ];
 
+const COLLECTION_FILTERS: Record<string, VideoFilters> = {
+  "cinematic-kling": { aiTool: "kling" as AiTool, sort: "popular", limit: 4 },
+  "runway-loops": { aiTool: "runway" as AiTool, genre: "loop" as Genre, sort: "popular", limit: 4 },
+  "suno-mv": { aiTool: "suno" as AiTool, genre: "music-video" as Genre, sort: "popular", limit: 4 },
+  experimental: { genre: "experimental" as Genre, sort: "popular", limit: 4 },
+  "short-form": { genre: "short-form" as Genre, sort: "popular", limit: 4 },
+  animation: { genre: "animation" as Genre, sort: "popular", limit: 4 },
+  "trending-this-week": { sort: "trending", limit: 4 },
+  "tool-starter-kit": { collection: "tool-starter-kit", sort: "popular", limit: 4 },
+  "challenge-gallery": { tag: "challenge", sort: "popular", limit: 4 },
+};
+
 export function getDiscoverCollections(): DiscoverCollection[] {
   return discoverCollections;
+}
+
+export async function getCollectionPreviewVideos(
+  collectionId: string
+): Promise<Video[]> {
+  const filters = COLLECTION_FILTERS[collectionId];
+  if (!filters) return [];
+  return getVideos(filters);
+}
+
+export async function getDiscoverCollectionsWithPreviews(): Promise<
+  (DiscoverCollection & { previews: Video[] })[]
+> {
+  const collections = getDiscoverCollections();
+  const previews = await Promise.all(
+    collections.map((collection) => getCollectionPreviewVideos(collection.id))
+  );
+  return collections.map((collection, index) => ({
+    ...collection,
+    previews: previews[index] ?? [],
+  }));
 }

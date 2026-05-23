@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { followUser, unfollowUser } from "@/lib/follows";
+import { notifyUserOfFollow } from "@/lib/notifications";
 
 export const runtime = "edge";
 
@@ -20,6 +21,13 @@ export async function POST(request: Request) {
     }
 
     await followUser(user.id, followingId);
+
+    try {
+      await notifyUserOfFollow(user.id, followingId);
+    } catch {
+      // Non-blocking if notifications fail
+    }
+
     return NextResponse.json({ ok: true });
   } catch (err) {
     return NextResponse.json(
