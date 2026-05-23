@@ -93,6 +93,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    let mergedCount = 0;
+    const { data: mergedVideos, error: mergeError } = await supabase.rpc(
+      "transfer_videos_for_youtube_channel",
+      {
+        p_channel_id: channel.channelId,
+        p_new_user_id: userId,
+      }
+    );
+
+    if (!mergeError && typeof mergedVideos === "number") {
+      mergedCount = mergedVideos;
+    }
+
     const { error: updateError } = await supabase
       .from("users")
       .update({
@@ -111,6 +124,9 @@ export async function GET(request: NextRequest) {
 
     const redirectUrl = new URL(next, origin);
     redirectUrl.searchParams.set("youtube", "connected");
+    if (typeof mergedCount === "number" && mergedCount > 0) {
+      redirectUrl.searchParams.set("merged", String(mergedCount));
+    }
     const response = NextResponse.redirect(redirectUrl);
     response.cookies.set("youtube_connect_next", "", { path: "/", maxAge: 0 });
 

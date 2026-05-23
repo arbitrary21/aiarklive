@@ -27,6 +27,15 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         Sign in with Google to upload videos, build your profile, and follow
         creators. New users are registered automatically on first sign-in.
       </p>
+      <p className="mt-3 rounded-xl border px-4 py-3 text-left text-xs leading-relaxed text-muted"
+        style={{ borderColor: "var(--border)" }}
+      >
+        <span className="font-medium text-foreground">YouTube channel owners:</span>{" "}
+        If you uploaded with a channel brand account but want to use your personal
+        Gmail instead, sign in with that Gmail, then go to{" "}
+        <strong className="text-foreground">Upload → Connect YouTube channel</strong>.
+        Same channel will merge your previous videos into this login.
+      </p>
 
       {!configured && (
         <p className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">

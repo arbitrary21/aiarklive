@@ -53,6 +53,9 @@ export async function GET(request: NextRequest) {
     options: {
       redirectTo: `${origin}/auth/callback`,
       skipBrowserRedirect: true,
+      queryParams: {
+        prompt: "select_account",
+      },
     },
   });
 

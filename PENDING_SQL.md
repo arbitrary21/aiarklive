@@ -38,6 +38,7 @@ Last updated: 2026-05-23 (migration #10 ?add_comment_spam_guard added to queue)
 | 10 | `supabase/migrations/add_comment_spam_guard.sql` | ?? ?? ?? trigger + comments.is_flagged | ✅ Applied (2026-05-23) |
 | 11 | `supabase/migrations/add_avatar_storage.sql` | Supabase Storage avatars bucket + RLS | ? Applied (2026-05-23) |
 | 12 | `supabase/migrations/add_youtube_channel_verify.sql` | users.youtube_channel_id + verified_at | Applied (2026-05-23) |
+| 13 | `supabase/migrations/add_youtube_channel_merge.sql` | RPC: merge videos when same YT channel reconnects | ⬜ Pending |
 
 ---
 
