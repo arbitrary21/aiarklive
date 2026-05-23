@@ -47,9 +47,10 @@ export default async function UploadPage({
             </div>
           )}
           <YouTubeConnectBanner
-          initialVerified={Boolean(user?.youtube_channel_id)}
-          initialChannelTitle={user?.youtube_channel_title ?? null}
-        />
+            initialVerified={Boolean(user?.youtube_channel_id)}
+            initialChannelTitle={user?.youtube_channel_title ?? null}
+          />
+        </>
       )}
       <UploadForm />
     </div>
