@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { createComment, getComments } from "@/lib/comments";
 import { notifyVideoOwnerOfComment } from "@/lib/notifications";
-import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { checkRateLimitAsync, rateLimitResponse } from "@/lib/rate-limit";
 import { getVideoById } from "@/lib/videos";
 
 export const runtime = "edge";
@@ -30,9 +30,9 @@ export async function POST(request: Request) {
       request.headers.get("x-forwarded-for") ??
       "anon";
 
-    const userLimit = checkRateLimit(`comment:user:${user.id}`, 20, 600_000);
+    const userLimit = await checkRateLimitAsync(`comment:user:${user.id}`, 20, 600_000);
     if (!userLimit.allowed) return rateLimitResponse(userLimit.retryAfterSeconds);
-    const ipLimit = checkRateLimit(`comment:ip:${ip}`, 30, 600_000);
+    const ipLimit = await checkRateLimitAsync(`comment:ip:${ip}`, 30, 600_000);
     if (!ipLimit.allowed) return rateLimitResponse(ipLimit.retryAfterSeconds);
 
     const { videoId, content } = await request.json();

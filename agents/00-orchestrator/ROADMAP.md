@@ -27,13 +27,13 @@
 - [x] **Rate limit (업로드/댓글)** — in-memory best-effort
 - [x] Growth: `/tools/runway` + `/tools/pixverse` SEO 랜딩
 
-## Next (P2) — Sprint 3
+## Next (P2) — Sprint 3 ✅ Complete
 
 - [x] **Notification delivery 구현** — like/comment/follow + new_video (06-data-backend → 07-ui)
-- [ ] **YouTube 채널 인증 MVP** — Google OAuth로 채널 소유 확인
+- [x] **YouTube 채널 인증 MVP** — Connect flow + upload ownership guard
 - [x] `/discover` 큐레이션 실DB 연동 — 컬렉션별 preview + collection/tag explore 필터
-- [ ] **Pro tier spec** — 업로드 quota, analytics 기획
-- [ ] Rate limit: Cloudflare KV 기반으로 업그레이드 (multi-worker 공유 필요 시)
+- [x] **Pro tier spec** — upload quota, analytics (`agents/04-monetization/models/2026-05-23-pro-tier-spec.md`)
+- [x] Rate limit: Cloudflare KV 기반으로 업그레이드 (`RATE_LIMIT_KV` namespace)
 
 ## Phase 2 (중기)
 

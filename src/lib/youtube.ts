@@ -70,6 +70,7 @@ export async function fetchYouTubeMetadata(url: string, apiKey?: string) {
   if (!apiKey) {
     return {
       videoId,
+      channelId: null,
       title: "YouTube video",
       description: "",
       thumbnail_url,
@@ -101,6 +102,7 @@ export async function fetchYouTubeMetadata(url: string, apiKey?: string) {
 
   return {
     videoId,
+    channelId: (snippet.channelId as string) ?? null,
     title: snippet.title as string,
     description: (snippet.description as string) ?? "",
     thumbnail_url:
@@ -109,5 +111,39 @@ export async function fetchYouTubeMetadata(url: string, apiKey?: string) {
       thumbnail_url,
     embed_url,
     platform: "youtube" as Platform,
+  };
+}
+
+export interface YouTubeChannelInfo {
+  channelId: string;
+  title: string;
+}
+
+export async function fetchMyYouTubeChannel(
+  accessToken: string
+): Promise<YouTubeChannelInfo | null> {
+  const params = new URLSearchParams({
+    part: "snippet",
+    mine: "true",
+  });
+
+  const res = await fetch(
+    `https://www.googleapis.com/youtube/v3/channels?${params.toString()}`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch YouTube channel.");
+  }
+
+  const data = await res.json();
+  const item = data.items?.[0];
+  if (!item?.id) return null;
+
+  return {
+    channelId: item.id as string,
+    title: (item.snippet?.title as string) ?? "YouTube channel",
   };
 }

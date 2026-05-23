@@ -32,6 +32,9 @@ export interface User {
   bio: string | null;
   created_at: string;
   username_confirmed?: boolean;
+  youtube_channel_id?: string | null;
+  youtube_channel_title?: string | null;
+  youtube_verified_at?: string | null;
 }
 
 export interface Video {

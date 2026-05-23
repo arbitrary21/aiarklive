@@ -62,6 +62,12 @@ export function ProfileView({
           )}
           <div>
             <h1 className="text-3xl font-bold text-foreground">{user.username}</h1>
+            {user.youtube_channel_id && user.youtube_channel_title && (
+              <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-medium text-red-200">
+                <span aria-hidden>▶</span>
+                {user.youtube_channel_title}
+              </p>
+            )}
             {user.bio && <p className="mt-2 max-w-xl text-muted">{user.bio}</p>}
             <p className="mt-3 text-sm text-muted">
               {stats.videoCount} videos · Joined{" "}

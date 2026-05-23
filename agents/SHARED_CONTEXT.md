@@ -19,11 +19,11 @@
 
 ---
 
-## 현재 상태 (Last updated: 2026-05-23 — Sprint 3: notifications, discover DB previews)
+## 현재 상태 (Last updated: 2026-05-23 — Sprint 3 complete)
 
 ### 배포
 - **Status:** ✅ ALL 12/12 routes passing
-- **Last deploy:** `a9ab679` — edge runtime fix for sitemap/robots
+- **Last deploy:** `564fd8c` — notifications + discover DB previews
 
 ### 인증
 - **Status:** ✅ Google OAuth 정상 동작
@@ -54,6 +54,10 @@
 - ✅ ai_tool/ai_disclosed 업로드 API + createVideo 연동
 - ✅ Notification delivery — new_video + like/comment/follow (2026-05-23)
 - ✅ Discover 실DB 연동 — 컬렉션별 preview 썸네일 + collection/tag explore 필터 (2026-05-23)
+- ✅ YouTube 채널 인증 MVP — connect/callback/status API + upload guard (2026-05-23)
+- ✅ Rate limit Cloudflare KV — `RATE_LIMIT_KV` namespace + async limiter (2026-05-23)
+- ⬜ `add_youtube_channel_verify.sql` — Supabase SQL Editor 적용 필요 (#12)
+- ⬜ Cloudflare Pages KV 바인딩 확인 — Dashboard > aiarklive > Settings > Functions
 
 ### 알려진 이슈
 - ~~`reports` API: `/api/report` 메모리 전용 — DB 저장 없음~~ → ✅ 해결됨 (2026-05-22) — Supabase INSERT + 23505 idempotency

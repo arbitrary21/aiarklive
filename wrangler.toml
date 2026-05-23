@@ -2,3 +2,8 @@ name = "aiarklive"
 pages_build_output_dir = ".vercel/output/static"
 compatibility_date = "2026-05-21"
 compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "f1138b5fc3294b82996182890a1fbfba"
+

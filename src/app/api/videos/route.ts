@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { notifyFollowersOfNewVideo } from "@/lib/notifications";
 import { detectPlatform, fetchYouTubeMetadata } from "@/lib/youtube";
 import { createVideo, getVideos } from "@/lib/videos";
-import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { checkRateLimitAsync, rateLimitResponse } from "@/lib/rate-limit";
 import type { AiTool, Genre } from "@/lib/types";
 
 export const runtime = "edge";
@@ -63,10 +63,10 @@ export async function POST(request: Request) {
       "anon";
 
     if (user?.id) {
-      const userLimit = checkRateLimit(`upload:user:${user.id}`, 10, 3_600_000);
+      const userLimit = await checkRateLimitAsync(`upload:user:${user.id}`, 10, 3_600_000);
       if (!userLimit.allowed) return rateLimitResponse(userLimit.retryAfterSeconds);
     }
-    const ipLimit = checkRateLimit(`upload:ip:${ip}`, 20, 3_600_000);
+    const ipLimit = await checkRateLimitAsync(`upload:ip:${ip}`, 20, 3_600_000);
     if (!ipLimit.allowed) return rateLimitResponse(ipLimit.retryAfterSeconds);
 
     const body = await request.json();
@@ -93,12 +93,38 @@ export async function POST(request: Request) {
     let resolvedEmbedUrl = embed_url;
 
     if (platform === "youtube") {
+      if (user && !user.youtube_channel_id) {
+        return NextResponse.json(
+          {
+            error:
+              "Connect your YouTube channel before uploading YouTube videos.",
+            code: "YOUTUBE_NOT_CONNECTED",
+          },
+          { status: 403 }
+        );
+      }
+
       const meta = await fetchYouTubeMetadata(
         embed_url,
         process.env.YOUTUBE_API_KEY
       );
       thumbnail_url = meta.thumbnail_url;
       resolvedEmbedUrl = meta.embed_url;
+
+      if (
+        user?.youtube_channel_id &&
+        meta.channelId &&
+        meta.channelId !== user.youtube_channel_id
+      ) {
+        return NextResponse.json(
+          {
+            error:
+              "You can only upload videos from your verified YouTube channel.",
+            code: "YOUTUBE_CHANNEL_MISMATCH",
+          },
+          { status: 403 }
+        );
+      }
     }
 
     const video = await createVideo(

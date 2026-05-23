@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { UploadForm } from "@/components/UploadForm";
+import { YouTubeConnectBanner } from "@/components/youtube/YouTubeConnectBanner";
 import { getCurrentUser } from "@/lib/auth";
 
 export const runtime = "edge";
@@ -14,11 +15,14 @@ export default async function UploadPage() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 
+  let user = null;
   if (configured && process.env.NODE_ENV === "production") {
-    const user = await getCurrentUser();
+    user = await getCurrentUser();
     if (!user) {
       redirect("/login?next=/upload");
     }
+  } else if (configured) {
+    user = await getCurrentUser();
   }
 
   return (
@@ -29,6 +33,12 @@ export default async function UploadPage() {
           Submit a YouTube, TikTok, or X link and tag the AI tools used
         </p>
       </div>
+      {configured && (
+        <YouTubeConnectBanner
+          initialVerified={Boolean(user?.youtube_channel_id)}
+          initialChannelTitle={user?.youtube_channel_title ?? null}
+        />
+      )}
       <UploadForm />
     </div>
   );
