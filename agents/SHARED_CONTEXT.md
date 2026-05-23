@@ -54,6 +54,7 @@
 - ~~`adjustLikesCount` 레이스컨디션~~ → ✅ 해결됨 (2026-05-23) — migration #8 적용 완료, atomic RPC 사용 중
 - ~~Upload: 저작권 고지 UI~~ → ✅ 해결됨 (upload-notice 체크박스 구현 완료)
 - **DB SQL 미적용:** `add_ai_tool_columns.sql` + `add_comment_spam_guard.sql` → Supabase SQL Editor 수동 실행 필요
+- ✅ `add_avatar_storage.sql` — avatars Storage bucket + RLS (Applied 2026-05-23)
 
 ---
 
