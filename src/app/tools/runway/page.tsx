@@ -2,123 +2,123 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getVideos } from "@/lib/videos";
 import { VideoGrid } from "@/components/VideoGrid";
-import { ExternalLink, Sparkles, Zap, Image, Film } from "lucide-react";
+import { ExternalLink, Sparkles, Zap, Film, Layers } from "lucide-react";
 
 export const runtime = "edge";
 
 export const metadata: Metadata = {
-  title: "Kling AI Video Generator — Examples & Guide | AIARKLIVE",
+  title: "Runway AI Video Generator — Examples & Guide | AIARKLIVE",
   description:
-    "Explore top Kling AI videos, prompts & tutorials from the AIARKLIVE community. See text-to-video, image-to-video & motion brush examples. Free to browse.",
+    "Explore top Runway Gen-3 Alpha videos, prompts & tutorials from the AIARKLIVE community. See text-to-video, image-to-video & motion control examples. Free to browse.",
   openGraph: {
-    title: "Kling AI Video Generator — Examples & Guide | AIARKLIVE",
+    title: "Runway AI Video Generator — Examples & Guide | AIARKLIVE",
     description:
-      "Explore top Kling AI videos, prompts & tutorials from the AIARKLIVE community. See text-to-video, image-to-video & motion brush examples. Free to browse.",
+      "Explore top Runway Gen-3 Alpha videos, prompts & tutorials from the AIARKLIVE community. Free to browse.",
     type: "website",
     siteName: "AIARKLIVE",
-    url: "https://aiarklive.com/tools/kling",
+    url: "https://aiarklive.com/tools/runway",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kling AI Video Generator — Examples & Guide | AIARKLIVE",
+    title: "Runway AI Video Generator — Examples & Guide | AIARKLIVE",
     description:
-      "Explore top Kling AI videos, prompts & tutorials from the AIARKLIVE community.",
+      "Explore top Runway Gen-3 Alpha videos, prompts & tutorials from the AIARKLIVE community.",
   },
 };
 
 const SCHEMA_SOFTWARE = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Kling AI",
+  name: "Runway",
   description:
-    "Kling AI is an AI-powered video generation tool that creates high-quality videos from text prompts and images.",
+    "Runway is a professional AI video generation suite used by filmmakers and creators worldwide for text-to-video, image-to-video, and video editing.",
   applicationCategory: "MultimediaApplication",
   operatingSystem: "Web",
-  url: "https://klingai.com",
+  url: "https://runwayml.com",
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "Free tier available",
+    description: "Free trial available with 125 credits",
   },
 };
 
 const FEATURES = [
   {
     icon: Film,
-    title: "Text-to-Video",
+    title: "Gen-3 Alpha Turbo",
     description:
-      "Generate cinematic video clips from text descriptions. Kling AI supports up to 2 minutes of video at 1080p.",
+      "Runway's fastest model — generate cinematic video clips in seconds from text prompts with Hollywood-level quality.",
   },
   {
-    icon: Image,
+    icon: Layers,
     title: "Image-to-Video",
     description:
-      "Bring any still image to life. Upload a photo and Kling AI animates it with realistic motion.",
+      "Transform any still image into a smooth, high-quality video. Ideal for product animations and scene transitions.",
   },
   {
     icon: Zap,
-    title: "Motion Brush",
+    title: "Motion Controls",
     description:
-      "Paint motion onto specific areas of an image for precise, controlled animation effects.",
+      "Precisely control camera movement and subject motion with Runway's advanced motion brush and camera presets.",
   },
   {
     icon: Sparkles,
-    title: "Camera Control",
+    title: "Act One",
     description:
-      "Simulate professional camera movements — pan, zoom, orbit — with AI-driven cinematography.",
+      "Bring characters to life by transferring your own performance onto any AI-generated character in real time.",
   },
 ];
 
 const PROMPTS = [
-  "A lone astronaut walks across the surface of Mars at golden hour, cinematic, slow motion",
-  "A paper origami crane unfolding in reverse, macro photography, white background",
-  "Ocean waves crashing on black volcanic rocks, aerial drone shot, sunrise",
-  "A neon-lit Tokyo street at night, rain reflections, looping cinemagraph style",
-  "A scientist in a lab watching a glowing DNA strand rotate in mid-air, sci-fi lighting",
+  "A cinematic close-up of a teardrop falling in slow motion, golden hour backlight, 8K",
+  "Two astronauts floating inside a futuristic space station, warm ambient light, handheld camera",
+  "A vintage car racing through rain-soaked city streets at night, neon reflections, film grain",
+  "A butterfly emerging from its chrysalis in extreme macro detail, nature documentary style",
+  "Sweeping aerial shot over an ancient jungle temple at dawn, mist rising, cinematic grade",
 ];
 
 const COMPARISON = [
   {
     feature: "Free tier",
-    kling: "✅ 66 credits/day",
     runway: "✅ 125 credits (one-time)",
-    sora: "✅ Limited",
+    kling: "✅ 66 credits/day",
+    pixverse: "✅ Daily credits",
   },
   {
     feature: "Max video length",
-    kling: "2 min",
     runway: "16 sec",
-    sora: "20 sec",
+    kling: "2 min",
+    pixverse: "8 sec",
   },
   {
     feature: "Max resolution",
-    kling: "1080p",
     runway: "1080p",
-    sora: "1080p",
+    kling: "1080p",
+    pixverse: "1080p",
   },
   {
     feature: "Image-to-video",
-    kling: "✅",
     runway: "✅",
-    sora: "✅",
+    kling: "✅",
+    pixverse: "✅",
   },
   {
-    feature: "Motion brush",
-    kling: "✅",
-    runway: "❌",
-    sora: "❌",
+    feature: "Character animation",
+    runway: "✅ Act One",
+    kling: "❌",
+    pixverse: "❌",
   },
   {
     feature: "Camera control",
-    kling: "✅",
     runway: "✅",
-    sora: "✅",
+    kling: "✅",
+    pixverse: "❌",
   },
 ];
 
-export default async function KlingPage() {
-  const videos = await getVideos({ aiTool: "kling", sort: "popular", limit: 12 });
+export default async function RunwayPage() {
+  const videos = await getVideos({ aiTool: "runway", sort: "popular", limit: 12 });
 
   return (
     <>
@@ -130,62 +130,64 @@ export default async function KlingPage() {
       <div className="mx-auto max-w-5xl space-y-16 pb-16">
         {/* Hero */}
         <section className="pt-8 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm text-emerald-300">
             <Sparkles className="h-3.5 w-3.5" />
             AI Video Tool
           </div>
           <h1 className="mb-4 text-4xl font-bold text-foreground sm:text-5xl">
-            Kling AI Video Generator —{" "}
-            <span className="text-brand-300">Community Examples & Guide</span>
+            Runway Gen-3 Alpha —{" "}
+            <span className="text-emerald-300">Community Examples & Guide</span>
           </h1>
           <p className="mx-auto mb-8 max-w-2xl text-lg text-muted">
-            Discover what Kling AI can do. Browse real videos made by the
-            AIARKLIVE community — text-to-video, image-to-video, motion brush,
+            Discover what Runway Gen-3 can do. Browse real videos made by the
+            AIARKLIVE community — text-to-video, image-to-video, camera motion,
             and more.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="/explore?tool=kling"
-              className="rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-400"
+              href="/explore?tool=runway"
+              className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-500"
             >
-              Explore all AI videos
+              Explore all Runway videos
             </Link>
             <a
-              href="https://klingai.com"
+              href="https://runwayml.com"
               target="_blank"
               rel="noopener noreferrer nofollow"
               className="flex items-center gap-1.5 rounded-xl border px-5 py-2.5 text-sm font-semibold text-muted transition hover:text-foreground"
               style={{ borderColor: "var(--border)" }}
             >
-              Try Kling AI free
+              Try Runway free
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>
         </section>
 
-        {/* What Is Kling AI */}
+        {/* What Is Runway */}
         <section>
           <h2 className="mb-4 text-2xl font-bold text-foreground">
-            What Is Kling AI?
+            What Is Runway?
           </h2>
           <div className="panel p-6 text-muted leading-relaxed space-y-3">
             <p>
-              <strong className="text-foreground">Kling AI</strong> is an
-              AI-powered video generation platform developed by Kuaishou
-              Technology. It lets you create high-quality video clips from text
-              prompts or images — no camera, no editing software required.
+              <strong className="text-foreground">Runway</strong> is a
+              professional AI creative platform trusted by filmmakers, VFX
+              artists, and content creators worldwide. Their{" "}
+              <strong className="text-foreground">Gen-3 Alpha</strong> model
+              delivers cinematic-quality video generation from text and image
+              inputs.
             </p>
             <p>
-              Kling AI stands out for its generous free tier (66 credits/day),
-              long video support (up to 2 minutes), and unique features like{" "}
-              <strong className="text-foreground">Motion Brush</strong> — which
-              lets you paint motion onto specific areas of an image — and
-              professional-grade camera controls.
+              What sets Runway apart is its focus on{" "}
+              <strong className="text-foreground">professional workflows</strong>{" "}
+              — from Act One (character animation) to precise camera motion
+              controls, it's built for creators who need more than just a
+              "generate and hope" experience.
             </p>
             <p>
-              It competes directly with Runway Gen-3, Sora, and PixVerse, but
-              is often preferred for its realistic motion physics and free
-              access.
+              Runway is used in production by teams at Netflix, Adobe, and
+              top-tier creative agencies. It competes with Kling AI, PixVerse,
+              and Sora.
             </p>
           </div>
         </section>
@@ -194,11 +196,11 @@ export default async function KlingPage() {
         <section>
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-2xl font-bold text-foreground">
-              Top Kling AI Videos from the Community
+              Top Runway Videos from the Community
             </h2>
             <Link
               href="/leaderboard"
-              className="text-sm text-brand-300 hover:underline"
+              className="text-sm text-emerald-300 hover:underline"
             >
               View leaderboard →
             </Link>
@@ -207,22 +209,22 @@ export default async function KlingPage() {
             <VideoGrid videos={videos} />
           ) : (
             <div className="panel p-8 text-center text-muted">
-              <p className="mb-4">No Kling AI videos yet — be the first!</p>
+              <p className="mb-4">No Runway videos yet — be the first!</p>
               <Link
                 href="/upload"
-                className="rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-400"
+                className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500"
               >
-                Upload your Kling AI video
+                Upload your Runway video
               </Link>
             </div>
           )}
           {videos.length > 0 && (
             <div className="mt-4 text-center">
               <Link
-                href="/explore?tool=kling"
-                className="text-sm text-brand-300 hover:underline"
+                href="/explore?tool=runway"
+                className="text-sm text-emerald-300 hover:underline"
               >
-                See all Kling AI videos →
+                See all Runway videos →
               </Link>
             </div>
           )}
@@ -231,12 +233,12 @@ export default async function KlingPage() {
         {/* Features */}
         <section>
           <h2 className="mb-6 text-2xl font-bold text-foreground">
-            Kling AI Features: Text-to-Video, Image-to-Video & Motion Brush
+            Runway Features: Gen-3 Alpha, Act One & Camera Controls
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {FEATURES.map((f) => (
               <div key={f.title} className="panel p-5 flex gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-500/15 text-brand-300">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
                   <f.icon className="h-5 w-5" />
                 </div>
                 <div>
@@ -255,12 +257,11 @@ export default async function KlingPage() {
         {/* Best Prompts */}
         <section>
           <h2 className="mb-4 text-2xl font-bold text-foreground">
-            Kling AI Prompts That Actually Work
+            Runway Gen-3 Prompts That Actually Work
           </h2>
           <p className="mb-4 text-muted">
-            These prompt structures consistently produce high-quality results
-            with Kling AI. The key is to be specific about subject, action,
-            style, and camera.
+            Runway Gen-3 excels at cinematic realism. These prompts leverage its
+            strengths in lighting, physics, and camera movement.
           </p>
           <div className="space-y-2">
             {PROMPTS.map((prompt, i) => (
@@ -268,7 +269,7 @@ export default async function KlingPage() {
                 key={i}
                 className="panel flex items-start gap-3 p-4 text-sm"
               >
-                <span className="shrink-0 rounded bg-brand-500/20 px-2 py-0.5 text-xs font-mono text-brand-300">
+                <span className="shrink-0 rounded bg-emerald-500/20 px-2 py-0.5 text-xs font-mono text-emerald-300">
                   {i + 1}
                 </span>
                 <p className="text-muted leading-relaxed">{prompt}</p>
@@ -280,16 +281,16 @@ export default async function KlingPage() {
         {/* Comparison */}
         <section>
           <h2 className="mb-4 text-2xl font-bold text-foreground">
-            Kling AI vs Runway vs Sora — Quick Comparison
+            Runway vs Kling AI vs PixVerse — Quick Comparison
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left" style={{ borderColor: "var(--border)" }}>
                   <th className="pb-3 pr-4 font-semibold text-muted">Feature</th>
-                  <th className="pb-3 pr-4 font-semibold text-brand-300">Kling AI</th>
-                  <th className="pb-3 pr-4 font-semibold text-muted">Runway</th>
-                  <th className="pb-3 font-semibold text-muted">Sora</th>
+                  <th className="pb-3 pr-4 font-semibold text-emerald-300">Runway</th>
+                  <th className="pb-3 pr-4 font-semibold text-muted">Kling AI</th>
+                  <th className="pb-3 font-semibold text-muted">PixVerse</th>
                 </tr>
               </thead>
               <tbody>
@@ -300,9 +301,9 @@ export default async function KlingPage() {
                     style={{ borderColor: "var(--border)" }}
                   >
                     <td className="py-3 pr-4 text-muted">{row.feature}</td>
-                    <td className="py-3 pr-4 font-medium text-foreground">{row.kling}</td>
-                    <td className="py-3 pr-4 text-muted">{row.runway}</td>
-                    <td className="py-3 text-muted">{row.sora}</td>
+                    <td className="py-3 pr-4 font-medium text-foreground">{row.runway}</td>
+                    <td className="py-3 pr-4 text-muted">{row.kling}</td>
+                    <td className="py-3 text-muted">{row.pixverse}</td>
                   </tr>
                 ))}
               </tbody>
@@ -311,16 +312,16 @@ export default async function KlingPage() {
           <p className="mt-3 text-xs text-muted">
             * Data as of May 2026. Plans and features may change.{" "}
             <a
-              href="https://klingai.com"
+              href="https://runwayml.com/pricing"
               target="_blank"
               rel="noopener noreferrer nofollow"
               className="underline hover:text-foreground"
             >
-              Check Kling AI pricing
+              Check Runway pricing
             </a>{" "}
             ·{" "}
-            <Link href="/tools/runway" className="underline hover:text-foreground">
-              Runway guide
+            <Link href="/tools/kling" className="underline hover:text-foreground">
+              Kling AI guide
             </Link>{" "}
             ·{" "}
             <Link href="/tools/pixverse" className="underline hover:text-foreground">
@@ -332,19 +333,19 @@ export default async function KlingPage() {
         {/* How To */}
         <section>
           <h2 className="mb-4 text-2xl font-bold text-foreground">
-            How to Use Kling AI: Step-by-Step
+            How to Use Runway Gen-3: Step-by-Step
           </h2>
           <ol className="space-y-3 text-muted">
             {[
-              "Go to klingai.com and create a free account (66 credits refreshed daily).",
-              'Select "AI Video" → choose "Text to Video" or "Image to Video".',
-              "Write a detailed prompt: describe the subject, action, camera angle, and style.",
-              "Set aspect ratio (16:9 for YouTube, 9:16 for shorts), duration (5s / 10s), and quality.",
-              'Click "Generate" and wait ~2–5 minutes.',
-              "Download your video or share it directly to AIARKLIVE!",
+              "Go to runwayml.com and create a free account (125 one-time credits).",
+              'Select "Gen-3 Alpha" or "Gen-3 Alpha Turbo" from the model menu.',
+              "Write a descriptive text prompt, focusing on lighting, action, and camera style.",
+              "Optionally upload a reference image for image-to-video generation.",
+              "Set video duration (up to 16 seconds) and aspect ratio, then click Generate.",
+              "Download your video or share it on AIARKLIVE!",
             ].map((step, i) => (
               <li key={i} className="flex gap-3 text-sm leading-relaxed">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-500/20 text-xs font-bold text-brand-300">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-bold text-emerald-300">
                   {i + 1}
                 </span>
                 {step}
@@ -356,18 +357,18 @@ export default async function KlingPage() {
         {/* CTA */}
         <section className="panel p-8 text-center">
           <h2 className="mb-3 text-2xl font-bold text-foreground">
-            Share Your Kling AI Video
+            Share Your Runway Video
           </h2>
           <p className="mb-6 text-muted">
-            Made something with Kling AI? Upload it to AIARKLIVE and get
+            Made something with Runway Gen-3? Upload it to AIARKLIVE and get
             discovered by thousands of AI creators.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/upload"
-              className="rounded-xl bg-brand-500 px-6 py-3 font-semibold text-white transition hover:bg-brand-400"
+              className="rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white transition hover:bg-emerald-500"
             >
-              Upload your Kling AI video
+              Upload your Runway video
             </Link>
             <Link
               href="/challenges"

@@ -17,14 +17,23 @@
 > ⚠️ 법률 결정 (2026-05-23): **다운로드 기능 미제공** — YouTube ToS § + DMCA §1201 위반 리스크.
 > YouTube 공식 embed 전용. 재배포·AI학습 목적 사용 ToS 금지 명시 예정.
 
-## Next (P1–P2) — Sprint 2
+## Now (P1) — Sprint 2 ✅ Complete
 
-- [ ] **`videos.ai_tool` + `videos.ai_disclosed` 컬럼** (06-data-backend, handoff 발행 예정)
-- [ ] **댓글 스팸 방지 trigger + `is_flagged` 컬럼** (06-data-backend, handoff 발행됨)
-- [ ] **ToS 초안 페이지** (02-legal-trust, handoff 발행 예정)
-- [ ] `/discover` 큐레이션 데이터 실DB 연동 (08-editorial)
-- [ ] Growth: `/tools/[tool]` SEO 랜딩 추가 2종 (runway, pixverse)
-- [ ] Notification delivery 구현 (06-data-backend → 07-ui)
+- [x] **`videos.ai_tool` + `videos.ai_disclosed` 컬럼** — SQL Applied + API 연동
+- [x] **댓글 스팸 방지 trigger + `is_flagged` 컬럼** — SQL Applied
+- [x] **ToS 페이지** `/terms` — 법적 요건 포함 (다운로드 금지, AI 공개, 재배포 금지)
+- [x] **Discover 컬렉션 3개 추가** — Trending/Tool Starter Kit/Challenge Gallery
+- [x] **Trending sort (7일 창)** — getVideos + /api/videos GET 지원
+- [x] **Rate limit (업로드/댓글)** — in-memory best-effort
+- [x] Growth: `/tools/runway` + `/tools/pixverse` SEO 랜딩
+
+## Next (P2) — Sprint 3
+
+- [ ] **Notification delivery 구현** (06-data-backend → 07-ui)
+- [ ] **YouTube 채널 인증 MVP** — Google OAuth로 채널 소유 확인
+- [ ] `/discover` 큐레이션 실DB 연동 — 트렌딩 쿼리 실제 반영
+- [ ] **Pro tier spec** — 업로드 quota, analytics 기획
+- [ ] Rate limit: Cloudflare KV 기반으로 업그레이드 (multi-worker 공유 필요 시)
 
 ## Phase 2 (중기)
 

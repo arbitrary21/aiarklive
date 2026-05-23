@@ -159,6 +159,12 @@ export function Sidebar() {
           </Link>
         )}
         <ThemeToggle />
+        <div className="flex gap-3 px-1 text-xs text-muted">
+          <Link href="/terms" className="hover:text-foreground transition">Terms</Link>
+          <Link href="/tools/kling" className="hover:text-foreground transition">Kling</Link>
+          <Link href="/tools/runway" className="hover:text-foreground transition">Runway</Link>
+          <Link href="/tools/pixverse" className="hover:text-foreground transition">PixVerse</Link>
+        </div>
       </div>
 
       <div

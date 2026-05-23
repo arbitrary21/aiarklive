@@ -49,6 +49,27 @@ export const discoverCollections: DiscoverCollection[] = [
     href: "/explore?genre=animation",
     accent: "from-rose-500/20 to-fuchsia-500/10",
   },
+  {
+    id: "trending-this-week",
+    title: "Trending This Week",
+    description: "This week's most-liked and saved AI videos",
+    href: "/explore?sort=trending",
+    accent: "from-brand-500/30 to-amber-500/15",
+  },
+  {
+    id: "tool-starter-kit",
+    title: "Tool Starter Kit",
+    description: "Best beginner examples from Kling, Runway, and PixVerse",
+    href: "/explore?collection=tool-starter-kit",
+    accent: "from-cyan-500/25 to-violet-500/10",
+  },
+  {
+    id: "challenge-gallery",
+    title: "Challenge Gallery",
+    description: "Creative submissions from the community challenges",
+    href: "/explore?tag=challenge",
+    accent: "from-rose-500/25 to-fuchsia-500/10",
+  },
 ];
 
 export function getDiscoverCollections(): DiscoverCollection[] {

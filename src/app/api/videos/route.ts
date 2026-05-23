@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { notifyFollowersOfNewVideo } from "@/lib/notifications";
 import { detectPlatform, fetchYouTubeMetadata } from "@/lib/youtube";
 import { createVideo, getVideos } from "@/lib/videos";
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
 import type { AiTool, Genre } from "@/lib/types";
 
 export const runtime = "edge";
@@ -11,7 +12,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const aiTool = searchParams.get("aiTool") as AiTool | null;
   const genre = searchParams.get("genre") as Genre | null;
-  const sort = searchParams.get("sort") as "latest" | "popular" | "recommended" | null;
+  const sort = searchParams.get("sort") as "latest" | "popular" | "recommended" | "trending" | null;
   const userId = searchParams.get("userId");
   const q = searchParams.get("q");
   const limit = searchParams.get("limit");
@@ -52,9 +53,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Sign in required." }, { status: 401 });
     }
 
+    const ip =
+      request.headers.get("cf-connecting-ip") ??
+      request.headers.get("x-forwarded-for") ??
+      "anon";
+
+    if (user?.id) {
+      const userLimit = checkRateLimit(`upload:user:${user.id}`, 10, 3_600_000);
+      if (!userLimit.allowed) return rateLimitResponse(userLimit.retryAfterSeconds);
+    }
+    const ipLimit = checkRateLimit(`upload:ip:${ip}`, 20, 3_600_000);
+    if (!ipLimit.allowed) return rateLimitResponse(ipLimit.retryAfterSeconds);
+
     const body = await request.json();
-    const { embed_url, title, description, ai_tools, genre, prompt } = body;
+    const { embed_url, title, description, ai_tools, genre, prompt, ai_generated } = body;
     const source_url = embed_url as string;
+    const ai_disclosed = Boolean(ai_generated);
 
     if (!embed_url || !title || !ai_tools?.length || !genre) {
       return NextResponse.json(
@@ -92,6 +106,8 @@ export async function POST(request: Request) {
         platform,
         thumbnail_url,
         ai_tools,
+        ai_tool: (ai_tools as AiTool[])[0] ?? null,
+        ai_disclosed,
         genre,
         prompt,
       },

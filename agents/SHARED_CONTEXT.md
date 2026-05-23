@@ -19,7 +19,7 @@
 
 ---
 
-## 현재 상태 (Last updated: 2026-05-23 — SEO + Affiliate CTA + Legal compliance sprint)
+## 현재 상태 (Last updated: 2026-05-23 — Sprint 2: SQL migrations, rate limit, tools pages, ToS)
 
 ### 배포
 - **Status:** ✅ ALL 8/8 routes passing
@@ -44,8 +44,14 @@
 - ✅ `video/[id]/opengraph-image.tsx` + generateMetadata OG/Twitter 태그 (Applied 2026-05-23)
 - ✅ `/tools/kling` SEO 랜딩 페이지 (Applied 2026-05-23)
 - ✅ `AffiliateCTABanner` — kling/runway/pixverse/pika/hailuo CTA (Applied 2026-05-23)
-- ⬜ `add_ai_tool_columns.sql` — videos.ai_tool + videos.ai_disclosed (Pending SQL)
-- ⬜ `add_comment_spam_guard.sql` — 댓글 스팸 방지 trigger + is_flagged (Pending SQL)
+- ✅ `add_ai_tool_columns.sql` — videos.ai_tool + videos.ai_disclosed (Applied 2026-05-23)
+- ✅ `add_comment_spam_guard.sql` — 댓글 스팸 방지 trigger + is_flagged (Applied 2026-05-23)
+- ✅ `/tools/runway` + `/tools/pixverse` SEO 랜딩 페이지 (2026-05-23)
+- ✅ `/terms` ToS 페이지 (2026-05-23)
+- ✅ Rate limit (업로드 10/h, 댓글 20/10min) — in-memory best-effort (2026-05-23)
+- ✅ Discover 컬렉션 3개 추가 (Trending This Week, Tool Starter Kit, Challenge Gallery)
+- ✅ Trending sort (7일 창) getVideos 지원
+- ✅ ai_tool/ai_disclosed 업로드 API + createVideo 연동
 - ⬜ Notification delivery 미구현
 
 ### 알려진 이슈
@@ -53,7 +59,7 @@
 - ~~Likes/saves 23505 에러 미처리~~ → ✅ 해결됨 (2026-05-22)
 - ~~`adjustLikesCount` 레이스컨디션~~ → ✅ 해결됨 (2026-05-23) — migration #8 적용 완료, atomic RPC 사용 중
 - ~~Upload: 저작권 고지 UI~~ → ✅ 해결됨 (upload-notice 체크박스 구현 완료)
-- **DB SQL 미적용:** `add_ai_tool_columns.sql` + `add_comment_spam_guard.sql` → Supabase SQL Editor 수동 실행 필요
+- ✅ `add_ai_tool_columns.sql` + `add_comment_spam_guard.sql` → Applied 2026-05-23
 - ✅ `add_avatar_storage.sql` — avatars Storage bucket + RLS (Applied 2026-05-23)
 
 ---

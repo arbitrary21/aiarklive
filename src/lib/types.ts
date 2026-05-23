@@ -22,7 +22,7 @@ export type AiTool =
   | "pixverse"
   | "other";
 
-export type FeedSort = "latest" | "popular" | "recommended" | "following";
+export type FeedSort = "latest" | "popular" | "recommended" | "following" | "trending";
 
 export interface User {
   id: string;
@@ -44,6 +44,8 @@ export interface Video {
   platform: Platform;
   thumbnail_url: string;
   ai_tools: AiTool[];
+  ai_tool: AiTool | null;
+  ai_disclosed: boolean;
   genre: Genre;
   prompt: string | null;
   likes_count: number;
@@ -75,6 +77,8 @@ export interface CreateVideoInput {
   platform: Platform;
   thumbnail_url: string;
   ai_tools: AiTool[];
+  ai_tool?: AiTool | null;
+  ai_disclosed?: boolean;
   genre: Genre;
   prompt?: string;
 }

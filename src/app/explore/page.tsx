@@ -13,6 +13,7 @@ function ExploreContent() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
   const q = searchParams.get("q") ?? "";
+  const sortParam = searchParams.get("sort") ?? "";
   const [aiTool, setAiTool] = useState<AiTool | undefined>(
     (searchParams.get("tool") as AiTool) || undefined
   );
@@ -25,6 +26,7 @@ function ExploreContent() {
     if (aiTool) params.set("aiTool", aiTool);
     if (genre) params.set("genre", genre);
     if (q) params.set("q", q);
+    if (sortParam) params.set("sort", sortParam);
     params.set("limit", String(FEED_PAGE_SIZE));
     params.set("offset", "0");
 
@@ -33,7 +35,7 @@ function ExploreContent() {
       .then((res) => res.json())
       .then((data) => setVideos(data))
       .finally(() => setLoading(false));
-  }, [aiTool, genre, q]);
+  }, [aiTool, genre, q, sortParam]);
 
   return (
     <div className="space-y-6">

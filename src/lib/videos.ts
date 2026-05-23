@@ -104,6 +104,13 @@ export async function getVideos(filters: VideoFilters = {}): Promise<Video[]> {
     case "recommended":
       query = query.order("views_count", { ascending: false });
       break;
+    case "trending": {
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      query = query
+        .gte("created_at", sevenDaysAgo)
+        .order("likes_count", { ascending: false });
+      break;
+    }
     default:
       query = query.order("created_at", { ascending: false });
   }
@@ -215,6 +222,8 @@ export async function createVideo(
       platform: input.platform,
       thumbnail_url: input.thumbnail_url,
       ai_tools: input.ai_tools,
+      ai_tool: input.ai_tool ?? input.ai_tools[0] ?? null,
+      ai_disclosed: input.ai_disclosed ?? false,
       genre: input.genre,
       prompt: input.prompt ?? null,
       likes_count: 0,
@@ -236,6 +245,8 @@ export async function createVideo(
     .from("videos")
     .insert({
       ...input,
+      ai_tool: input.ai_tool ?? input.ai_tools[0] ?? null,
+      ai_disclosed: input.ai_disclosed ?? false,
       user_id: userId,
       likes_count: 0,
       views_count: 0,
