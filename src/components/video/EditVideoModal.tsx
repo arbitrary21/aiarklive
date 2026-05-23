@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import clsx from "clsx";
 import { X } from "lucide-react";
 import { AI_TOOLS, GENRES } from "@/lib/constants";
@@ -13,6 +14,7 @@ interface EditVideoModalProps {
 }
 
 export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [title, setTitle] = useState(video.title);
   const [description, setDescription] = useState(video.description ?? "");
   const [prompt, setPrompt] = useState(video.prompt ?? "");
@@ -23,12 +25,24 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
 
   const toggleTool = (tool: AiTool) => {
     setAiTools((prev) =>
@@ -75,20 +89,25 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
     }
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
       style={{ background: "var(--overlay)" }}
-      onPointerDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="edit-video-title"
     >
       <div
         className="panel max-h-[90vh] w-full max-w-lg overflow-y-auto p-6"
+        onMouseDown={(e) => e.stopPropagation()}
         onPointerDown={(e) => e.stopPropagation()}
       >
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">Edit video</h2>
+          <h2 id="edit-video-title" className="text-lg font-semibold text-foreground">
+            Edit video
+          </h2>
           <button
             type="button"
             onClick={onClose}
@@ -178,7 +197,8 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
             />
           </div>
 
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl border p-3"
+          <label
+            className="flex cursor-pointer items-start gap-3 rounded-xl border p-3"
             style={{ borderColor: "var(--border)" }}
           >
             <input
@@ -208,6 +228,7 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
