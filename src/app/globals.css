@@ -44,6 +44,11 @@ body {
   }
 }
 
+body.edit-modal-open .flex.min-h-screen,
+body.edit-modal-open iframe {
+  pointer-events: none !important;
+}
+
 @layer components {
   .panel {
     @apply rounded-2xl border bg-surface;

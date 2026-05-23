@@ -1,7 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { Pencil } from "lucide-react";
 import { EditVideoModal } from "@/components/video/EditVideoModal";
 import type { Video } from "@/lib/types";
@@ -11,10 +11,30 @@ interface VideoOwnerActionsProps {
   isOwner: boolean;
 }
 
+function editingStorageKey(videoId: string) {
+  return `aiarklive:edit-video:${videoId}`;
+}
+
 export function VideoOwnerActions({ video, isOwner }: VideoOwnerActionsProps) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [displayTitle, setDisplayTitle] = useState(video.title);
+
+  useEffect(() => {
+    if (sessionStorage.getItem(editingStorageKey(video.id)) === "1") {
+      setEditing(true);
+    }
+  }, [video.id]);
+
+  const openEdit = () => {
+    sessionStorage.setItem(editingStorageKey(video.id), "1");
+    setEditing(true);
+  };
+
+  const closeEdit = () => {
+    sessionStorage.removeItem(editingStorageKey(video.id));
+    setEditing(false);
+  };
 
   if (!isOwner) return null;
 
@@ -23,7 +43,7 @@ export function VideoOwnerActions({ video, isOwner }: VideoOwnerActionsProps) {
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <button
           type="button"
-          onClick={() => setEditing(true)}
+          onClick={openEdit}
           className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium text-foreground transition hover:bg-[var(--surface-elevated)]"
           style={{ borderColor: "var(--border)" }}
         >
@@ -36,17 +56,16 @@ export function VideoOwnerActions({ video, isOwner }: VideoOwnerActionsProps) {
         {displayTitle}
       </h1>
 
-      {editing && (
-        <EditVideoModal
-          video={{ ...video, title: displayTitle }}
-          onClose={() => setEditing(false)}
-          onSaved={(updated) => {
-            setDisplayTitle(updated.title);
-            setEditing(false);
-            router.refresh();
-          }}
-        />
-      )}
+      <EditVideoModal
+        video={{ ...video, title: displayTitle }}
+        open={editing}
+        onClose={closeEdit}
+        onSaved={(updated) => {
+          setDisplayTitle(updated.title);
+          closeEdit();
+          router.refresh();
+        }}
+      />
     </>
   );
 }
