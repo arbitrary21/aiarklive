@@ -19,7 +19,12 @@
 
 ---
 
-## 현재 상태 (Last updated: 2026-05-23 — Sprint 3 complete)
+## 현재 상태 (Last updated: 2026-05-23 — Sprint 4 kickoff: Content & Discover)
+
+### Sprint 4 (active)
+- **Goal:** Discover/Explore 콘텐츠 채우기 + 챌린지 #001 런칭
+- **Lead:** 08-content-editorial
+- **Handoffs:** `agents/HANDOFFS.md` Sprint 4 섹션
 
 ### 배포
 - **Status:** ✅ ALL 12/12 routes passing
@@ -116,7 +121,11 @@
 
 > Orchestrator가 handoff 발행 시 `agents/HANDOFFS.md`에 기록.
 
-_(현재 없음)_
+| Sprint | Lead | 상태 |
+|--------|------|------|
+| Sprint 4 — Content & Discover | 08 Editorial | 🔄 kickoff |
+
+**즉시:** Editorial 앵커 콘텐츠 → UI empty state → Community 챌린지 공지 → QA smoke
 
 ---
 

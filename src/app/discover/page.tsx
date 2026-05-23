@@ -1,4 +1,5 @@
 import { Compass } from "lucide-react";
+import { DiscoverChallengeBanner } from "@/components/discover/DiscoverChallengeBanner";
 import { DiscoverCollectionCard } from "@/components/discover/DiscoverCollectionCard";
 import { TrendingKeywords } from "@/components/TrendingKeywords";
 import { getDiscoverCollectionsWithPreviews } from "@/lib/discover";
@@ -30,6 +31,8 @@ export default async function DiscoverPage() {
           <TrendingKeywords />
         </div>
       </section>
+
+      <DiscoverChallengeBanner />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {collections.map((collection) => (

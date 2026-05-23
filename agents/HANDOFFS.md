@@ -8,6 +8,76 @@
 
 ## 📥 Active (미완료)
 
+### Sprint 4 — 2026-05-23 — 앵커 콘텐츠 시드 & Discover preview 채우기
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 08-content-editorial |
+| **Priority** | P0 (Sprint 4 lead) |
+| **Goal** | Discover/Explore가 비어 보이지 않도록 앵커 콘텐츠 메타·태그·큐레이션 기준 확정 |
+| **Context** | Sprint 4 = **A: 콘텐츠·Discover**. `src/lib/discover.ts` 9개 컬렉션은 DB preview 연동 완료 — **실제 영상 수가 적어** 대부분 카드가 썸네일 없음. 앵커: `cozyambience` 계정 + 영상 `5ba1af16-7ab1-4605-b66b-fbc3f9607e5a` (Candlelight Cozy Ambience). Brief: `agents/08-content-editorial/briefs/2026-05-23-collections.md` |
+| **Acceptance** | - [ ] `briefs/2026-05-23-sprint4-seed.md` 작성 — 컬렉션별 목표 영상 수(최소 5컬렉션 × 4 preview)<br>- [ ] cozyambience 영상 메타 확정: title, description, `ai_tool`, genre(`loop`), tags(`ambient`, `cozy`, `kling` 등)<br>- [ ] 컬렉션 매핑표: 어떤 영상이 `runway-loops` / `cinematic-kling` / `trending-this-week` 등에 노출될지<br>- [ ] 신규 업로드 3~5개 **메타데이터 템플릿**(프롬프트·도구·태그) — 실제 영상은 크리에이터/운영자 업로드<br>- [ ] Data handoff 필요 시 `PENDING_SQL.md` 또는 06 handoff 발행 (스키마 변경 없이 메타만이면 생략) |
+| **Out of scope** | 저작권 없는 타인 YouTube 영상 대량 등록, 스키마 마이그레이션 |
+| **Blocked by** | 없음 |
+| **Status** | 🔄 in-progress — `briefs/2026-05-23-sprint4-seed.md` + `sprint4-anchor-video.sql` 작성됨. DB/SQL 또는 Edit 모달 적용 대기 |
+
+### Sprint 4 — 2026-05-23 — Discover empty state + 컬렉션 카피 (한/영)
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 07-product-ui |
+| **Priority** | P1 |
+| **Goal** | preview 0개 컬렉션 카드에 placeholder UI + Discover 페이지 카피 polish |
+| **Context** | `DiscoverCollectionCard` — `previews.length > 0` 일 때만 썸네일 그리드. Sprint 4 시드 전후 모두 대응 필요. Editorial brief의 한국어 제목/설명 반영 검토. |
+| **Acceptance** | - [ ] preview 0개: gradient placeholder 4칸 + “Be the first to upload” 또는 “첫 영상을 올려보세요” CTA (`/upload` 링크)<br>- [ ] preview 1~3개: 빈 칸은 placeholder로 채움<br>- [ ] `/discover` hero 설명 한 줄 polish (선택: bilingual)<br>- [ ] 모바일 그리드 깨짐 없음 |
+| **Out of scope** | DB 기반 컬렉션 관리, Featured Creator 배지 |
+| **Blocked by** | 없음 (Editorial과 병렬 가능) |
+| **Status** | ✅ done — `DiscoverCollectionCard` placeholder 4칸 + empty copy |
+
+### Sprint 4 — 2026-05-23 — 챌린지 #001 “나만의 미래 도시” 런칭 패키지
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 08-content-editorial + 12-community-ops |
+| **Priority** | P1 |
+| **Goal** | 2026-05-26(월) KST 시작 주간 챌린지 공지·카피·해시태그 가이드 완성 |
+| **Context** | Brief §챌린지 #001 in `agents/08-content-editorial/briefs/2026-05-23-collections.md`. `src/lib/challenges.ts`는 mock only — Sprint 4는 **카피+공지** 우선, DB 챌린지 테이블은 Phase 2. |
+| **Acceptance** | - [ ] Editorial: `briefs/2026-05-23-challenge-001.md` — 규칙·심사·수상·해시태그 `#AIARKChallenge001` 최종본<br>- [ ] Community: 홈/Discover용 공지 문안 (200자 + 상세 FAQ)<br>- [ ] 업로드 시 description에 넣을 해시태그·프롬프트 공유 가이드 1페이지<br>- [ ] (선택) 07 UI handoff: Discover hero 배너 컴포넌트 |
+| **Out of scope** | 배지/Featured Creator 구현, Stripe 상금 |
+| **Blocked by** | 없음 |
+| **Status** | 🔄 in-progress — `briefs/2026-05-23-challenge-001.md` + Discover `DiscoverChallengeBanner` |
+
+### Sprint 4 — 2026-05-23 — Discover/Explore SEO 메타 점검
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 05-growth-seo |
+| **Priority** | P2 |
+| **Goal** | `/discover`, `/explore?*` 페이지 discoverability — title/description/OG |
+| **Context** | `/tools/kling` 등 SEO 랜딩은 완료. Discover는 `metadata.title = "Discover"` 만 있음. Explore는 쿼리별 동적 title 미흡할 수 있음. |
+| **Acceptance** | - [ ] `/discover` metadata description + OG 이미지(또는 fallback) 제안<br>- [ ] explore 주요 필터(`tool=kling`, `sort=trending`, `collection=tool-starter-kit`)별 title 템플릿<br>- [ ] `sitemap.ts`에 discover/explore 포함 여부 확인<br>- [ ] 07 UI handoff 또는 직접 PR (범위에 따라) |
+| **Out of scope** | paid ads, blog |
+| **Blocked by** | 없음 |
+| **Status** | ⬜ pending |
+
+### Sprint 4 — 2026-05-23 — Discover smoke (시드 후)
+
+| 항목 | 내용 |
+|------|------|
+| **From** | 00-orchestrator |
+| **To** | 11-qa-release |
+| **Priority** | P1 |
+| **Goal** | Editorial 시드 + UI empty state 배포 후 Discover/Explore 회귀 없음 확인 |
+| **Context** | `python check_deploy.py` + 수동: `/discover` 9카드, preview≥1인 카드 수, `/explore?tool=kling`, cozyambience 영상 상세 OG |
+| **Acceptance** | - [ ] 12/12 routes OK<br>- [ ] Discover ≥5 컬렉션 preview 1장 이상<br>- [ ] cozyambience 영상 explore 필터 노출<br>- [ ] Edit modal drag-close 회귀 없음<br>- [ ] `agent_log.json` 갱신 |
+| **Out of scope** | E2E 자동화 신규 작성 |
+| **Blocked by** | 08 Editorial 앵커 메타 + (선택) 07 empty state |
+| **Status** | ⬜ pending |
+
 ### 2026-05-23 — 프로필 편집 API + Supabase Storage 아바타 업로드
 
 | 항목 | 내용 |
@@ -15,12 +85,7 @@
 | **From** | 00-orchestrator |
 | **To** | 06-data-backend |
 | **Priority** | P1 |
-| **Goal** | 유저가 닉네임·자기소개·프로필 사진을 직접 변경할 수 있도록 API + Storage 구축 |
-| **Context** | 현재 로그인은 Google OAuth 전용. `users` 테이블에 `username`, `bio`, `avatar_url` 컬럼 존재. `username`은 최초 설정 시 `/api/profile/setup` POST로만 변경 가능 — 이후 재편집 불가. `bio`는 DB 컬럼이 없을 수 있음(타입에는 존재). 프로필 사진은 Google avatar URL 고정. |
-| **Acceptance** | - [ ] `users` 테이블에 `bio TEXT` 컬럼 존재 확인 (없으면 migration 추가)<br>- [ ] `PUT /api/profile/update` 라우트 — `{ username?, bio? }` 수신, 본인 인증 후 업데이트<br>- [ ] username 중복 체크 + 동일 유효성 검사 (`validateUsername`) 재사용<br>- [ ] Supabase Storage bucket `avatars` 생성 (public read, authenticated write)<br>- [ ] `POST /api/profile/avatar` 라우트 — multipart/form-data 수신, Storage upload, `users.avatar_url` 업데이트 후 URL 반환<br>- [ ] RLS: `users` 테이블에 `UPDATE (username, bio, avatar_url) WHERE id = auth.uid()` 정책 확인/추가<br>- [ ] `PENDING_SQL.md` 에 필요한 migration 항목 추가 |
-| **Out of scope** | 프로필 편집 UI (07-product-ui 담당), 소셜 링크 등 추가 필드 |
-| **Blocked by** | 없음 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done — `PUT /api/profile/update`, `POST /api/profile/avatar`, `add_avatar_storage.sql` Applied |
 
 ### 2026-05-23 — 프로필 편집 UI (닉네임·소개·사진 변경)
 
@@ -29,12 +94,7 @@
 | **From** | 00-orchestrator |
 | **To** | 07-product-ui |
 | **Priority** | P1 |
-| **Goal** | `/profile/me` 에서 닉네임·자기소개·프로필 사진을 변경하는 인라인 편집 UI 구현 |
-| **Context** | `src/components/profile/ProfileView.tsx` — `isOwnProfile=true` 일 때 현재 "+ Add video" 링크만 있음. Google 로그인이라도 닉네임·bio·avatar는 자체 편집 가능해야 함. API 의존: `PUT /api/profile/update` + `POST /api/profile/avatar` (06-data-backend 선행 필요). `User` 타입: `{ username, bio, avatar_url }`. |
-| **Acceptance** | - [ ] `ProfileView` — `isOwnProfile=true` 시 "프로필 편집" 버튼 표시<br>- [ ] `EditProfileModal` (또는 인라인 슬라이드): username, bio 텍스트 필드<br>- [ ] 아바타 이미지 클릭 시 파일 업로드 (PNG/JPG ≤5MB) → `POST /api/profile/avatar`<br>- [ ] 저장 후 AuthProvider 혹은 로컬 상태 즉시 반영 (새로고침 불필요)<br>- [ ] username 중복 에러 표시<br>- [ ] 로딩/에러 상태 처리<br>- [ ] 모바일 반응형 |
-| **Out of scope** | 비밀번호 변경 (OAuth 전용), 계정 삭제, 소셜 링크 |
-| **Blocked by** | 06-data-backend — `PUT /api/profile/update` + `POST /api/profile/avatar` 완료 후 진행 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done — `EditProfileModal.tsx` + `ProfilePageClient.tsx` 구현됨. QA: 닉네임 `user1` → `cozyambience` 변경 smoke 권장 |
 
 ### 2026-05-23 — `videos.ai_tool` + `videos.ai_disclosed` 컬럼 추가
 
@@ -43,12 +103,7 @@
 | **From** | 00-orchestrator |
 | **To** | 06-data-backend |
 | **Priority** | P1 |
-| **Goal** | `videos` 테이블에 AI 도구 식별 컬럼 추가 — Affiliate CTA 정확도 향상 + 업로드 정책 반영 |
-| **Context** | Legal 결정(2026-05-23): AI 생성 여부 및 사용 도구를 DB에 저장. 현재 `AffiliateCTABanner`는 `source_url` 파싱으로 도구 추론하나, 직접 컬럼이 있으면 정확도 100%. `upload-notice.md` §2의 AI 생성 체크박스 값을 영속화. |
-| **Acceptance** | - [ ] `supabase/migrations/add_ai_tool_columns.sql` 작성<br>- [ ] `videos.ai_tool varchar(100) nullable` — 'kling', 'runway', 'pixverse' 등<br>- [ ] `videos.ai_disclosed boolean default false` — AI 생성 여부 공개 플래그<br>- [ ] RLS: `authenticated` INSERT/UPDATE 허용<br>- [ ] `PENDING_SQL.md` 에 항목 추가 |
-| **Out of scope** | 업로드 폼 UI 수정 (07-product-ui 담당), Affiliate 로직 변경 |
-| **Blocked by** | 없음 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done — migration #9 Applied, upload API 연동 |
 
 ### 2026-05-23 — ToS 초안 페이지 작성
 
@@ -57,12 +112,7 @@
 | **From** | 00-orchestrator |
 | **To** | 02-legal-trust |
 | **Priority** | P2 |
-| **Goal** | AIARKLIVE 서비스 이용약관(ToS) 초안 문서 작성 |
-| **Context** | Legal 결정(2026-05-23): "다운로드·재배포·AI학습 목적 사용 금지" 조항 포함 필요. `agents/02-legal-trust/POLICY_DRAFTS/download-policy.md` 내용 기반. 최종 ToS는 `src/app/terms/page.tsx` 로 구현 (07-product-ui에 별도 handoff). |
-| **Acceptance** | - [ ] `agents/02-legal-trust/POLICY_DRAFTS/tos-draft.md` 작성<br>- [ ] 다운로드·재배포·AI학습 금지 조항 포함<br>- [ ] YouTube 임베드 전용 정책 명시<br>- [ ] 사용자 콘텐츠 권리 확인 조항 포함<br>- [ ] 한국어 버전 (영문은 별도 검토) |
-| **Out of scope** | 실제 법률 자문, ToS 페이지 UI 구현 |
-| **Blocked by** | 없음 |
-| **Status** | ⬜ pending |
+| **Status** | ✅ done — `/terms` 페이지 배포 (2026-05-23). 별도 `tos-draft.md`는 선택 follow-up |
 
 ### 2026-05-23 — 다운로드 버튼 미표시 확인 + `/api/download` 노출 제거
 

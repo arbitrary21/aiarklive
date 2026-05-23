@@ -35,13 +35,26 @@
 - [x] **Pro tier spec** — upload quota, analytics (`agents/04-monetization/models/2026-05-23-pro-tier-spec.md`)
 - [x] Rate limit: Cloudflare KV 기반으로 업그레이드 (`RATE_LIMIT_KV` namespace)
 
+## Now (P1) — Sprint 4 🎯 Content & Discover
+
+> **목표:** Discover/Explore/홈 피드가 “비어 보이지” 않게 — 앵커 콘텐츠 + 큐레이션 + 챌린지 #001 런칭  
+> **선택:** Orchestrator 결정 A (2026-05-23)
+
+- [ ] **앵커 크리에이터 콘텐츠 MVP** — cozyambience 영상 메타·태그·도구 라벨 확정 (`ai_tool`, genre, tags)
+- [ ] **Discover 컬렉션 preview 채우기** — 9개 컬렉션 중 최소 5개에 썸네일 4장 노출
+- [ ] **Discover empty state UI** — preview 0개일 때 placeholder + “첫 업로드” CTA
+- [ ] **챌린지 #001 “나만의 미래 도시”** — 카피·공지·Discover hero 배너 (2026-05-26 시작)
+- [ ] **홈 hero Featured strip** (선택) — Trending 또는 Challenge 1줄 하이라이트
+- [ ] **Growth** — `/discover` + `/explore` SEO 메타·OG 점검
+- [ ] **QA** — 시드 후 Discover smoke + explore 필터 검증
+
+**에이전트:** 08 Editorial (lead) → 07 UI → 12 Community → 05 Growth → 11 QA
+
 ## Phase 2 (중기)
 
-- [ ] **YouTube 채널 인증** — Google OAuth로 채널 소유 확인 후 영상 링크 등록
-  - YouTube Data API v3 활용, 스토리지 비용 0, 저작권 리스크 최소화
-  - 담당: 06-data-backend + 07-product-ui
-- [ ] Pro tier spec (업로드 quota, analytics)
-- [ ] Pro tier 결제 (Stripe)
+- [x] **YouTube 채널 인증 MVP** — connect/callback/status + upload guard (Sprint 3)
+- [ ] Google Cloud: YouTube Data API v3 + `youtube.readonly` OAuth consent
+- [ ] Pro tier 결제 (Stripe) — spec 완료 (`agents/04-monetization/models/2026-05-23-pro-tier-spec.md`)
 
 ## Later (P3)
 
