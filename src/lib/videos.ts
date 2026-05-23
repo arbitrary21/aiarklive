@@ -1,7 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { getFollowingIds, getFollowStats } from "@/lib/follows";
 import { attachUsersToVideos, mockUsers, mockVideos } from "@/lib/mock-data";
-import type { CreateVideoInput, User, UserProfileStats, Video, VideoFilters } from "@/lib/types";
+import type {
+  CreateVideoInput,
+  UpdateVideoInput,
+  User,
+  UserProfileStats,
+  Video,
+  VideoFilters,
+} from "@/lib/types";
 
 function isSupabaseConfigured(): boolean {
   return Boolean(
@@ -309,6 +316,56 @@ export async function getUserProfileStats(
       0
     ),
   };
+}
+
+export async function updateVideo(
+  videoId: string,
+  userId: string,
+  input: UpdateVideoInput
+): Promise<Video> {
+  const title = input.title?.trim();
+  if (title !== undefined && !title) {
+    throw new Error("Title is required.");
+  }
+  if (input.ai_tools !== undefined && input.ai_tools.length === 0) {
+    throw new Error("Select at least one AI tool.");
+  }
+
+  const patch: Record<string, unknown> = {};
+  if (title !== undefined) patch.title = title;
+  if (input.description !== undefined) patch.description = input.description;
+  if (input.genre !== undefined) patch.genre = input.genre;
+  if (input.prompt !== undefined) patch.prompt = input.prompt;
+  if (input.ai_disclosed !== undefined) patch.ai_disclosed = input.ai_disclosed;
+  if (input.ai_tools !== undefined) {
+    patch.ai_tools = input.ai_tools;
+    patch.ai_tool = input.ai_tools[0] ?? null;
+  }
+
+  if (Object.keys(patch).length === 0) {
+    throw new Error("No fields to update.");
+  }
+
+  if (!isSupabaseConfigured()) {
+    const video = mockVideos.find((v) => v.id === videoId);
+    if (!video) throw new Error("Video not found.");
+    if (video.user_id !== userId) throw new Error("Not allowed.");
+    Object.assign(video, patch);
+    return video;
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("videos")
+    .update(patch)
+    .eq("id", videoId)
+    .eq("user_id", userId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  if (!data) throw new Error("Video not found.");
+  return data as Video;
 }
 
 export async function incrementVideoDownloads(videoId: string): Promise<void> {

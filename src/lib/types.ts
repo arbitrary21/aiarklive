@@ -88,6 +88,15 @@ export interface CreateVideoInput {
   prompt?: string;
 }
 
+export interface UpdateVideoInput {
+  title?: string;
+  description?: string | null;
+  ai_tools?: AiTool[];
+  genre?: Genre;
+  prompt?: string | null;
+  ai_disclosed?: boolean;
+}
+
 export type NotificationType = "new_video" | "like" | "comment" | "follow";
 
 export interface Notification {

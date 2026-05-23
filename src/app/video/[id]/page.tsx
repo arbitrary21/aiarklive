@@ -7,7 +7,9 @@ import { VideoToolbar } from "@/components/VideoToolbar";
 import { AffiliateCTABanner } from "@/components/video/AffiliateCTABanner";
 import { getAiToolLabel, getGenreLabel } from "@/lib/constants";
 import { getSourceUrl } from "@/lib/youtube";
+import { getCurrentUser } from "@/lib/auth";
 import { getVideoById } from "@/lib/videos";
+import { VideoOwnerActions } from "@/components/video/VideoOwnerActions";
 import type { Metadata } from "next";
 
 export const runtime = "edge";
@@ -56,9 +58,14 @@ export async function generateMetadata({
 
 export default async function VideoPage({ params }: VideoPageProps) {
   const { id } = await params;
-  const video = await getVideoById(id);
+  const [video, currentUser] = await Promise.all([
+    getVideoById(id),
+    getCurrentUser(),
+  ]);
 
   if (!video) notFound();
+
+  const isOwner = Boolean(currentUser && currentUser.id === video.user_id);
 
   const sourceUrl = getSourceUrl(
     video.platform,
@@ -91,9 +98,13 @@ export default async function VideoPage({ params }: VideoPageProps) {
           </div>
 
           <div>
-            <h1 className="text-xl font-bold text-foreground sm:text-2xl">
-              {video.title}
-            </h1>
+            {isOwner ? (
+              <VideoOwnerActions video={video} isOwner />
+            ) : (
+              <h1 className="text-xl font-bold text-foreground sm:text-2xl">
+                {video.title}
+              </h1>
+            )}
             <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-muted">
               <span className="flex items-center gap-1">
                 <Heart className="h-4 w-4" />
