@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { X } from "lucide-react";
 import { AI_TOOLS, GENRES } from "@/lib/constants";
@@ -21,6 +21,15 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
   const [aiGenerated, setAiGenerated] = useState(video.ai_disclosed);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const backdropPressed = useRef(false);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
 
   const toggleTool = (tool: AiTool) => {
     setAiTools((prev) =>
@@ -71,11 +80,21 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: "var(--overlay)" }}
-      onClick={onClose}
+      onPointerDown={(e) => {
+        backdropPressed.current = e.target === e.currentTarget;
+      }}
+      onPointerUp={(e) => {
+        if (backdropPressed.current && e.target === e.currentTarget) {
+          onClose();
+        }
+        backdropPressed.current = false;
+      }}
     >
       <div
         className="panel max-h-[90vh] w-full max-w-lg overflow-y-auto p-6"
-        onClick={(e) => e.stopPropagation()}
+        onPointerDown={() => {
+          backdropPressed.current = false;
+        }}
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">Edit video</h2>
