@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
 
+export const runtime = "edge";
 export const revalidate = 3600;
 
 const BASE_URL = "https://aiarklive.com";
