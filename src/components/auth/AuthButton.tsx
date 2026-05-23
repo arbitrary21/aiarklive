@@ -83,12 +83,20 @@ export function AuthButton({ nextPath }: AuthButtonProps) {
 
       {open && (
         <div
-          className="absolute right-0 top-full z-50 mt-2 min-w-[180px] overflow-hidden rounded-xl border py-1 shadow-xl"
+          className="absolute right-0 top-full z-50 mt-2 min-w-[220px] overflow-hidden rounded-xl border py-1 shadow-xl"
           style={{
             borderColor: "var(--border)",
             background: "var(--surface)",
           }}
         >
+          <div className="border-b px-4 py-2.5" style={{ borderColor: "var(--border)" }}>
+            <p className="truncate text-sm font-medium text-foreground">{user.username}</p>
+            {user.email && (
+              <p className="truncate text-xs text-muted" title={user.email}>
+                {user.email}
+              </p>
+            )}
+          </div>
           <Link
             href="/profile/me"
             onClick={() => setOpen(false)}

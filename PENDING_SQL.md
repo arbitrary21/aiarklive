@@ -89,6 +89,40 @@ Configure in Supabase UI:
 
 ---
 
+### One-off: transfer video to another login (account mismatch)
+
+When a user signed up with a **YouTube Brand Google account** (`@pages.plusgoogle.com`) but logs in later with a **personal Gmail**, they get two AIARKLIVE users. Example:
+
+- `cozyambientsounds` — `cozy-ambient-sounds-...@pages.plusgoogle.com` (has the video)
+- `user1` — `pottery0121@gmail.com`
+
+**Option A (recommended):** Sign out → Sign in with Google → pick **Cozy Ambient Sounds** brand account.
+
+**Option B:** Reassign video to the personal account (run in SQL Editor after replacing `TARGET_USER_ID` with pottery user's `auth.users.id` from Supabase):
+
+```sql
+-- cozyambientsounds owner
+-- c8c2db81-c61e-422a-bc84-15c84d30c9f9
+UPDATE public.videos
+SET user_id = 'TARGET_USER_ID'
+WHERE id = '5ba1af16-7ab1-4605-b66b-fbc3f9607e5a';
+```
+
+Also copy YouTube verify fields if needed:
+
+```sql
+UPDATE public.users AS target
+SET
+  youtube_channel_id = source.youtube_channel_id,
+  youtube_channel_title = source.youtube_channel_title,
+  youtube_verified_at = source.youtube_verified_at
+FROM public.users AS source
+WHERE source.username = 'cozyambientsounds'
+  AND target.id = 'TARGET_USER_ID';
+```
+
+---
+
 ## Notes
 
 - Likes/saves use tables from `schema.sql` (no extra migration).
