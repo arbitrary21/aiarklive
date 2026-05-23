@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 import { X } from "lucide-react";
@@ -13,7 +13,15 @@ interface EditVideoModalProps {
   onSaved: (video: Video) => void;
 }
 
+function isTextField(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return false;
+  const tag = target.tagName;
+  return tag === "INPUT" || tag === "TEXTAREA";
+}
+
 export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const selectionDragRef = useRef(false);
   const [mounted, setMounted] = useState(false);
   const [title, setTitle] = useState(video.title);
   const [description, setDescription] = useState(video.description ?? "");
@@ -39,8 +47,51 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    const appRoot = document.querySelector<HTMLElement>(".flex.min-h-screen");
+    appRoot?.setAttribute("inert", "");
+
     return () => {
       document.body.style.overflow = previousOverflow;
+      appRoot?.removeAttribute("inert");
+    };
+  }, []);
+
+  useEffect(() => {
+    const markSelectionStart = (e: Event) => {
+      if (panelRef.current?.contains(e.target as Node) && isTextField(e.target)) {
+        selectionDragRef.current = true;
+      }
+    };
+
+    const swallowOutsideRelease = (e: Event) => {
+      if (!selectionDragRef.current) return;
+
+      const target = e.target as Node | null;
+      if (target && panelRef.current?.contains(target)) {
+        selectionDragRef.current = false;
+        return;
+      }
+
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.type === "mouseup" || e.type === "pointerup" || e.type === "click") {
+        selectionDragRef.current = false;
+      }
+    };
+
+    document.addEventListener("pointerdown", markSelectionStart, true);
+    document.addEventListener("mousedown", markSelectionStart, true);
+    document.addEventListener("pointerup", swallowOutsideRelease, true);
+    document.addEventListener("mouseup", swallowOutsideRelease, true);
+    document.addEventListener("click", swallowOutsideRelease, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", markSelectionStart, true);
+      document.removeEventListener("mousedown", markSelectionStart, true);
+      document.removeEventListener("pointerup", swallowOutsideRelease, true);
+      document.removeEventListener("mouseup", swallowOutsideRelease, true);
+      document.removeEventListener("click", swallowOutsideRelease, true);
     };
   }, []);
 
@@ -48,6 +99,20 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
     setAiTools((prev) =>
       prev.includes(tool) ? prev.filter((t) => t !== tool) : [...prev, tool]
     );
+  };
+
+  const handlePanelPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    if (isTextField(e.target)) {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+  };
+
+  const handlePanelPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    selectionDragRef.current = false;
   };
 
   const handleSave = async () => {
@@ -98,11 +163,23 @@ export function EditVideoModal({ video, onClose, onSaved }: EditVideoModalProps)
       role="dialog"
       aria-modal="true"
       aria-labelledby="edit-video-title"
+      onMouseUp={(e) => {
+        if (panelRef.current?.contains(e.target as Node)) return;
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      onClick={(e) => {
+        if (panelRef.current?.contains(e.target as Node)) return;
+        e.preventDefault();
+        e.stopPropagation();
+      }}
     >
       <div
+        ref={panelRef}
         className="panel max-h-[90vh] w-full max-w-lg overflow-y-auto p-6"
+        onPointerDown={handlePanelPointerDown}
+        onPointerUp={handlePanelPointerUp}
         onMouseDown={(e) => e.stopPropagation()}
-        onPointerDown={(e) => e.stopPropagation()}
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 id="edit-video-title" className="text-lg font-semibold text-foreground">
