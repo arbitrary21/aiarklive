@@ -24,6 +24,14 @@ export const metadata: Metadata = {
   },
   description: SITE_TAGLINE,
   metadataBase: new URL("https://aiarklive.com"),
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [{ url: "/apple-touch-icon.svg", type: "image/svg+xml" }],
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
