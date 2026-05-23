@@ -181,8 +181,8 @@ export default async function RunwayPage() {
               What sets Runway apart is its focus on{" "}
               <strong className="text-foreground">professional workflows</strong>{" "}
               — from Act One (character animation) to precise camera motion
-              controls, it's built for creators who need more than just a
-              "generate and hope" experience.
+              controls, it&apos;s built for creators who need more than just a
+              &quot;generate and hope&quot; experience.
             </p>
             <p>
               Runway is used in production by teams at Netflix, Adobe, and
