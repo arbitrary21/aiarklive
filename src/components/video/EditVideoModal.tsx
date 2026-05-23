@@ -27,10 +27,20 @@ function editingStorageKey(videoId: string) {
   return `aiarklive:edit-video:${videoId}`;
 }
 
+const openByVideoId = new Map<string, boolean>();
+
+function readInitialOpen(videoId: string) {
+  if (typeof window === "undefined") return false;
+  if (openByVideoId.get(videoId)) return true;
+  return sessionStorage.getItem(editingStorageKey(videoId)) === "1";
+}
+
 export const EditVideoModal = forwardRef<EditVideoModalHandle, EditVideoModalProps>(
   function EditVideoModal({ video, onSaved }, ref) {
     const panelRef = useRef<HTMLDivElement>(null);
-    const openRef = useRef(false);
+    const closeButtonRef = useRef<HTMLButtonElement>(null);
+    const closePressRef = useRef(false);
+    const hasOpenedRef = useRef(false);
     const [mounted, setMounted] = useState(false);
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState(video.title);
@@ -44,8 +54,9 @@ export const EditVideoModal = forwardRef<EditVideoModalHandle, EditVideoModalPro
 
     const setOpenPersist = useCallback(
       (next: boolean) => {
-        openRef.current = next;
+        openByVideoId.set(video.id, next);
         if (next) {
+          hasOpenedRef.current = true;
           sessionStorage.setItem(editingStorageKey(video.id), "1");
         } else {
           sessionStorage.removeItem(editingStorageKey(video.id));
@@ -69,29 +80,29 @@ export const EditVideoModal = forwardRef<EditVideoModalHandle, EditVideoModalPro
 
     useEffect(() => {
       setMounted(true);
-      if (sessionStorage.getItem(editingStorageKey(video.id)) === "1") {
+      if (readInitialOpen(video.id)) {
+        hasOpenedRef.current = true;
         setOpenPersist(true);
       }
     }, [video.id, setOpenPersist]);
 
     useEffect(() => {
+      if (!open) return;
       setTitle(video.title);
       setDescription(video.description ?? "");
       setPrompt(video.prompt ?? "");
       setGenre(video.genre);
       setAiTools(video.ai_tools);
       setAiGenerated(video.ai_disclosed);
-    }, [video]);
+    }, [open, video]);
 
     useEffect(() => {
       if (!open) return;
 
-      const previousOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       document.body.classList.add("edit-modal-open");
 
       const blockBackgroundInteraction = (e: Event) => {
-        if (!openRef.current) return;
         const target = e.target as Node | null;
         if (target && panelRef.current?.contains(target)) return;
         e.preventDefault();
@@ -108,7 +119,7 @@ export const EditVideoModal = forwardRef<EditVideoModalHandle, EditVideoModalPro
       document.addEventListener("click", blockBackgroundInteraction, true);
 
       return () => {
-        document.body.style.overflow = previousOverflow;
+        document.body.style.overflow = "";
         document.body.classList.remove("edit-modal-open");
         document.removeEventListener("pointerdown", blockBackgroundInteraction, true);
         document.removeEventListener("pointerup", blockBackgroundInteraction, true);
@@ -117,16 +128,6 @@ export const EditVideoModal = forwardRef<EditVideoModalHandle, EditVideoModalPro
         document.removeEventListener("click", blockBackgroundInteraction, true);
       };
     }, [open]);
-
-    useEffect(() => {
-      if (!open) return;
-
-      const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") closeModal();
-      };
-      window.addEventListener("keydown", onKeyDown);
-      return () => window.removeEventListener("keydown", onKeyDown);
-    }, [open, closeModal]);
 
     const handleTextFieldPointerDown = (
       e: React.PointerEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -142,6 +143,21 @@ export const EditVideoModal = forwardRef<EditVideoModalHandle, EditVideoModalPro
       if (e.currentTarget.hasPointerCapture(e.pointerId)) {
         e.currentTarget.releasePointerCapture(e.pointerId);
       }
+    };
+
+    const handleCloseButtonMouseDown = (
+      e: React.MouseEvent<HTMLButtonElement>
+    ) => {
+      e.stopPropagation();
+      closePressRef.current = e.currentTarget === closeButtonRef.current;
+    };
+
+    const handleCloseButtonMouseUp = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      const shouldClose =
+        closePressRef.current && e.currentTarget === closeButtonRef.current;
+      closePressRef.current = false;
+      if (shouldClose) closeModal();
     };
 
     const toggleTool = (tool: AiTool) => {
@@ -189,14 +205,18 @@ export const EditVideoModal = forwardRef<EditVideoModalHandle, EditVideoModalPro
       }
     };
 
-    if (!mounted || !open) return null;
+    if (!mounted || (!open && !hasOpenedRef.current)) return null;
 
     return createPortal(
       <div
-        className="fixed inset-0 z-[2147483646] flex items-center justify-center p-4"
+        className={clsx(
+          "fixed inset-0 z-[2147483646] flex items-center justify-center p-4",
+          !open && "pointer-events-none invisible"
+        )}
         style={{ background: "var(--overlay)" }}
         role="dialog"
-        aria-modal="true"
+        aria-modal={open}
+        aria-hidden={!open}
         aria-labelledby="edit-video-title"
       >
         <div
@@ -213,12 +233,10 @@ export const EditVideoModal = forwardRef<EditVideoModalHandle, EditVideoModalPro
               Edit video
             </h2>
             <button
+              ref={closeButtonRef}
               type="button"
-              onMouseDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                closeModal();
-              }}
+              onMouseDown={handleCloseButtonMouseDown}
+              onMouseUp={handleCloseButtonMouseUp}
               className="btn-icon"
               aria-label="Close"
             >

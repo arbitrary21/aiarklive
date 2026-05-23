@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Pencil } from "lucide-react";
 import {
@@ -18,6 +18,11 @@ export function VideoOwnerActions({ video, isOwner }: VideoOwnerActionsProps) {
   const router = useRouter();
   const modalRef = useRef<EditVideoModalHandle>(null);
   const [displayTitle, setDisplayTitle] = useState(video.title);
+
+  const modalVideo = useMemo(
+    () => ({ ...video, title: displayTitle }),
+    [video, displayTitle]
+  );
 
   if (!isOwner) return null;
 
@@ -41,7 +46,7 @@ export function VideoOwnerActions({ video, isOwner }: VideoOwnerActionsProps) {
 
       <EditVideoModal
         ref={modalRef}
-        video={{ ...video, title: displayTitle }}
+        video={modalVideo}
         onSaved={(updated) => {
           setDisplayTitle(updated.title);
           router.refresh();
